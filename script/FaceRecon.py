@@ -4,7 +4,7 @@ import cv2
 
 os.getcwd()
 face_cascade = cv2.CascadeClassifier('./config/face_detector.xml')
-img = cv2.imread('../visuel/faceReconConf/refb.png')
+img = cv2.VideoCapture(0)
 
 faces = face_cascade.detectMultiScale(img,1.1, 4)
 
