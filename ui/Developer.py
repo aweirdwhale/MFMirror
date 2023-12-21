@@ -18,7 +18,7 @@ import requests
 
 recognized = "No recognized faces yet"
 """Creds"""
-key = "AIzaSyA3mZLqwIAFmIast90AD3LYc0kxHFMh4qs"
+key = "[GOOGLE_API_KEY]"
 
 """Defines Actions for the window"""
 
@@ -86,7 +86,7 @@ window.title("Developer Window For MFM")  # sets window title
 window.configure(background="#222222")  # sets background color
 
 """Make an Instance for action class"""
-action = Actions(window, 0, key)
+action = Actions(window, 2, key)
 
 """Define window widgets"""
 
@@ -201,8 +201,8 @@ class Music:
         self.btn.place(x=500, y=305, anchor=NW)
 
         # activer la modification de volume
-        self.vbtn = ttk.Button(window, text=f"Volume", command=lambda: action.vol())
-        self.vbtn.place(x=500, y=335)
+        # self.vbtn = ttk.Button(window, text=f"Volume", command=lambda: action.vol())
+        # self.vbtn.place(x=500, y=335)
 
     def changeLabel(self):
         pass

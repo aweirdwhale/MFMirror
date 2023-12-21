@@ -29,7 +29,7 @@ class MusicBehaviour:
         self.youtube = build("youtube", "v3", developerKey=self.key)
         self.video = []
         self.window = window
-        self.save_path = './musics'
+        self.save_path = '/home/aweirdwhale/Bureau/Aweirdwhale/Miroir/mfm/scripts/music/musics'
 
     def info(self, info, state):
         print(info, state)

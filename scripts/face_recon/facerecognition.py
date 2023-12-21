@@ -25,7 +25,7 @@ class FaceRecognition:
         self.recognizer = '/home/aweirdwhale/Bureau/Aweirdwhale/Miroir/mfm/scripts/face_recon/output/recognizer.pickle'
         self.le = '/home/aweirdwhale/Bureau/Aweirdwhale/Miroir/mfm/scripts/face_recon/output/le.pickle'
         self.protopath = "/home/aweirdwhale/Bureau/Aweirdwhale/Miroir/mfm/scripts/face_recon/face_detection_model/deploy.prototxt"
-        self.deploypath = "/home/aweirdwhale/Bureau/Aweirdwhale/Miroir/mfm/scripts/face_recon/face_detection_model/deploy.prototxt"  # Why the fuck do I have to put the absolute path???
+        self.deploypath = "/home/aweirdwhale/Bureau/Aweirdwhale/Miroir/mfm/scripts/face_recon/face_detection_model/deploy.prototxt"  # Why the fuck do I have to put the absolute path??? (using pycharm)
         self.modelpath = "/home/aweirdwhale/Bureau/Aweirdwhale/Miroir/mfm/scripts/face_recon/face_detection_model/res10_300x300_ssd_iter_140000.caffemodel"
         self.detector = cv2.dnn.readNetFromCaffe(self.protopath, self.modelpath)
         self.embedder = cv2.dnn.readNetFromTorch("/home/aweirdwhale/Bureau/Aweirdwhale/Miroir/mfm/scripts/face_recon/openface_nn4.small2.v1.t7")
@@ -98,7 +98,7 @@ class FaceRecognition:
             except OSError as e:
                 print(f"Error creating directory '{path}': {e}")
         else:
-            print(f"Directory '{path}' already exists.")
+            print(f"Directory '{path}' already exists. And ready to use !")
 
     def implement_dataset(self, username):
         """

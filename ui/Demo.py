@@ -8,6 +8,7 @@ import time
 
 from scripts.face_recon.facerecognition import FaceRecognition
 
+
 class Clock:
     def __init__(self, label):
         self.label = label
@@ -18,6 +19,7 @@ class Clock:
         self.label.configure(text=current_time)
         app.after(60 * 1000, self.change_label)  # Met à jour toutes les secondes
 
+
 class Username:
     def __init__(self, label):
         self.label = label
@@ -25,9 +27,10 @@ class Username:
         self.initialize_username()
 
     def initialize_username(self):
-        recon = FaceRecognition(0)
+        recon = FaceRecognition(2)
         self.username = recon.recognition()[0]
         self.label.configure(text=f"Bonjour,\r   {self.username}")
+
 
 def start_app():
     global app
@@ -50,7 +53,8 @@ def start_app():
     music_title_label = tk.CTkLabel(app, text="Music title", font=('Montserrat', 32), bg_color="#000000")
     music_title_label.place(x=200, y=650, anchor="sw")  # place the label bottom left
 
-    music_artist_label = tk.CTkLabel(app, text="artist", font=('Montserrat', 24), bg_color="#000000", text_color="#d3d3d3")
+    music_artist_label = tk.CTkLabel(app, text="artist", font=('Montserrat', 24), bg_color="#000000",
+                                     text_color="#d3d3d3")
     music_artist_label.place(x=200, y=680, anchor="sw")  # place the label bottom left
 
     app.mainloop()
