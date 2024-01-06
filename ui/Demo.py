@@ -1,12 +1,9 @@
 #!/usr/bin/env python3
 
-from tkinter import Canvas, Frame, Label
-
 import customtkinter as tk
-import threading
 import time
 
-from scripts.face_recon.facerecognition import FaceRecognition
+from features.face_recon.facerecognition import FaceRecognition
 
 
 class Clock:
@@ -29,7 +26,7 @@ class Username:
     def initialize_username(self):
         recon = FaceRecognition(2)
         self.username = recon.recognition()[0]
-        self.label.configure(text=f"Bonjour,\r   {self.username}")
+        self.label.configure(text=f"Bonjour,\r      {self.username}")
 
 
 def start_app():
@@ -43,7 +40,6 @@ def start_app():
 
     wish_label = tk.CTkLabel(app, text="Bonjour,\r   ", font=("Playfair Display", 48), bg_color="#000000")
     wish_label.place(x=20, y=0, anchor="nw")  # Place the label in the top left corner of the window
-
     username_label = Username(wish_label)
 
     watch_label = tk.CTkLabel(app, text=f"", font=("Montserrat", 42), bg_color="#000000")

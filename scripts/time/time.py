@@ -1,19 +1,13 @@
 import time
-import threading
-
-clk = 0
 
 
-def get_time():
-    global clk
-    clk = time.strftime('\t%H:%M\r')
-    return clk
+class Clock:
+    def __init__(self, label):
+        self.label = label
+        self.change_label()
 
+    def change_label(self):
+        current_time = time.strftime('%H\r%M')
+        self.label.configure(text=current_time)
+        win.after(60 * 1000, self.change_label)  # Met à jour toutes les secondes
 
-def manage_time():
-    while True:
-        print(get_time())
-        time.sleep(60)
-
-
-threading.Thread(target=manage_time()).start()

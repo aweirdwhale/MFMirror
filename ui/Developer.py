@@ -10,8 +10,8 @@ from io import BytesIO
 import time
 
 # distant classes
-from scripts.face_recon.facerecognition import FaceRecognition
-from scripts.music.musicbehaviour import MusicBehaviour
+from features.face_recon.facerecognition import FaceRecognition
+from features.music.musicbehaviour import MusicBehaviour
 
 # APIs
 import requests
