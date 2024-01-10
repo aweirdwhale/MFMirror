@@ -18,7 +18,7 @@ def speech_to_text_from_file(audio_file_path):
     recognizer = sr.Recognizer()
 
     try:
-        with sr.AudioFile(audio_file_path) as source:
+        with sr.Microphone() as source:
             audio = recognizer.record(source)  # Enregistre tout le fichier audio
             text = recognizer.recognize_google(audio, language='fr-FR')
             return text

@@ -1,7 +1,7 @@
 import customtkinter as ctk
 
 
-from scripts.time.time import Clock
+from features.time.time import Clock
 from features.face_recon.facerecognition import FaceRecognition
 
 """Define the main window"""
@@ -13,7 +13,7 @@ win.config(bg="#000000")
 
 
 
-
+"""
 class Username:
     def __init__(self, label):
         self.label = label
@@ -24,12 +24,14 @@ class Username:
         recon = FaceRecognition(2)
         self.username = recon.recognition()[0]
         self.label.configure(text=f"Bonjour,\r   {self.username}")
+"""
+
 
 
 """Define the widgets"""
-wish_label = ctk.CTkLabel(win, text=f"Bonjour,\r   ", font=("Playfair Display", 48), bg_color="#000000")
+wish_label = ctk.CTkLabel(win, text=f"Bonjour,\r   Baptou", font=("Playfair Display", 48), bg_color="#000000")
 wish_label.place(x=20, y=0, anchor="nw")  # Place the label in the top left corner of the window
-wish = Username(wish_label)
+# wish = Username(wish_label)
 
 
 # create a canvas around the watch

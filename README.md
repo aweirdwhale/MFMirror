@@ -108,6 +108,8 @@ This project is under MIT licence, free for everyone and forever !
 
 [![Licence](https://img.shields.io/badge/Licence-MIT-green?labelColor=gray&style=for-the-badge)](https://choosealicense.com/licenses/mit/)
 
+Fonts used in the UI : [Pilowlava](https://www.freefaces.gallery/typefaces/pilowlava) & [Subjectivity](https://www.freefaces.gallery/typefaces/subjectivity)
+
 ![Software](https://img.shields.io/badge/Software-WIP-orange?labelColor=gray&style=for-the-badge)
 
 ![Hardware](https://img.shields.io/badge/Hardware-TODO-red?labelColor=gray&style=for-the-badge)

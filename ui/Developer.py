@@ -11,14 +11,14 @@ import time
 
 # distant classes
 from features.face_recon.facerecognition import FaceRecognition
-from features.music.musicbehaviour import MusicBehaviour
+from features.music.player import Player
 
 # APIs
 import requests
 
 recognized = "No recognized faces yet"
 """Creds"""
-key = "[GOOGLE_API_KEY]"
+key = "AIzaSyA3mZLqwIAFmIast90AD3LYc0kxHFMh4qs"
 
 """Defines Actions for the window"""
 

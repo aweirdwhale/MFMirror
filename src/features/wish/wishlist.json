@@ -1,0 +1,38 @@
+{
+  "fr" : {
+    "morning": {
+      "wish1": "Bonjour, {username}, comment allez-vous?",
+      "wish2": "Bonjour, {username}, je suis content de vous revoir!"
+    },
+    "afternoon": {
+      "wish1": "Bonjour, {username}, comment allez-vous?",
+        "wish2": "Bonjour, {username}, je suis content de vous revoir!"
+    },
+    "evening": {
+      "wish1": "Bonsoir, {username}, comment allez-vous?",
+      "wish2": "Bonsoir, {username}, je suis content de vous revoir!"
+    },
+    "doesntMatter": {
+      "wish1": "Ah! Je vous attendais, {username}!",
+      "wish2": "C'est toujours un plaisir de vous voir, {username}!"
+    }
+  },
+  "en" : {
+    "morning": {
+        "wish1": "Hello, {username}, how are you?",
+        "wish2": "Good morning, {username}, I'm glad to see you again!"
+        },
+    "afternoon": {
+        "wish1": "Hello, {username}, how are you?",
+        "wish2": "Good afternoon, {username}, I'm glad to see you again!"
+        },
+    "evening": {
+        "wish1": "Hello, {username}, how are you?",
+        "wish2": "Good evening, {username}, I'm glad to see you again!"
+        },
+    "doesntMatter": {
+        "wish1": "Ah! I was waiting for you, {username}!",
+        "wish2": "It's always a pleasure to see you, {username}!"
+        }
+    }
+}

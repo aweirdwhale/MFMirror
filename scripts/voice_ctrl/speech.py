@@ -3,7 +3,7 @@ import subprocess
 
 
 class Speaker:
-    def __init__(self, text, lang='fr'):
+    def __init__(self, text, lang='en'):
         self.text = text
         self.lang = lang
 
@@ -14,5 +14,5 @@ class Speaker:
 
 
 if __name__ == "__main__":
-    sp = Speaker("Salam mon frère")
+    sp = Speaker("Hello, I'm Gideon, your personal assistant.")
     sp.speak()
