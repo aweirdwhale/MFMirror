@@ -9,7 +9,7 @@ def convert_to_wav(input_file, output_file):
 
 # Utilisation de la fonction pour convertir le fichier audio en WAV
 input_file_path = './output.mp3'  # Remplacez par le chemin de votre fichier audio
-output_file_path = './output.wav'  # Remplacez par le chemin de sortie en format WAV
+output_file_path = '../../src/features/speech-to-text/output.wav'  # Remplacez par le chemin de sortie en format WAV
 
 convert_to_wav(input_file_path, output_file_path)
 
@@ -18,7 +18,7 @@ def speech_to_text_from_file(audio_file_path):
     recognizer = sr.Recognizer()
 
     try:
-        with sr.Microphone() as source:
+        with sr.AudioFile(audio_file_path) as source:
             audio = recognizer.record(source)  # Enregistre tout le fichier audio
             text = recognizer.recognize_google(audio, language='fr-FR')
             return text
@@ -31,7 +31,7 @@ def speech_to_text_from_file(audio_file_path):
 
 
 # Utilisation de la fonction avec un fichier audio
-audio_file_path = './output.wav'  # Remplacez par le chemin de votre fichier audio
+audio_file_path = '../../src/features/speech-to-text/output.wav'  # Remplacez par le chemin de votre fichier audio
 result = speech_to_text_from_file(audio_file_path)
 
 if result:
