@@ -76,7 +76,7 @@ Folder Structure :
   ├── src                     # Source files (alternatively `app`)
   |     └── features          # Here are the face detection, hand gesture, music scripts and so on...
   |     └── components        # Components used in the UI
-  |     └── interface.        # User Interface itself
+  |     └── interface.py      # User Interface itself
   |
   ├── tools                   # Tools and utilities
   |     └── DeveloperUI.py   # This is the UI used to test every feature individually
