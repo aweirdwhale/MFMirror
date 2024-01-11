@@ -22,7 +22,7 @@ Don't have any friends? Better than a curly: MFMirror!
 
 MFMirror is an artificial intelligence based on ChatGPT, created by the Biquettes. It powers the world's best mirror. You might ask: If I had to sum up MFMirror with you today, I'd start by saying that it's a meeting between two brilliant minds who reached out to each other, perhaps at a time when we couldn't take it anymore, when we were alone at home. And it's quite curious to think that this chance meeting forged a most perfect mirror, because when you have this taste for things well done, the beautiful gesture, well I'd say that you don't find the interest in spying on your customers as our competitors Amazon, Google or even Apple do.
 
-So, as you may have gathered, Les Biquettes today present a project born of a meeting between the most eminent minds in science fiction and those of the Brothers Grimm.
+So, as you may have gathered, Les Biquettes today present a project born out of a meeting between the most eminent minds in science fiction and those of the Brothers Grimm.
 
 A seemingly simple object of fascination, the mirror is in fact a marvellous instrument that has captivated people's imaginations for centuries, possessing a mystical aura that is both practical and magical, making it unique among everyday objects. Here's to artificial intelligence, which we've been talking about far too much lately.
 
