@@ -16,6 +16,17 @@ class HandGesture(threading.Thread):
         super(HandGesture, self).__init__()
         self.volume_thread_stop_event = threading.Event()
         self.pygame_instance = None
+        self.vol = 0
+
+    def show(self):
+        if self.pygame_instance is None:
+            self.pygame_instance = pygame.init()
+
+        print(pygame.mixer.music.get_volume())
+        while not self.volume_thread_stop_event.is_set():
+            self.vol = pygame.mixer.music.get_volume()
+            print(self.vol)
+            time.sleep(.5)
 
     def run(self):
         cam = cv2.VideoCapture(0)
@@ -56,6 +67,7 @@ class HandGesture(threading.Thread):
                         # Vérifier si le pourcentage augmente
                         if abs(percentage_gap - prev_percentage_gap) > 1.5:
                             per = percentage_gap / 100
+                            self.vol = per * 100
                             pygame.mixer.music.set_volume(per)
 
                         # Mettre à jour le pourcentage précédent

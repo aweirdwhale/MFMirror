@@ -1,38 +1,70 @@
 {
-  "fr" : {
-    "morning": {
-      "wish1": "Bonjour, {username}, comment allez-vous?",
-      "wish2": "Bonjour, {username}, je suis content de vous revoir!"
+  "welcome": {
+    "fr": {
+      "morning": [
+        "Bonjour, {username}, comment allez-vous?",
+        "Bonjour, {username}, je suis content de vous revoir!",
+        "Vous êtes bien matinal, {username}!",
+        "Salut, {username}, avez-vous bien dormi?"
+      ],
+      "afternoon": [
+        "Bonjour, {username}, comment allez-vous?",
+        "Bonjour, {username}, je suis content de vous revoir!",
+        "Bonne après-midi, {username}!",
+        "Salut, {username}, avez-vous passé une bonne journée?"
+      ],
+      "evening": [
+        "Bonsoir, {username}, comment allez-vous?",
+        "Bonsoir, {username}, je suis content de vous revoir!",
+        "Bonne soirée, {username}!",
+        "Salut, {username}, comment s'est passée votre journée?"
+      ],
+      "doesntMatter": [
+        "Ah! Je vous attendais, {username}!",
+        "C'est toujours un plaisir de vous voir, {username}!",
+        "Bienvenue, {username}!",
+        "Salut, {username}, ravi de vous avoir ici!"
+      ]
     },
-    "afternoon": {
-      "wish1": "Bonjour, {username}, comment allez-vous?",
-        "wish2": "Bonjour, {username}, je suis content de vous revoir!"
-    },
-    "evening": {
-      "wish1": "Bonsoir, {username}, comment allez-vous?",
-      "wish2": "Bonsoir, {username}, je suis content de vous revoir!"
-    },
-    "doesntMatter": {
-      "wish1": "Ah! Je vous attendais, {username}!",
-      "wish2": "C'est toujours un plaisir de vous voir, {username}!"
+    "en": {
+      "morning": [
+        "Hello, {username}, how are you?",
+        "Good morning, {username}, I'm glad to see you again!",
+        "Welcome in the morning, {username}!",
+        "Hi, {username}, did you sleep well?"
+      ],
+      "afternoon": [
+        "Hello, {username}, how are you?",
+        "Good afternoon, {username}, I'm glad to see you again!",
+        "Good afternoon, {username}! How's your day going?",
+        "Hi, {username}, hope you're having a great afternoon!"
+      ],
+      "evening": [
+        "Hello, {username}, how are you?",
+        "Good evening, {username}, I'm glad to see you again!",
+        "Good evening, {username}! How was your day?",
+        "Hi, {username}, I hope you had a wonderful evening!"
+      ],
+      "doesntMatter": [
+        "Ah! I was waiting for you, {username}!",
+        "It's always a pleasure to see you, {username}!",
+        "Welcome, {username}!",
+        "Hi, {username}, glad to have you here!"
+      ]
     }
   },
-  "en" : {
-    "morning": {
-        "wish1": "Hello, {username}, how are you?",
-        "wish2": "Good morning, {username}, I'm glad to see you again!"
-        },
-    "afternoon": {
-        "wish1": "Hello, {username}, how are you?",
-        "wish2": "Good afternoon, {username}, I'm glad to see you again!"
-        },
-    "evening": {
-        "wish1": "Hello, {username}, how are you?",
-        "wish2": "Good evening, {username}, I'm glad to see you again!"
-        },
-    "doesntMatter": {
-        "wish1": "Ah! I was waiting for you, {username}!",
-        "wish2": "It's always a pleasure to see you, {username}!"
-        }
-    }
+  "goodbye": {
+    "fr": [
+      "Au revoir, {username}, à bientôt!",
+      "Adieu, {username}, prenez soin de vous!",
+      "À la prochaine, {username}!",
+      "À bientôt, {username}, passez une excellente journée!"
+    ],
+    "en": [
+      "Goodbye, {username}, see you soon!",
+      "Farewell, {username}, take care!",
+      "Until next time, {username}!",
+      "Goodbye, {username}, have a great day!"
+    ]
+  }
 }

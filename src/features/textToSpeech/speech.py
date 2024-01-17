@@ -19,5 +19,5 @@ class TTS:
 
 
 if __name__ == "__main__":
-    tts = TTS(lang="en")
-    tts.speak("Hello, I'm Franck, your personal assistant.")
+    tts = TTS(lang="fr")
+    tts.speak("Bonjour.")

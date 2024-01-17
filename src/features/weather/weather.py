@@ -30,26 +30,34 @@ class Weather:
         self.params = {
             "latitude": self.lat,
             "longitude": self.lon,
-            "current": ["temperature_2m", "apparent_temperature", "is_day", "precipitation", "rain", "snowfall",
-                        "weather_code", "wind_speed_10m", "wind_direction_10m"],
-            "hourly": "temperature_2m",
-            "timezone": "Europe/London"
+            "current": ["temperature_2m", "relative_humidity_2m", "apparent_temperature", "is_day", "weather_code",
+                        "wind_speed_10m", "wind_direction_10m"],
+            "hourly": ["temperature_2m", "weather_code"],
+            "daily": ["temperature_2m_max", "temperature_2m_min", "sunrise", "sunset", "uv_index_max"]
         }
 
         self.responses = self.open_meteo.weather_api(self.api, params=self.params)
         self.response = self.responses[0]  # process first location
 
-    def current(self):
+    def values(self):
         # Current values. The order of variables needs to be the same as requested.
         current = self.response.Current()
         current_temperature_2m = current.Variables(0).Value()
-        current_apparent_temperature = current.Variables(1).Value()
-        current_is_day = current.Variables(2).Value()
-        current_precipitation = current.Variables(3).Value()
-        current_rain = current.Variables(4).Value()
-        current_snowfall = current.Variables(5).Value()
-        current_wind_speed_10m = current.Variables(6).Value()
-        current_wind_direction_10m = current.Variables(7).Value()
+        current_relative_humidity_2m = current.Variables(1).Value()
+        current_apparent_temperature = current.Variables(2).Value()
+        current_is_day = current.Variables(3).Value()
+        current_weather_code = current.Variables(4).Value()
+        current_wind_speed_10m = current.Variables(5).Value()
+        current_wind_direction_10m = current.Variables(6).Value()
+
+        # Process hourly data. The order of variables needs to be the same as requested.
+        hourly = self.response.Hourly()
+        hourly_temperature_2m = hourly.Variables(0).ValuesAsNumpy()
+        hourly_weather_code = hourly.Variables(1).ValuesAsNumpy()
+
+        print(hourly_weather_code, hourly_temperature_2m)
+
+        #hourly_dataframe = pd.DataFrame(data=hourly_data)
 
         time = pd.to_datetime(current.Time(), unit='s')
 
@@ -59,19 +67,22 @@ class Weather:
                 f"{self.response.Elevation()}",
                 f"Timezone : {self.response.Timezone()} (GMT+{self.response.UtcOffsetSeconds()})"
             ],
-            "time": time,
-            "temp": current_temperature_2m,
-            "body_feeling": current_apparent_temperature,
-            "is_day": True if current_is_day == 1 else False,
-            "precipitation": {
-                "rain": current_rain,
-                "snow": current_snowfall,
-                "total": current_precipitation
+            "current": {
+                "time": time,
+                "temp": current_temperature_2m,
+                "body_feeling": current_apparent_temperature,
+                "is_day": True if current_is_day == 1 else False,
+                "wind": {
+                    "speed": current_wind_speed_10m,
+                    "direction": current_wind_direction_10m
+                },
+                "code": current_weather_code,
             },
-            "wind": {
-                "speed": current_wind_speed_10m,
-                "direction": current_wind_direction_10m
+            "hourly": {
+
             }
+
+
 
         }
 
@@ -80,7 +91,7 @@ class Weather:
     def refresh(self):
         self.responses = self.open_meteo.weather_api(self.api, params=self.params)
         self.response = self.responses[0]  # process first location
-        return self.current()
+        return self.values()
 
 
 if __name__ == "__main__":

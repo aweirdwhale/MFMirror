@@ -22,9 +22,6 @@ import threading
 
 from hand_gesture import HandGesture
 
-import math
-import numpy as np
-
 mp_drawing = mp.solutions.drawing_utils
 mp_hands = mp.solutions.hands
 
@@ -150,6 +147,7 @@ class Player:
         hg = HandGesture()  # instance
         hg.start()  # start thread
         hg.join()  # wait for thread to finish
+
 
 
 # Test

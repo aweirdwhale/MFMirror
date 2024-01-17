@@ -23,11 +23,21 @@ app.resizable(False, False)
 # Black bg
 app.config(bg="#000000")
 
-
 """Clock widget"""
-clk = ctk.CTkLabel(app, text=f"", font=("Montserrat", 42), bg_color="#000000")
-clk.place(x=920, y=22, anchor="ne")
+# create a canvas around the watch
+watch_canvas = ctk.CTkCanvas(app, width=120, height=120, bg="#000000", highlightthickness=0)
+watch_canvas.place(x=950, y=12, anchor="ne")  # place the canvas in the top right corner of the window
+
+# create a circle on the canvas
+# watch_canvas.create_oval(0, 0, 117, 117, fill="#000000", outline="#FFFFFF", width=2)  # ==> idk
+
+clk = ctk.CTkLabel(app, text=f"", font=("Montserrat", 42), bg_color="#000000", text_color="#ffffff")
+clk.place(x=918, y=20, anchor="ne")
 clock = Clock(clk, app)
 
-""""""
+"""Wish"""
+# Hello babe
+
+
+"""Start the app"""
 app.mainloop()

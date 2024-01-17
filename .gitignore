@@ -163,6 +163,8 @@ cython_debug/
 # Music files
 *.mp3
 
+llama/*
+
 # Dataset/* but not Dataset/unknown
 Dataset/*
 !Dataset/unknown
