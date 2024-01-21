@@ -1,4 +1,4 @@
-![Banner](./Explanations/splashbanner.png)
+![Banner](./Explainations/splashbanner.png)
 
 # **MFMirror**
 
