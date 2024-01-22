@@ -35,7 +35,7 @@ class Behaviour:
         )
         self.stt = SpeechToText()
         self.tts = TTS(lang=language)
-        self.wish = Wish(language, "Baptou")
+        self.wish = Wish(language, "Janick")
         self.weather = Weather()
         self.iss = ISS()
         self.player = Player()
@@ -87,12 +87,12 @@ class Behaviour:
         if "peux-tu" in self.command:
             self.tts.speak(phrases[language]["processing"])
 
-        if "météo" in self.command:
+        if "météo" in self.command or "temps" in self.command:
             self.weather.refresh()
             meteo = self.weather.meteo
             self.tts.speak("Il fait " + meteo["current"]["temp"] + " degrés Celcius, ressentit" + meteo["current"]["body_feeling"])
         
-        elif "iss" in self.command:
+        elif "iss" in self.commandn or "station spatiale" in self.command:
             self.iss.refresh()
             position = self.iss.position
             self.tts.speak("La station spatiale internationale se trouve au dessus de " + position["over"] + " à " + position["time"])
@@ -119,6 +119,7 @@ class Behaviour:
         elif "volume" in self.command:
             self.player.volume()
 
+        
         else:
             self.tts.speak(phrases[language]["bozo"])
 

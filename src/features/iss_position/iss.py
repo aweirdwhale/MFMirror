@@ -40,7 +40,10 @@ class ISS:
             lat = None
             lon = None
 
-        self.countryName = self.over["countryName"] if self.over["countryName"] else "Ocean"
+        try:
+            self.countryName = self.over["countryName"]
+        except:
+            self.countryName = "l'océan"
 
         self.position = {
             "time": str(time),

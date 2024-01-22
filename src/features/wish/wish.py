@@ -22,12 +22,15 @@ class Wish:
         return message_list[index]
 
     def _get_time_of_day(self):
+        print(type(datetime.now().hour))
         if 12 <= datetime.now().hour < 18:
             return "afternoon"
-        elif 18 <= datetime.now().hour < 22:
+        elif 18 <= datetime.now().hour <= 21:
             return "evening"
-        elif 22 <= datetime.now().hour < 6:
-            return "night"
+        elif 21 < datetime.now().hour <= 24:
+            return "doesntMatter"
+        elif 0 <= datetime.now().hour < 6:
+            return "doesntMatter"
         else:
             return "morning"
 
