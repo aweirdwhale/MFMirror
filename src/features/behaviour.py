@@ -13,6 +13,7 @@ from wakeword.Wakey import PorcupineListener
 
 import json
 import playsound
+import pygame
 
 phrases = json.load(open("src/features/phrases.json", "r"))
 
@@ -34,7 +35,7 @@ class Behaviour:
         )
         self.stt = SpeechToText()
         self.tts = TTS(lang=language)
-        self.wish = Wish(language, "janick")
+        self.wish = Wish(language, "Baptou")
         self.weather = Weather()
         self.iss = ISS()
         self.player = Player()
@@ -42,6 +43,7 @@ class Behaviour:
         self.last_detection_time = None
         self.command = ""
         self.arg = ""
+        self.isPlaying = False
 
     def listen(self):
         try:
@@ -56,7 +58,7 @@ class Behaviour:
     def listen_for_commands(self):
         self.stt.run() #running the speach to text
         # print the text detected :
-
+        
         self.command = self.stt.text
         self.command = self.command.lower()
 
@@ -92,13 +94,18 @@ class Behaviour:
             self.tts.speak(phrases[language]["music"])
             self.get_args()
             print("Music : " + self.arg)
+            self.player.use_youtube(self.arg, os.getenv("GOOGLE_KEY"))
+            self.player.play()
+
         else:
             self.tts.speak(phrases[language]["bozo"])
 
+        self.player.pause_resume() #resume the music
 
 
     def use(self):
         if self.wake_word.detected:
+            self.player.pause_resume() #pause the music
             # first thing first, say Hello :)
             # Check if the wake word was detected in the last 20 minutes
             if self.last_detection_time is None or datetime.now() - self.last_detection_time > timedelta(minutes=20):

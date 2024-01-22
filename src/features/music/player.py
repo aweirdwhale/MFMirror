@@ -135,6 +135,9 @@ class Player:
 
     def pause_resume(self):
 
+        if self.pygame_instance is None:
+            return
+
         if pygame.mixer.music.get_busy() and not self.paused:
             self.current_position = pygame.mixer.music.get_pos()
             pygame.mixer.music.pause()
