@@ -25,15 +25,15 @@ class FaceRecognition:
         self.cameraIndex = int(cameraIndex)
 
         # Using pycharm, you have to run from terminal or paths doesn't work
-        self.dataset = '../../../DATA/faces/'
-        self.embeddings = './output/embeddings.pickle'
+        self.dataset = 'DATA/faces/'
+        self.embeddings = 'src/features/face_recon/output/embeddings.pickle'
         self.recognizer = './output/recognizer.pickle'
         self.le = './output/le.pickle'
-        self.protopath = "./face_detection_model/deploy.prototxt"
-        self.deploypath = "./face_detection_model/deploy.prototxt"
-        self.modelpath = "./face_detection_model/res10_300x300_ssd_iter_140000.caffemodel"
+        self.protopath = "src/features/face_recon/face_detection_model/deploy.prototxt"
+        self.deploypath = "src/features/face_recon/face_detection_model/deploy.prototxt"
+        self.modelpath = "src/features/face_recon/face_detection_model/res10_300x300_ssd_iter_140000.caffemodel"
         self.detector = cv2.dnn.readNetFromCaffe(self.protopath, self.modelpath)
-        self.embedder = cv2.dnn.readNetFromTorch("./openface_nn4.small2.v1.t7")
+        self.embedder = cv2.dnn.readNetFromTorch("src/features/face_recon/openface_nn4.small2.v1.t7")
 
         self.knownEmbeddings = []
         self.knownNames = []

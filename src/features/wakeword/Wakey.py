@@ -7,12 +7,13 @@ import pvporcupine
 from pvrecorder import PvRecorder
 
 from dotenv import load_dotenv
-from features.Logs.log import Log
+from Logs.log import Log
 
 load_dotenv("../../../.env.secret")
 PiKEY = os.getenv("PORCUPINE_KEY")
 console = Log()
 
+console.log(PiKEY, "success")
 
 class PorcupineListener:
     def __init__(self, accessKey, keywordPath, modelPath, outputPath=None, audioDeviceIndex=-1):
@@ -24,6 +25,7 @@ class PorcupineListener:
         self.porcupine = None
         self.recorder = None
         self.wav_file = None
+        self.detected = False
 
     def initialize(self):
         self.porcupine = pvporcupine.create(
@@ -55,12 +57,14 @@ class PorcupineListener:
                     self.wav_file.writeframes(struct.pack("h" * len(pcm), *pcm))
 
                 if result >= 0:
-                    print('[%s] Detected %s' % (str(datetime.now()), self.keyword_path))
+                    print('[%s] Detected outre ça' % str(datetime.now()))
+                    self.detected = True
                     return True
-
         except KeyboardInterrupt:
             print('Stopping ...')
-            yield False
+        finally:
+            return False
+
 
     def cleanup(self):
         if self.recorder:
@@ -71,17 +75,18 @@ class PorcupineListener:
             self.wav_file.close()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     access_key = PiKEY
-    keyword_path = "./wake_fr.ppn"
-    model_path = './porcupine_fr.pv'
-    output_path = "output.wav"  # Change to your desired output path
-    audio_device_index = -1  # Set to the desired audio device index
+    kpath = "./wake_fr.ppn",  # outre ça
+    mpath = "./porcupine_fr.pv",
+    opath = "./output.wav"
 
-    listener = PorcupineListener(access_key, keyword_path, model_path, output_path, audio_device_index)
+    listener = PorcupineListener(access_key, kpath, mpath, opath)
     listener.initialize()
 
     try:
         listener.start_detection()
     finally:
         listener.cleanup()
+
+

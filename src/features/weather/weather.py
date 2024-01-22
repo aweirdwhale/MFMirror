@@ -6,7 +6,7 @@ from retry_requests import retry
 import os
 from dotenv import load_dotenv
 
-load_dotenv(dotenv_path="../../../config.env")
+load_dotenv(dotenv_path="config.env")
 
 """
 class Weather:
@@ -39,6 +39,8 @@ class Weather:
         self.responses = self.open_meteo.weather_api(self.api, params=self.params)
         self.response = self.responses[0]  # process first location
 
+        self.meteo = {}
+
     def values(self):
         # Current values. The order of variables needs to be the same as requested.
         current = self.response.Current()
@@ -55,13 +57,13 @@ class Weather:
         hourly_temperature_2m = hourly.Variables(0).ValuesAsNumpy()
         hourly_weather_code = hourly.Variables(1).ValuesAsNumpy()
 
-        print(hourly_weather_code, hourly_temperature_2m)
+        # print(hourly_weather_code, hourly_temperature_2m)
 
         #hourly_dataframe = pd.DataFrame(data=hourly_data)
 
         time = pd.to_datetime(current.Time(), unit='s')
 
-        meteo = {
+        self.meteo = {
             "header": [
                 f"{self.response.Latitude()}°E {self.response.Longitude()}°N",
                 f"{self.response.Elevation()}",
@@ -69,8 +71,8 @@ class Weather:
             ],
             "current": {
                 "time": time,
-                "temp": current_temperature_2m,
-                "body_feeling": current_apparent_temperature,
+                "temp": str(round(current_temperature_2m)),
+                "body_feeling": str(round(current_apparent_temperature)),
                 "is_day": True if current_is_day == 1 else False,
                 "wind": {
                     "speed": current_wind_speed_10m,
@@ -81,12 +83,11 @@ class Weather:
             "hourly": {
 
             }
-
-
-
         }
 
-        return meteo
+        print(self.meteo)
+
+        return self.meteo
 
     def refresh(self):
         self.responses = self.open_meteo.weather_api(self.api, params=self.params)

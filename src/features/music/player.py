@@ -7,7 +7,7 @@ from googleapiclient.errors import HttpError
 from moviepy.audio.io.AudioFileClip import AudioFileClip
 from pytube import YouTube
 
-from src.features.Logs.log import Log
+from Logs.log import Log
 
 from dotenv import load_dotenv
 
@@ -20,12 +20,12 @@ import requests
 import mediapipe as mp
 import threading
 
-from hand_gesture import HandGesture
+from music.hand_gesture import HandGesture
 
 mp_drawing = mp.solutions.drawing_utils
 mp_hands = mp.solutions.hands
 
-load_dotenv(dotenv_path="../../../.env.secret")
+load_dotenv(dotenv_path=".env.secret")
 key = os.getenv("GOOGLE_KEY")
 
 # init log
@@ -36,7 +36,7 @@ class Player:
     def __init__(self, window=None):
         self.video_info = None
         self.result = []
-        self.save_path = '../../../DATA/musics'
+        self.save_path = 'DATA/musics'
         self.window = window
 
         self.pygame_instance = None

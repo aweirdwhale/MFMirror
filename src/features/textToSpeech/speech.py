@@ -4,7 +4,7 @@ from gtts import gTTS
 #import config
 from dotenv import load_dotenv
 import os
-load_dotenv(dotenv_path="../../../config.env")
+load_dotenv(dotenv_path="config.env")
 language = os.getenv("LANG")
 
 
@@ -14,8 +14,8 @@ class TTS:
 
     def speak(self, text):
         tts = gTTS(text=text, lang=self.lang)
-        tts.save("./output/speech.mp3")
-        subprocess.run(["mpg321", "./output/speech.mp3"])
+        tts.save("src/features/textToSpeech/output/speech.mp3")
+        subprocess.run(["mpg321", "src/features/textToSpeech/output/speech.mp3"])
 
 
 if __name__ == "__main__":

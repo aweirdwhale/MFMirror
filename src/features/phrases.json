@@ -1,0 +1,18 @@
+{
+    "fr": {
+        "listening": "Je suis tout ouïe",
+        "processing": "Je m'en charge ! Laissez-moi quelques secondes...",
+        "bozo": "Je suis désolé, je ne suis pas assez qualifié pour ce job.",
+        "success": "Et voilà le travail !",
+        "howareyou": "Je vais bien, merci ! Et vous ?",
+        "music": "Que voulez-vous écouter ?"
+    },
+    "en": {
+        "listening": "I'm all ears",
+        "processing": "I'm on it! Give me a few seconds...",
+        "bozo": "I'm sorry, I'm not qualified enough for this job.",
+        "success": "Here you go!",
+        "howareyou": "I'm fine, thank you! And you?",
+        "music": "What do you want to listen to?"
+    }
+}

@@ -8,13 +8,14 @@ import os
 load_dotenv(dotenv_path="../../../config.env")
 language = os.getenv("LANGUAGE")
 
-wishlist = json.load(open("wishlist.json", "r"))
+wishlist = json.load(open("src/features/wish/wishlist.json", "r"))
 
 
 class Wish:
-    def __init__(self, lang=language):
+    def __init__(self, lang=language, username="Guest"):
         self.lang = lang
         self.daytime = ""
+        self.username = username
 
     def _get_random_message(self, message_list):
         index = randint(0, len(message_list) - 1)
@@ -30,29 +31,28 @@ class Wish:
         else:
             return "morning"
 
-    def wish(self, username):
+    def wish(self):
         self.daytime = self._get_time_of_day()
 
         # Greet
         greeting_list = wishlist["welcome"][self.lang][self.daytime]
         greeting = self._get_random_message(greeting_list)
-        greeting = greeting.replace("{username}", username)
+        greeting = greeting.replace("{username}", self.username)
 
         return greeting
 
-    def farewell(self, username):
+    def farewell(self):
         farewell_list = wishlist["goodbye"][self.lang]
         farewell = self._get_random_message(farewell_list)
-        farewell = farewell.replace("{username}", username)
+        farewell = farewell.replace("{username}", self.username)
 
         return farewell
 
 
 if __name__ == "__main__":
-    wish = Wish()
-    username = "Big boss"
-    print(wish.wish(username))
+    wish = Wish("en", "Big Boss")
+    print(wish.wish())
 
     # ... other interactions ...
 
-    print(wish.farewell(username))
+    print(wish.farewell())

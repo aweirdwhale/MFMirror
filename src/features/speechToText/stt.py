@@ -5,11 +5,11 @@ from pydub import AudioSegment
 from scipy.io.wavfile import write
 import wavio as wv
 import speech_recognition as sr
-from features.Logs.log import Log
+from Logs.log import Log
 
 # import language
 from dotenv import load_dotenv
-load_dotenv("../../../config.env")
+load_dotenv("config.env")
 
 lang = os.getenv("LANG")
 
@@ -21,8 +21,9 @@ class SpeechToText:
     def __init__(self, freq=44100, duration=5):
         self.freq = freq
         self.duration = duration
-        self.inputFile = './output/recording.mp3'
-        self.outputFile = './output/rec.wav'
+        self.inputFile = 'src/features/speechToText/output/recording.mp3'
+        self.outputFile = 'src/features/speechToText/output/rec.wav'
+        self.text = ""
 
     def record(self):
         recording = sd.rec(int(self.duration * self.freq), samplerate=self.freq, channels=2)
@@ -45,6 +46,7 @@ class SpeechToText:
                 audio = recognizer.record(source)  # save audio file
                 text = recognizer.recognize_google(audio, language=lang)
                 log.log(text, "great")
+                self.text = text
                 return text
         except sr.UnknownValueError:
             log.log("Unable to understand the audio.", "error")
