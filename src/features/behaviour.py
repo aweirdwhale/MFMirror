@@ -44,6 +44,7 @@ class Behaviour:
         self.command = ""
         self.arg = ""
         self.isPlaying = False
+        self.count = 0
 
     def listen(self):
         try:
@@ -62,11 +63,17 @@ class Behaviour:
         self.command = self.stt.text
         self.command = self.command.lower()
 
-        if "comment ça va" in self.command:
-            self.tts.speak(phrases[language]["howareyou"])
+        if "error :" in self.command:
+            self.count += 1
+            if self.count < 2:
+                self.tts.speak(phrases[language]["error"])
+                self.listen_for_commands()
+            else:
+                return
         else:
             self.process_command()
         
+        #self.player.pause()
 
     def get_args(self):
         self.stt.run() #running the speach to text
@@ -77,35 +84,50 @@ class Behaviour:
         return self.arg
 
     def process_command(self):
-        if "peux-tu" or "puisses-tu" or "pourrais-tu" in self.command:
+        if "peux-tu" in self.command:
             self.tts.speak(phrases[language]["processing"])
 
         if "météo" in self.command:
             self.weather.refresh()
             meteo = self.weather.meteo
             self.tts.speak("Il fait " + meteo["current"]["temp"] + " degrés Celcius, ressentit" + meteo["current"]["body_feeling"])
+        
         elif "iss" in self.command:
             self.iss.refresh()
             position = self.iss.position
             self.tts.speak("La station spatiale internationale se trouve au dessus de " + position["over"] + " à " + position["time"])
+        
         elif "bonne situation" in self.command:
             playsound.playsound("otis.mp3")
+        
         elif "musique" in self.command:
             self.tts.speak(phrases[language]["music"])
             self.get_args()
             print("Music : " + self.arg)
             self.player.use_youtube(self.arg, os.getenv("GOOGLE_KEY"))
             self.player.play()
+            self.isPlaying = True
+        
+        elif "pause" in self.command and self.isPlaying:
+            self.player.pause()
+            self.isPlaying = False
+        
+        elif "reprends" in self.command and not self.isPlaying:
+            self.player.resume()
+            self.isPlaying = True
+        
+        elif "volume" in self.command:
+            self.player.volume()
 
         else:
             self.tts.speak(phrases[language]["bozo"])
 
-        self.player.pause_resume() #resume the music
+        # self.player.resume() #resume the music
 
 
     def use(self):
         if self.wake_word.detected:
-            self.player.pause_resume() #pause the music
+            #self.player.pause() #pause the music
             # first thing first, say Hello :)
             # Check if the wake word was detected in the last 20 minutes
             if self.last_detection_time is None or datetime.now() - self.last_detection_time > timedelta(minutes=20):

@@ -63,13 +63,19 @@ class Player:
                 artist = search_result["snippet"]["channelTitle"]
                 title = search_result["snippet"]["title"]
                 thumbnail = search_result["snippet"]["thumbnails"]["medium"]["url"]
+                # isStream = search_result["liveBroadcastContent"]
+                # if isStream == "live":
+                #    isStream = True
+                # else:
+                #    isStream = False
 
                 self.video_info = {
                     "url": video_url,
                     "artist": artist,
                     "title": title,
                     "thumbnail": thumbnail,
-                    "id": str(video_id)
+                    "id": str(video_id),
+                    "isStream": False
                 }
 
                 self.result = []
@@ -89,7 +95,10 @@ class Player:
         if len(self.result) > 0:
             yt_url = self.result[0]["url"]
             file_name = self.result[0]["id"]
-
+            if self.result[0]["isStream"]:
+                Log.log("Can't download a stream. Search something else.", "error")
+                return False
+            
             if os.path.isfile(f"{self.save_path}/{file_name}.mp3"):
                 log.log("File ready to play.", "great")
 
@@ -133,7 +142,7 @@ class Player:
         elif not self.paused:
             pygame.quit()
 
-    def pause_resume(self):
+    def pause(self):
 
         if self.pygame_instance is None:
             return
@@ -142,7 +151,12 @@ class Player:
             self.current_position = pygame.mixer.music.get_pos()
             pygame.mixer.music.pause()
             self.paused = True
-        elif self.paused:
+
+    def resume(self):
+        if self.pygame_instance is None:
+            return
+
+        if self.paused:
             pygame.mixer.music.play(start=float(self.current_position / 1000))
             self.paused = False
 

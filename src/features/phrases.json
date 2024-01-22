@@ -5,7 +5,8 @@
         "bozo": "Je suis désolé, je ne suis pas assez qualifié pour ce job.",
         "success": "Et voilà le travail !",
         "howareyou": "Je vais bien, merci ! Et vous ?",
-        "music": "Que voulez-vous écouter ?"
+        "music": "Que voulez-vous écouter ?",
+        "error": "Je suis désolé, je n'ai pas compris. Veuillez répéter"
     },
     "en": {
         "listening": "I'm all ears",
@@ -13,6 +14,7 @@
         "bozo": "I'm sorry, I'm not qualified enough for this job.",
         "success": "Here you go!",
         "howareyou": "I'm fine, thank you! And you?",
-        "music": "What do you want to listen to?"
+        "music": "What do you want to listen to?",
+        "error": "I'm sorry, I didn't understand. Please repeat"
     }
 }

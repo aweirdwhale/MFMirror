@@ -50,9 +50,11 @@ class SpeechToText:
                 return text
         except sr.UnknownValueError:
             log.log("Unable to understand the audio.", "error")
+            self.text = "ERROR : Unable to understand the audio."
             return ""
         except sr.RequestError as e:
             log.log(f"An error occured while fetching the API: {e}", "error")
+            self.text = "ERROR : An error occured while fetching the API"
             return ""
 
     def run(self):
