@@ -5,7 +5,7 @@ from pydub import AudioSegment
 from scipy.io.wavfile import write
 import wavio as wv
 import speech_recognition as sr
-from Logs.log import Log
+from features.Logs.log import Log
 
 # import language
 from dotenv import load_dotenv

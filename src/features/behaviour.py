@@ -1,15 +1,15 @@
 import os
 from datetime import datetime, timedelta
 from dotenv import load_dotenv
-from Logs.log import Log
-from iss_position.iss import ISS
-from music.player import Player
-from weather.weather import Weather
-from textToSpeech.speech import TTS
-from wish.wish import Wish
-from speechToText.stt import SpeechToText
-from face_recon.facerecognition import FaceRecognition
-from wakeword.Wakey import PorcupineListener
+from features.Logs.log import Log
+from features.iss_position.iss import ISS
+from features.music.player import Player
+from features.weather.weather import Weather
+from features.textToSpeech.speech import TTS
+from features.wish.wish import Wish
+from features.speechToText.stt import SpeechToText
+from features.face_recon.facerecognition import FaceRecognition
+from features.wakeword.Wakey import PorcupineListener
 
 import json
 import playsound

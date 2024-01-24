@@ -1,8 +1,10 @@
 import customtkinter as ctk
+from tkinter import *
 
 import time
 from features import *
 
+from features.behaviour import Behaviour
 
 class Clock:
     def __init__(self, label, window):
@@ -35,8 +37,19 @@ clk = ctk.CTkLabel(app, text=f"", font=("Montserrat", 42), bg_color="#000000", t
 clk.place(x=918, y=20, anchor="ne")
 clock = Clock(clk, app)
 
+# Musiqua ! 
+# create a circle on the bottom left corner of the window
+music_canvas = ctk.CTkCanvas(app, width=180, height=180, bg="#ff0000", highlightthickness=0)
+music_canvas.place(x=20, y=700, anchor="sw")
+
+# create a circle on the canvas
+music_canvas.create_oval(30, 30, 150, 150, fill="", outline="black", width=20)
+
+
+
+
 """Wish"""
-# Hello babe
+# Hello babe <3
 
 
 """Start the app"""

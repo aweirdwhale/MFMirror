@@ -7,7 +7,7 @@ from googleapiclient.errors import HttpError
 from moviepy.audio.io.AudioFileClip import AudioFileClip
 from pytube import YouTube
 
-from Logs.log import Log
+from features.Logs.log import Log
 
 from dotenv import load_dotenv
 
@@ -20,7 +20,7 @@ import requests
 import mediapipe as mp
 import threading
 
-from music.hand_gesture import HandGesture
+from features.music.hand_gesture import HandGesture
 
 mp_drawing = mp.solutions.drawing_utils
 mp_hands = mp.solutions.hands
