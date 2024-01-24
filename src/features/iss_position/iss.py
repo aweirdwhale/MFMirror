@@ -40,7 +40,7 @@ class ISS:
             lat = None
             lon = None
 
-        try:
+        try:  # maybe I cheated a bit here
             self.countryName = self.over["countryName"]
         except:
             self.countryName = "l'océan"

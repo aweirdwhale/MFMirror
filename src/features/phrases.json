@@ -6,7 +6,11 @@
         "success": "Et voilà le travail !",
         "howareyou": "Je vais bien, merci ! Et vous ?",
         "music": "Que voulez-vous écouter ?",
-        "error": "Je suis désolé, je n'ai pas compris. Veuillez répéter"
+        "error": "Je suis désolé, je n'ai pas compris. Veuillez répéter",
+        "wikipedia": "Qui voulez-vous rechercher ?",
+        "wikipedia_error": "Je suis désolé, je n'ai pas trouvé de résultat pour cette recherche",
+        "wikipedia_success": "Voici ce que j'ai trouvé sur Wikipédia :"
+
     },
     "en": {
         "listening": "I'm all ears",
@@ -15,6 +19,9 @@
         "success": "Here you go!",
         "howareyou": "I'm fine, thank you! And you?",
         "music": "What do you want to listen to?",
-        "error": "I'm sorry, I didn't understand. Please repeat"
+        "error": "I'm sorry, I didn't understand. Please repeat",
+        "wikipedia": "Who do you want to search for?",
+        "wikipedia_error": "I'm sorry, I didn't find any result for this search",
+        "wikipedia_success": "Here's what I found on Wikipedia:"
     }
 }

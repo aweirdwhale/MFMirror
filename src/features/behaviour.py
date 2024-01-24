@@ -119,6 +119,22 @@ class Behaviour:
         elif "volume" in self.command:
             self.player.volume()
 
+        elif "wikipedia" in self.command or "recherche" in self.command or "rechercher" in self.command:
+            self.tts.speak(phrases[language]["wikipedia"])
+            self.get_args()
+            print("Wikipedia : " + self.arg)
+            self.tts.speak(phrases[language]["processing"])
+            self.wiki = Wikipedia(self.arg)
+            self.wiki.print_page_info()
+            try:
+                if self.wiki.recherche[0] == "404":
+                    self.tts.speak(phrases[language]["wikipedia_error"])
+                elif self.wiki.recherche[0] == "503":
+                    self.tts.speak(phrases[language]["wikipedia_error"])
+                else:
+                    self.tts.speak(self.wiki.recherche[0])
+            except:
+                self.tts.speak(phrases[language]["wikipedia_error"])
         
         else:
             self.tts.speak(phrases[language]["bozo"])
