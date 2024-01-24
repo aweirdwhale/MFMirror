@@ -22,6 +22,8 @@ import threading
 
 from features.music.hand_gesture import HandGesture
 
+from mutagen.mp3 import MP3
+
 mp_drawing = mp.solutions.drawing_utils
 mp_hands = mp.solutions.hands
 
@@ -45,6 +47,7 @@ class Player:
         self.current_position = 0
 
         self.volume_thread_stop_event = threading.Event()
+        self.audio_length = 00
 
     def use_youtube(self, query, yt_key):
         youtube = build("youtube", "v3", developerKey=yt_key)
@@ -120,6 +123,12 @@ class Player:
             log.log("404 Music not found.", "fail")
             return False
 
+    def get_duration(self):
+        file_name = self.result[0]["id"]
+        audio = MP3(f"{self.save_path}/{file_name}.mp3")
+        self.audio_length = round((audio.info.length / 60), 2)
+        return self.audio_length
+
     def play(self):
         file_name = self.result[0]["id"]
         self.download()
@@ -186,12 +195,17 @@ if __name__ == '__main__':
 
         def play(self):
             self.behaviour.play()
+            self.behaviour.get_duration()
 
         def pause(self):
             self.behaviour.pause_resume()
 
         def volume(self):
             self.behaviour.volume()
+
+        def duration(self):
+            self.behaviour.get_duration()
+            print(self.behaviour.audio_length)
 
 
     # Create the main window
@@ -221,6 +235,10 @@ if __name__ == '__main__':
 
     progress = ttk.Label(root)
     progress.pack()
+
+    duration = tk.Button(root, text="duration", command=actions.duration)
+    duration.pack()
+
 
     pause_button = tk.Button(root, text="Pause/Reprendre la musique", command=actions.pause)
     pause_button.pack()

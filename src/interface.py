@@ -1,10 +1,11 @@
 import customtkinter as ctk
 from tkinter import *
-
+from PIL import ImageTk, Image, ImageDraw
 import time
+import numpy as np
 from features import *
 
-from features.behaviour import Behaviour
+# from features.behaviour import Behaviour
 
 class Clock:
     def __init__(self, label, window):
@@ -38,14 +39,65 @@ clk.place(x=918, y=20, anchor="ne")
 clock = Clock(clk, app)
 
 # Musiqua ! 
-# create a circle on the bottom left corner of the window
-music_canvas = ctk.CTkCanvas(app, width=180, height=180, bg="#ff0000", highlightthickness=0)
-music_canvas.place(x=20, y=700, anchor="sw")
+# here, we get the thumbnail of the current song and display it as a circle rotating arround itself. We'll use a foo image for now
 
-# create a circle on the canvas
-music_canvas.create_oval(30, 30, 150, 150, fill="", outline="black", width=20)
+placeholder_image_path = "placeholder.jpg"
+
+img = Image.open(placeholder_image_path).convert("RGB")
+
+npImage=np.array(img)
+h,w=img.size
+
+# Create same size alpha layer with circle
+alpha = Image.new('L', img.size,0)
+draw = ImageDraw.Draw(alpha)
+draw.pieslice([0,0,h,w],0,360,fill=255)
+
+# Convert alpha Image to numpy array
+npAlpha=np.array(alpha)
+
+# Add alpha layer to RGB
+npImage=np.dstack((npImage,npAlpha))
+
+# Save with alpha
+Image.fromarray(npImage).save('thumbnail.png')
+
+# import the image, resize and place it
+placeholder_image = Image.open("thumbnail.png")
+placeholder_image = placeholder_image.resize((120, 120), Image.ANTIALIAS) 
+image_with_circle = placeholder_image.copy()
 
 
+# Create a canvas for the song thumbnail
+thumbnail_canvas = ctk.CTkCanvas(width=120, height=120, bg="#000000", highlightthickness=0)
+thumbnail_canvas.place(x=10, y=700, anchor="sw")
+
+
+# Create an ImageDraw object
+draw = ImageDraw.Draw(image_with_circle)
+
+# Calculate the center of the image
+center_x = image_with_circle.width // 2
+center_y = image_with_circle.height // 2
+
+# Define the radius of the circle (adjust as needed)
+circle_radius = 20
+hole_radius = 10
+border_radius = 40
+
+# Draw a white circle at the center
+draw.ellipse((center_x - circle_radius, center_y - circle_radius, center_x + circle_radius, center_y + circle_radius), fill="white")
+draw.ellipse((center_x - hole_radius, center_y - hole_radius, center_x + hole_radius, center_y + hole_radius), fill="black")
+draw.ellipse((center_x - border_radius, center_y - border_radius, center_x + border_radius, center_y + border_radius), outline="white", width=2)
+
+# Convert the modified image to PhotoImage
+placeholder_image_with_circle = ImageTk.PhotoImage(image_with_circle)
+
+# Create a label to display the image with the circle
+placeholder_image_label = ctk.CTkLabel(app, text="", image=placeholder_image_with_circle, bg_color="#000000")
+
+# Place it bottom left
+placeholder_image_label.place(x=10, y=700, anchor="sw")
 
 
 """Wish"""

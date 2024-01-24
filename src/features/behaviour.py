@@ -14,6 +14,7 @@ from features.wakeword.Wakey import PorcupineListener
 import json
 import playsound
 import pygame
+import threading
 
 phrases = json.load(open("src/features/phrases.json", "r"))
 
@@ -25,7 +26,7 @@ load_dotenv(dotenv_path="config.env")
 language = os.getenv("LANGUAGE")
 PiKEY = os.getenv("PORCUPINE_KEY")
 
-class Behaviour:
+class Behaviour():
     def __init__(self):
         self.wake_word = PorcupineListener(
             accessKey=PiKEY,
@@ -45,6 +46,7 @@ class Behaviour:
         self.arg = ""
         self.isPlaying = False
         self.count = 0
+        self.song_duration = "00:00"
 
     def listen(self):
         try:
@@ -92,7 +94,7 @@ class Behaviour:
             meteo = self.weather.meteo
             self.tts.speak("Il fait " + meteo["current"]["temp"] + " degrés Celcius, ressentit" + meteo["current"]["body_feeling"])
         
-        elif "iss" in self.commandn or "station spatiale" in self.command:
+        elif "iss" in self.command or "station spatiale" in self.command:
             self.iss.refresh()
             position = self.iss.position
             self.tts.speak("La station spatiale internationale se trouve au dessus de " + position["over"] + " à " + position["time"])
@@ -106,6 +108,8 @@ class Behaviour:
             print("Music : " + self.arg)
             self.player.use_youtube(self.arg, os.getenv("GOOGLE_KEY"))
             self.player.play()
+            self.song_duration = str(self.player.audio_length)
+            print(self.song_duration)
             self.isPlaying = True
         
         elif "pause" in self.command and self.isPlaying:
@@ -164,13 +168,15 @@ class Behaviour:
                 # listen for commands
                 self.listen_for_commands()
 
-
         self.listen()
 
     def cleanup(self):
         if self.wake_word:
             self.wake_word.cleanup()
 
+
+
+
 if __name__ == "__main__":
     behaviour = Behaviour()
-    behaviour.listen()
+    behaviour.use()
