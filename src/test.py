@@ -65,19 +65,18 @@ class UserInterface(threading.Thread):
         self.lock = lock
 
     def run(self):
-        app = ctk.CTk()
-        app.title("Mother F Mirror")
-        app.geometry("960x720")
-        app.resizable(False, False)
-        app.config(bg="#000000")
-
+        self.app = ctk.CTk()
+        self.app.title("Mother F Mirror")
+        self.app.geometry("960x720")
+        self.app.resizable(False, False)
+        self.app.config(bg="#000000")
         # Clock widget
-        watch_canvas = ctk.CTkCanvas(app, width=120, height=120, bg="#000000", highlightthickness=0)
+        watch_canvas = ctk.CTkCanvas(self.app, width=120, height=120, bg="#000000", highlightthickness=0)
         watch_canvas.place(x=940, y=12, anchor="ne")
 
-        clk = ctk.CTkLabel(app, text="", font=("Subjectivity", 42), bg_color="#000000", text_color="#ffffff")
+        clk = ctk.CTkLabel(self.app, text="", font=("Subjectivity", 42), bg_color="#000000", text_color="#ffffff")
         clk.place(x=940, y=20, anchor="ne")
-        clock = Clock(clk, app)
+        clock = Clock(clk, self.app)
 
         # Musica !
         """round the image"""
@@ -103,29 +102,42 @@ class UserInterface(threading.Thread):
         Image.fromarray(npImage).save('thumbnail.png')
 
         # place the image
-        thumbnail_canvas = ctk.CTkCanvas(app, width=80, height=80, bg="#000000", highlightthickness=0)
+        thumbnail_canvas = ctk.CTkCanvas(self.app, width=80, height=80, bg="#000000", highlightthickness=0)
         thumbnail_canvas.place(x=20, y=700, anchor="sw")
 
         spinning_image = SpinningImage(thumbnail_canvas, "thumbnail.png")
 
         # Name of the song
-        song_name = ctk.CTkLabel(app, text=f"Song name", font=ctk.CTkFont("Subjectivity", 24), bg_color="#000000", text_color="#ffffff")
+        song_name = ctk.CTkLabel(self.app, text=f"Song name", font=ctk.CTkFont("Subjectivity", 24), bg_color="#000000", text_color="#ffffff")
         song_name.place(x=125, y=655, anchor="sw")
 
-        # song artist
-        song_artist = ctk.CTkLabel(app, text=f"Song artist", font=ctk.CTkFont("Subjectivity", 16), bg_color="#000000", text_color="#ffffff")
-        song_artist.place(x=125, y=685, anchor="sw")
+        # Song artist
+        # song_artist = ctk.CTkLabel(self.app, text=f"Song artist", font=ctk.CTkFont("Subjectivity", 16), bg_color="#000000", text_color="#ffffff")
+        # song_artist.place(x=125, y=685, anchor="sw")
 
-        # played/duration
-        song_duration = ctk.CTkLabel(app, text=f"MM:SS/{str(self.behaviour.song_duration)}", font=ctk.CTkFont("Subjectivity", 16), bg_color="#000000", text_color="#ffffff")
-        song_duration.place(x=125, y=685, anchor="sw")
+        # Song duration
+        song_duration_label = ctk.CTkLabel(self.app, text="00:00", font=ctk.CTkFont("Subjectivity", 16), bg_color="#000000", text_color="#ffffff")
+        song_duration_label.place(x=125, y=685, anchor="sw")
+        self.update_song_duration_label(song_duration_label)
 
-        # progress bar
-        progress_bar = ctk.CTkProgressBar(app, width=250, height=6, bg_color="#000000", border_color="#FFFFFF", border_width=1, progress_color="#ffffff", fg_color="#000000")
-        progress_bar.set(0.5)
+        # Progress bar
+        progress_bar = ctk.CTkProgressBar(self.app, width=250, height=6, bg_color="#000000", border_color="#FFFFFF", border_width=1, progress_color="#ffffff", fg_color="#000000")
+        progress_bar.set(0)
         progress_bar.place(x=125, y=700, anchor="sw")
+        self.progress_bar_behaviour(progress_bar)
 
-        app.mainloop()
+        self.app.mainloop()
+
+    def update_song_duration_label(self, label):
+        duration_text = f"{self.behaviour.audio_position}/{self.behaviour.audio_length_str}"
+        label.configure(text=duration_text)
+        self.app.after(1000, lambda: self.update_song_duration_label(label))
+
+    def progress_bar_behaviour(self, progress_bar):
+        self.progress = self.behaviour.progress_value
+        progress_bar.set(self.progress)
+        self.app.after(1000, lambda: self.progress_bar_behaviour(progress_bar))
+
 
     def start_behaviour(self):
         self.behaviour.use()

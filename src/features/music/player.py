@@ -49,6 +49,11 @@ class Player:
         self.volume_thread_stop_event = threading.Event()
         self.audio_length = 00
 
+        self.audio_position = 00
+
+        self.music_title = None
+        self.music_thumbnail = None
+
     def use_youtube(self, query, yt_key):
         youtube = build("youtube", "v3", developerKey=yt_key)
         try:
@@ -126,8 +131,13 @@ class Player:
     def get_duration(self):
         file_name = self.result[0]["id"]
         audio = MP3(f"{self.save_path}/{file_name}.mp3")
-        self.audio_length = round((audio.info.length / 60), 2)
-        return self.audio_length
+        self.audio_length = audio.info.length
+        self.audio_length_str = str(round((audio.info.length / 60), 2))
+        self.audio_position = pygame.mixer.music.get_pos()
+        self.progress_value = self.audio_position / self.audio_length
+        self.music_title = self.result[0]["title"]
+        self.music_thumbnail = self.result[0]["thumbnail"]
+        return self.audio_length, self.audio_position, self.progress_value, self.audio_length_str
 
     def play(self):
         file_name = self.result[0]["id"]

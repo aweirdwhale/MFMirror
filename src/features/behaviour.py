@@ -46,7 +46,10 @@ class Behaviour():
         self.arg = ""
         self.isPlaying = False
         self.count = 0
-        self.song_duration = "00:00"
+        self.song_duration = 0
+        self.audio_length_str = ""
+        self.progress_value = 0
+        self.audio_position = 0
 
     def listen(self):
         try:
@@ -108,8 +111,12 @@ class Behaviour():
             print("Music : " + self.arg)
             self.player.use_youtube(self.arg, os.getenv("GOOGLE_KEY"))
             self.player.play()
-            self.song_duration = str(self.player.audio_length)
-            print(self.song_duration)
+            self.player.get_duration()
+            self.song_duration = self.player.audio_length
+            self.audio_position = round(self.player.audio_position / 60000, 2)
+            self.progress_value = round(self.player.progress_value, 2)
+            self.audio_length_str = self.player.audio_length_str
+            print(f"Durée de la musique : {str(self.player.audio_length)}, position dans la musique : {str(self.player.audio_position)}, valeur de la pbar {str(self.player.progress_value)}, Taille de l'audio en str: {self.player.audio_length_str}")
             self.isPlaying = True
         
         elif "pause" in self.command and self.isPlaying:
@@ -123,7 +130,7 @@ class Behaviour():
         elif "volume" in self.command:
             self.player.volume()
 
-        elif "wikipedia" in self.command or "recherche" in self.command or "rechercher" in self.command:
+        elif "wikipédia" in self.command or "recherche" in self.command or "rechercher" in self.command:
             self.tts.speak(phrases[language]["wikipedia"])
             self.get_args()
             print("Wikipedia : " + self.arg)
@@ -168,7 +175,14 @@ class Behaviour():
                 # listen for commands
                 self.listen_for_commands()
 
+            self.audio_position = round(self.player.audio_position / 60000, 2)
+            self.progress_value = round(self.player.progress_value, 2)
+            
+
         self.listen()
+
+    
+
 
     def cleanup(self):
         if self.wake_word:
