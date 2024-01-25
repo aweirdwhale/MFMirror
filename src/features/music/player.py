@@ -1,4 +1,5 @@
 import os
+import datetime
 
 import cv2
 import pygame
@@ -6,6 +7,9 @@ from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 from moviepy.audio.io.AudioFileClip import AudioFileClip
 from pytube import YouTube
+
+import numpy as np
+from PIL import ImageTk, Image, ImageDraw
 
 from features.Logs.log import Log
 
@@ -19,6 +23,7 @@ import requests
 
 import mediapipe as mp
 import threading
+
 
 from features.music.hand_gesture import HandGesture
 
@@ -47,12 +52,17 @@ class Player:
         self.current_position = 0
 
         self.volume_thread_stop_event = threading.Event()
-        self.audio_length = 00
 
-        self.audio_position = 00
+        # UI
+        self.audio_length = 0
+        self.audio_position = 0
+        self.audio_position_str = ""
+        self.progress_value = 0
+        self.audio_length_str = ""
+        self.music_title = ""
+        self.music_thumbnail = ""
 
-        self.music_title = None
-        self.music_thumbnail = None
+        
 
     def use_youtube(self, query, yt_key):
         youtube = build("youtube", "v3", developerKey=yt_key)
@@ -129,15 +139,62 @@ class Player:
             return False
 
     def get_duration(self):
-        file_name = self.result[0]["id"]
-        audio = MP3(f"{self.save_path}/{file_name}.mp3")
-        self.audio_length = audio.info.length
-        self.audio_length_str = str(round((audio.info.length / 60), 2))
-        self.audio_position = pygame.mixer.music.get_pos()
-        self.progress_value = self.audio_position / self.audio_length
-        self.music_title = self.result[0]["title"]
-        self.music_thumbnail = self.result[0]["thumbnail"]
+        if self.video_info and os.path.isfile(f"{self.save_path}/{self.video_info['id']}.mp3"):
+            file_name = self.video_info["id"]
+            audio = MP3(f"{self.save_path}/{file_name}.mp3")
+
+            self.audio_length = audio.info.length
+            self.audio_length_str = str(datetime.datetime.fromtimestamp(audio.info.length).strftime('%M:%S'))
+
+            if pygame.mixer.music.get_busy():
+                self.audio_position = pygame.mixer.music.get_pos() / 1000
+            else:
+                self.audio_position = 0
+
+            self.audio_position_str = str(datetime.datetime.fromtimestamp(self.audio_position).strftime('%M:%S'))
+            self.progress_value = self.audio_position / self.audio_length
+
+            self.music_title = self.video_info["title"]
+            
+
         return self.audio_length, self.audio_position, self.progress_value, self.audio_length_str
+
+    def get_thumbnail(self):
+        self.music_thumbnail = self.video_info["thumbnail"]
+
+        # Musica !
+        """round the image"""
+        # get the image from link
+        _ = requests.get(self.music_thumbnail)
+        _.raise_for_status()  # Check if request is successful
+
+
+
+        img = Image.open(BytesIO(_.content)).convert("RGB")
+
+        npImage = np.array(img)
+        h, w = img.size
+
+        # Create same size alpha layer with circle
+        alpha = Image.new('L', img.size, 0)
+        draw = ImageDraw.Draw(alpha)
+
+        radius = w // 2
+        center_x = h // 2
+        center_y = w // 2
+
+        # make a circle with radius = h/2 at the center of image
+        draw.pieslice((center_x - radius, center_y - radius, center_x + radius, center_y + radius), 0, 360, fill=255, width=2)
+
+        # Convert alpha Image to numpy array
+        npAlpha = np.array(alpha)
+
+        # Add alpha layer to RGB
+        npImage = np.dstack((npImage, npAlpha))
+
+        # Save with alpha
+        Image.fromarray(npImage).save('thumbnail.png')
+        print(self.music_thumbnail)
 
     def play(self):
         file_name = self.result[0]["id"]
@@ -154,6 +211,8 @@ class Player:
 
         if self.window is not None:
             self.window.after(100, self.check_music_status)
+
+        self.get_thumbnail()
 
     def check_music_status(self):
         if pygame.mixer.music.get_busy():

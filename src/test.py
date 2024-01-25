@@ -26,10 +26,10 @@ class SpinningImage:
         self.canvas = canvas
         self.image = Image.open(image_path).convert("RGBA")
         self.image = self.image.resize((80, 80), Image.ANTIALIAS)
-        self.angle = 0
         self.image_with_circle = self.image.copy()
         self.center_x = self.image_with_circle.width // 2
         self.center_y = self.image_with_circle.height // 2
+        self.angle = 0
         self.circle_radius = 20
         self.hole_radius = 10
         self.border_radius = 40
@@ -64,6 +64,7 @@ class UserInterface(threading.Thread):
         self.behaviour = Behaviour()
         self.lock = lock
 
+
     def run(self):
         self.app = ctk.CTk()
         self.app.title("Mother F Mirror")
@@ -78,28 +79,7 @@ class UserInterface(threading.Thread):
         clk.place(x=940, y=20, anchor="ne")
         clock = Clock(clk, self.app)
 
-        # Musica !
-        """round the image"""
-        placeholder_image_path = "placeholder.jpg"
-
-        img = Image.open(placeholder_image_path).convert("RGB")
-
-        npImage = np.array(img)
-        h, w = img.size
-
-        # Create same size alpha layer with circle
-        alpha = Image.new('L', img.size, 0)
-        draw = ImageDraw.Draw(alpha)
-        draw.pieslice([0, 0, h, w], 0, 360, fill=255)
-
-        # Convert alpha Image to numpy array
-        npAlpha = np.array(alpha)
-
-        # Add alpha layer to RGB
-        npImage = np.dstack((npImage, npAlpha))
-
-        # Save with alpha
-        Image.fromarray(npImage).save('thumbnail.png')
+        self.behaviour.get_thumbnail()
 
         # place the image
         thumbnail_canvas = ctk.CTkCanvas(self.app, width=80, height=80, bg="#000000", highlightthickness=0)
@@ -111,36 +91,34 @@ class UserInterface(threading.Thread):
         song_name = ctk.CTkLabel(self.app, text=f"Song name", font=ctk.CTkFont("Subjectivity", 24), bg_color="#000000", text_color="#ffffff")
         song_name.place(x=125, y=655, anchor="sw")
 
-        # Song artist
-        # song_artist = ctk.CTkLabel(self.app, text=f"Song artist", font=ctk.CTkFont("Subjectivity", 16), bg_color="#000000", text_color="#ffffff")
-        # song_artist.place(x=125, y=685, anchor="sw")
-
         # Song duration
         song_duration_label = ctk.CTkLabel(self.app, text="00:00", font=ctk.CTkFont("Subjectivity", 16), bg_color="#000000", text_color="#ffffff")
         song_duration_label.place(x=125, y=685, anchor="sw")
-        self.update_song_duration_label(song_duration_label)
 
         # Progress bar
         progress_bar = ctk.CTkProgressBar(self.app, width=250, height=6, bg_color="#000000", border_color="#FFFFFF", border_width=1, progress_color="#ffffff", fg_color="#000000")
         progress_bar.set(0)
         progress_bar.place(x=125, y=700, anchor="sw")
-        self.progress_bar_behaviour(progress_bar)
 
-        self.app.mainloop()
+        # Mettez à jour les informations de la musique
+        self.update_music_info(song_name, song_duration_label, progress_bar)
 
-    def update_song_duration_label(self, label):
-        duration_text = f"{self.behaviour.audio_position}/{self.behaviour.audio_length_str}"
-        label.configure(text=duration_text)
-        self.app.after(1000, lambda: self.update_song_duration_label(label))
+        self.app.mainloop() 
 
-    def progress_bar_behaviour(self, progress_bar):
-        self.progress = self.behaviour.progress_value
-        progress_bar.set(self.progress)
-        self.app.after(1000, lambda: self.progress_bar_behaviour(progress_bar))
+    def update_music_info(self, song_name_label, song_duration_label, progress_bar):
+        # Mettez à jour les étiquettes et la barre de progression avec les informations de la musique
+        song_name_label.configure(text=self.behaviour.music_title)
+        self.thumnail_link = self.behaviour.music_thumbnail
+        duration_text = f"{self.behaviour.audio_position_str}/{self.behaviour.audio_length_str}"
+        song_duration_label.configure(text=duration_text)
+        progress_bar.set(self.behaviour.progress_value)
+
+        # Répétez cette méthode toutes les secondes
+        self.app.after(1000, lambda: self.update_music_info(song_name_label, song_duration_label, progress_bar))
 
 
     def start_behaviour(self):
-        self.behaviour.use()
+        self.behaviour.bypass_voice()
 
 lock = threading.Lock()
 # Lancer l'application en tant que thread
@@ -152,3 +130,4 @@ with lock:
 
 # Attendre que le thread de l'application se termine (optionnel)
 ui.join()
+
