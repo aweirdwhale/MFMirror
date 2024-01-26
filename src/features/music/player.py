@@ -12,7 +12,7 @@ import numpy as np
 from PIL import ImageTk, Image, ImageDraw
 
 from features.Logs.log import Log
-
+import json
 from dotenv import load_dotenv
 
 import tkinter as tk
@@ -26,6 +26,9 @@ import threading
 
 
 from features.music.hand_gesture import HandGesture
+from features.textToSpeech.speech import TTS
+
+
 
 from mutagen.mp3 import MP3
 
@@ -37,6 +40,10 @@ key = os.getenv("GOOGLE_KEY")
 
 # init log
 log = Log()
+
+# init language
+load_dotenv(dotenv_path="config.env")
+LANGUAGE = os.getenv("LANGUAGE")
 
 
 class Player:
@@ -62,6 +69,8 @@ class Player:
         self.music_title = ""
         self.music_thumbnail = ""
 
+        self.tts = TTS(lang=LANGUAGE)
+        self.phrases = json.load(open("src/features/phrases.json", "r"))
         
 
     def use_youtube(self, query, yt_key):
@@ -109,16 +118,20 @@ class Player:
 
     def download(self):
         log.log("Downloading . . .", "info")
+        self.tts.speak(self.phrases[LANGUAGE]["downloading"])
 
         if len(self.result) > 0:
             yt_url = self.result[0]["url"]
             file_name = self.result[0]["id"]
             if self.result[0]["isStream"]:
                 Log.log("Can't download a stream. Search something else.", "error")
+                self.tts.speak(self.phrases[LANGUAGE]["downloading_error"])
+
                 return False
             
             if os.path.isfile(f"{self.save_path}/{file_name}.mp3"):
                 log.log("File ready to play.", "great")
+                self.tts.speak(self.phrases[LANGUAGE]["downloading_success"])
 
             else:
                 yt = YouTube(yt_url)

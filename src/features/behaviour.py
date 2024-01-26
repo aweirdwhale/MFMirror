@@ -55,11 +55,11 @@ class Behaviour():
         self.progress_value = 0
         self.audio_length_str = ""
         self.music_title = ""
-        self.music_thumbnail = ""
-
+        self.music_thumbnail = "https://www.aweirdwhale.xyz/pps/21.jpg"
+        self.updateThumbnail = False
         # Test
         self.test_command = "musique"
-        self.test_arg = "Knockin' on heavens door"
+        self.test_arg = "Still standing"
 
     def listen(self):
         try:
@@ -133,6 +133,8 @@ class Behaviour():
             self.audio_length_str = self.player.audio_length_str
             print(f"Durée de la musique : {str(self.player.audio_length)}, position dans la musique : {str(self.player.audio_position)}, valeur de la pbar {str(self.player.progress_value)}, Taille de l'audio en str: {self.player.audio_length_str}")
             self.isPlaying = True
+
+            print(self.isPlaying)
         
         elif "pause" in self.command and self.isPlaying:
             self.player.pause()
@@ -170,7 +172,7 @@ class Behaviour():
     def bypass_voice(self):
         self.tts.speak(phrases[language]["music"])
         print("Music : " + "self.arg")
-        self.player.use_youtube("Knockin' on heavens door", os.getenv("GOOGLE_KEY"))
+        self.player.use_youtube("Lose yourself", os.getenv("GOOGLE_KEY"))
         self.player.play()
         self.player.get_duration()
 
@@ -185,6 +187,9 @@ class Behaviour():
 
         #print(f"Durée de la musique : {str(self.player.audio_length)}, position dans la musique : {str(self.player.audio_position)}, valeur de la pbar {str(self.player.progress_value)}, Taille de l'audio en str: {self.player.audio_length_str}")
         self.isPlaying = True
+        self.updateThumbnail = True
+
+        
 
         update_thread = threading.Thread(target=self.update_music_info_continuously)
         update_thread.start()

@@ -9,7 +9,10 @@
         "error": "Je suis désolé, je n'ai pas compris. Veuillez répéter",
         "wikipedia": "Qui voulez-vous rechercher ?",
         "wikipedia_error": "Je suis désolé, je n'ai pas trouvé de résultat pour cette recherche",
-        "wikipedia_success": "Voici ce que j'ai trouvé sur Wikipédia :"
+        "wikipedia_success": "Voici ce que j'ai trouvé sur Wikipédia :",
+        "downloading": "Je télécharge votre musique, veuillez patienter...",
+        "downloading_error": "Je suis désolé, je n'ai pas réussi à télécharger votre musique",
+        "downloading_success": "Votre musique a bien été téléchargée !"
 
     },
     "en": {
@@ -22,6 +25,9 @@
         "error": "I'm sorry, I didn't understand. Please repeat",
         "wikipedia": "Who do you want to search for?",
         "wikipedia_error": "I'm sorry, I didn't find any result for this search",
-        "wikipedia_success": "Here's what I found on Wikipedia:"
+        "wikipedia_success": "Here's what I found on Wikipedia:",
+        "downloading": "I'm downloading your music, please wait...",
+        "downloading_error": "I'm sorry, I couldn't download your music",
+        "downloading_success": "Your music has been downloaded successfully!"
     }
 }
