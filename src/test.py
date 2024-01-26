@@ -28,6 +28,21 @@ class SpinningImage:
     def __init__(self, canvas, image_path):
         self.canvas = canvas
         self.image = Image.open(image_path).convert("RGBA")
+        width, height = self.image.size
+
+        # Choisissez la dimension minimale pour le redimensionnement
+        min_dimension = min(width, height)
+
+        # Calculez les coordonnées du rectangle de recadrage centré
+        left = (width - min_dimension) // 2
+        top = (height - min_dimension) // 2
+        right = (width + min_dimension) // 2
+        bottom = (height + min_dimension) // 2
+
+        # Effectuez le recadrage
+        self.image = self.image.crop((left, top, right, bottom))
+
+        # Redimensionnez ensuite l'image à la taille souhaitée
         self.image = self.image.resize((80, 80), Image.ANTIALIAS)
         self.image_with_circle = self.image.copy()
         self.center_x = self.image_with_circle.width // 2
@@ -44,7 +59,7 @@ class SpinningImage:
         rotated_image = self.image.rotate(self.angle)
         rotated_image_with_circle = self.draw_circle(rotated_image)
         self.display_image(rotated_image_with_circle)
-        self.angle -= 5
+        self.angle -= 4
         self.canvas.after(50, self.spin_image)
 
     def draw_circle(self, image):
@@ -65,7 +80,25 @@ class SpinningImage:
     def clear(self):
         self.canvas.delete(self.image_label)
 
+class IndicatorDot:
+    def __init__(self, canvas):
+        self.canvas = canvas
+        self.dot = None
+        self.color = "orange"
+        self.draw_dot()
 
+    def draw_dot(self):
+        self.clear()
+        self.dot = self.canvas.create_oval(0, 0, 10, 10, fill=self.color)
+        self.canvas.after(800, self.draw_dot)
+
+    def clear(self):
+        self.canvas.delete(self.dot)
+
+    def update_color(self, new_color):
+        self.color = new_color
+        self.clear()
+        self.draw_dot()
 
 
 
@@ -79,7 +112,10 @@ class UserInterface(threading.Thread):
         self.updateThumbnail = False
         self.spinning_image = None
         self.thumbnail_image = None
-        self.placeholder = "placeholder.jpg"
+        self.placeholder = "placeholder.png"
+        self.state = self.behaviour.state
+        self.dot_color = "orange"  # Utilisez dot_color au lieu de state
+
         
 
     def run(self):
@@ -109,14 +145,23 @@ class UserInterface(threading.Thread):
         self.thumbnail_image = ImageTk.PhotoImage(Image.open(self.placeholder).convert("RGBA"))
         thumbnail_canvas.create_image(0, 0, anchor="nw", image=self.thumbnail_image)
     
+        # place the listener state indicator dot
+        state_canvas = ctk.CTkCanvas(self.app, width=20, height=20, bg="#000000", highlightthickness=0)
+        # place the dot at the top center
+        state_canvas.place(x=480, y=20, anchor="n")
+
+        # create the dot
+        self.indicator_dot = IndicatorDot(state_canvas)
+        
+
         
 
         # Name of the song
-        song_name = ctk.CTkLabel(self.app, text=f"Song name", font=ctk.CTkFont("Subjectivity", 24), bg_color="#000000", text_color="#ffffff")
+        song_name = ctk.CTkLabel(self.app, text=f"", font=ctk.CTkFont("Subjectivity", 24), bg_color="#000000", text_color="#ffffff")
         song_name.place(x=125, y=655, anchor="sw")
 
         # Song duration
-        song_duration_label = ctk.CTkLabel(self.app, text="00:00", font=ctk.CTkFont("Subjectivity", 16), bg_color="#000000", text_color="#ffffff")
+        song_duration_label = ctk.CTkLabel(self.app, text="", font=ctk.CTkFont("Subjectivity", 16), bg_color="#000000", text_color="#ffffff")
         song_duration_label.place(x=125, y=685, anchor="sw")
 
         # Progress bar
@@ -129,13 +174,30 @@ class UserInterface(threading.Thread):
 
         self.app.mainloop()
 
+    def update_state_indicator(self):
+        new_state = self.behaviour.state
+        print(new_state)
+        if new_state == 0:
+            new_color = "orange"
+        elif new_state == 1:
+            new_color = "green"
+        elif new_state == 2:
+            new_color = "blue"
+
+        if new_color != self.dot_color:
+            self.dot_color = new_color
+            self.indicator_dot.update_color(new_color)
+
+        # Planifier la prochaine mise à jour après un certain délai (par exemple, toutes les secondes)
+        self.app.after(1000, self.update_state_indicator)
+
     def get_thumbnail(self):
         #delete the previous image
         os.remove("thumbnail.png")
 
         self.music_thumbnail = self.behaviour.music_thumbnail
 
-        # Musica !
+        # Musica ! 
         """round the image"""
         # get the image from link
         _ = requests.get(self.music_thumbnail)
@@ -170,7 +232,7 @@ class UserInterface(threading.Thread):
 
     def update_thumbnail(self, thumbnail_canvas):
         self.updateThumbnail = self.behaviour.updateThumbnail
-
+        
         if self.updateThumbnail:
             self.updateThumbnail = False
             # delete the placeholder image from the canvas
@@ -180,10 +242,21 @@ class UserInterface(threading.Thread):
             # place the new image
             self.spinning_image = SpinningImage(thumbnail_canvas, "thumbnail.png")
 
+        
+        if self.isPlaying:
+            # Mettez à jour le canvas dans le thread principal
+            self.app.after(int(self.behaviour.audio_length * 1000), lambda: self.update_thumbnail(thumbnail_canvas))
+        else:
+            # Mettez à jour le canvas dans le thread principal
+            self.app.after(800, lambda: self.update_thumbnail(thumbnail_canvas))
 
-        # Mettez à jour le canvas dans le thread principal
-        self.app.after(int(self.behaviour.audio_length * 1000), lambda: self.update_thumbnail(thumbnail_canvas))
-
+    def update_thumbnail_periodically(self):
+        # Appeler la fonction update_thumbnail ici pour mettre à jour la vignette
+        self.update_thumbnail(thumbnail_canvas)
+        self.update_state_indicator()
+        
+        # Planifier la prochaine mise à jour après un certain délai (par exemple, toutes les secondes)
+        self.app.after(1000, self.update_thumbnail_periodically)
 
 
     def update_music_info(self, song_name_label, song_duration_label, progress_bar):
@@ -199,7 +272,7 @@ class UserInterface(threading.Thread):
         self.app.after(1000, lambda: self.update_music_info(song_name_label, song_duration_label, progress_bar))
 
     def start_behaviour(self):
-        self.behaviour.bypass_voice()
+        self.behaviour.use()
 
 lock = threading.Lock()
 # Lancer l'application en tant que thread

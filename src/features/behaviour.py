@@ -57,6 +57,8 @@ class Behaviour():
         self.music_title = ""
         self.music_thumbnail = "https://www.aweirdwhale.xyz/pps/21.jpg"
         self.updateThumbnail = False
+        self.state = 0  # State of the listener => 0=wakeword, 1=listening and 2=processing
+
         # Test
         self.test_command = "musique"
         self.test_arg = "Still standing"
@@ -76,6 +78,7 @@ class Behaviour():
             self.player.get_thumbnail()
 
     def listen_for_commands(self):
+        self.state = 1
         self.stt.run() #running the speach to text
         # print the text detected :
         
@@ -95,6 +98,7 @@ class Behaviour():
         #self.player.pause()
 
     def get_args(self):
+        self.state = 1
         self.stt.run() #running the speach to text
         
         self.arg = self.stt.text
@@ -102,7 +106,11 @@ class Behaviour():
 
         return self.arg
 
+    def set_playing_state(self, is_playing):
+        self.isPlaying = is_playing
+
     def process_command(self):
+        self.state = 2
         if "peux-tu" in self.command:
             self.tts.speak(phrases[language]["processing"])
 
@@ -120,21 +128,31 @@ class Behaviour():
             playsound.playsound("otis.mp3")
         
         elif "musique" in self.command:
-            self.tts.speak(phrases[language]["music"])
             self.get_args()
+
+            self.tts.speak(phrases[language]["music"])
             print("Music : " + self.arg)
             self.player.use_youtube(self.arg, os.getenv("GOOGLE_KEY"))
             self.player.play()
             self.player.get_duration()
 
-            self.song_duration = self.player.audio_length
-            self.audio_position = round(self.player.audio_position / 60000, 2)
-            self.progress_value = round(self.player.progress_value, 2)
+            # UI
+            self.audio_length = self.player.audio_length
+            self.audio_position = self.player.audio_position
+            self.audio_position_str = self.player.audio_position_str
+            self.progress_value = self.player.progress_value
             self.audio_length_str = self.player.audio_length_str
-            print(f"Durée de la musique : {str(self.player.audio_length)}, position dans la musique : {str(self.player.audio_position)}, valeur de la pbar {str(self.player.progress_value)}, Taille de l'audio en str: {self.player.audio_length_str}")
-            self.isPlaying = True
+            self.music_title = self.player.music_title
+            self.music_thumbnail = self.player.music_thumbnail
 
-            print(self.isPlaying)
+            #print(f"Durée de la musique : {str(self.player.audio_length)}, position dans la musique : {str(self.player.audio_position)}, valeur de la pbar {str(self.player.progress_value)}, Taille de l'audio en str: {self.player.audio_length_str}")
+            self.isPlaying = True
+            self.updateThumbnail = True
+
+            
+
+            update_thread = threading.Thread(target=self.update_music_info_continuously)
+            update_thread.start()
         
         elif "pause" in self.command and self.isPlaying:
             self.player.pause()
@@ -170,9 +188,10 @@ class Behaviour():
         # self.player.resume() #resume the music
 
     def bypass_voice(self):
+        self.get_args()
         self.tts.speak(phrases[language]["music"])
         print("Music : " + "self.arg")
-        self.player.use_youtube("Lose yourself", os.getenv("GOOGLE_KEY"))
+        self.player.use_youtube(self.arg, os.getenv("GOOGLE_KEY"))
         self.player.play()
         self.player.get_duration()
 
@@ -194,6 +213,11 @@ class Behaviour():
         update_thread = threading.Thread(target=self.update_music_info_continuously)
         update_thread.start()
 
+    def update_music_info(self, song_name_label, song_duration_label, progress_bar):
+        self.isPlaying = self.behaviour.isPlaying
+        self.behaviour.set_playing_state(self.isPlaying)
+
+
     def update_music_info_continuously(self):
         while True:
             self.player.get_duration()
@@ -205,9 +229,12 @@ class Behaviour():
             self.audio_length_str = self.player.audio_length_str
             self.music_title = self.player.music_title
             self.music_thumbnail = self.player.music_thumbnail
+            # Mise à jour de l'état de lecture
+            self.set_playing_state(self.isPlaying)
             time.sleep(1)  # Attendre 1 seconde avant la prochaine mise à jour
 
     def use(self):
+        self.state = 0
         if self.wake_word.detected:
             #self.player.pause() #pause the music
             # first thing first, say Hello :)
@@ -247,4 +274,4 @@ class Behaviour():
 
 if __name__ == "__main__":
     behaviour = Behaviour()
-    behaviour.bypass_voice()
+    behaviour.use()
