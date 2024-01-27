@@ -115,6 +115,7 @@ class UserInterface(threading.Thread):
         self.placeholder = "placeholder_.png"
         self.state = self.behaviour.state
         self.dot_color = "orange"  # Utilisez dot_color au lieu de state
+        self.meteo = self.behaviour.meteo
 
         
 
@@ -154,10 +155,15 @@ class UserInterface(threading.Thread):
         self.indicator_dot = IndicatorDot(state_canvas)
         self.update_state_indicator()
 
-        
+        """Top left corner"""
+        # Meteo
+        meteo_label = ctk.CTkLabel(self.app, text=f'{self.meteo["current"]["temp"]}°C {self.meteo["current"]["code"]}', font=ctk.CTkFont("Subjectivity", 24), bg_color="#000000", text_color="#ffffff")
+        meteo_label.place(x=20, y=20, anchor="nw")
+
+
 
         # Name of the song
-        song_name = ctk.CTkLabel(self.app, text=f"No song playing", font=ctk.CTkFont("Subjectivity", 24), bg_color="#000000", text_color="#ffffff")
+        song_name = ctk.CTkLabel(self.app, text=f"Nothing is playing", font=ctk.CTkFont("Subjectivity", 24), bg_color="#000000", text_color="#ffffff")
         song_name.place(x=125, y=655, anchor="sw")
 
         # Song duration

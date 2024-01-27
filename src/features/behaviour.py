@@ -63,6 +63,10 @@ class Behaviour():
         self.test_command = "musique"
         self.test_arg = "Still standing"
 
+        # weather
+        self.meteo = {}
+        self.getMeteo()
+
     def listen(self):
         self.state = 0
         try:
@@ -110,6 +114,11 @@ class Behaviour():
     def set_playing_state(self, is_playing):
         self.isPlaying = is_playing
 
+    def getMeteo(self):
+        self.weather.refresh()
+        self.meteo = self.weather.meteo
+        return self.meteo
+
     def process_command(self):
         self.state = 2
         if "peux-tu" in self.command:
@@ -117,8 +126,8 @@ class Behaviour():
 
         if "météo" in self.command or "temps" in self.command:
             self.weather.refresh()
-            meteo = self.weather.meteo
-            self.tts.speak("Il fait " + meteo["current"]["temp"] + " degrés Celcius, ressentit" + meteo["current"]["body_feeling"])
+            self.meteo = self.weather.meteo
+            self.tts.speak("Il fait " + self.meteo["current"]["temp"] + " degrés Celcius, ressentit" + self.meteo["current"]["body_feeling"])
         
         elif "iss" in self.command or "station spatiale" in self.command:
             self.iss.refresh()
@@ -129,11 +138,9 @@ class Behaviour():
             playsound.playsound("otis.mp3")
         
         elif "musique" in self.command:
-
-            self.get_args()
-
             self.state = 2
             self.tts.speak(phrases[language]["music"])
+            self.get_args()
             print("Music : " + self.arg)
             self.player.use_youtube(self.arg, os.getenv("GOOGLE_KEY"))
             self.player.play()
