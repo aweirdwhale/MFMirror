@@ -64,6 +64,7 @@ class Behaviour():
         self.test_arg = "Still standing"
 
     def listen(self):
+        self.state = 0
         try:
             self.wake_word.initialize()
             self.wake_word.start_detection()
@@ -128,8 +129,10 @@ class Behaviour():
             playsound.playsound("otis.mp3")
         
         elif "musique" in self.command:
+
             self.get_args()
 
+            self.state = 2
             self.tts.speak(phrases[language]["music"])
             print("Music : " + self.arg)
             self.player.use_youtube(self.arg, os.getenv("GOOGLE_KEY"))
@@ -184,6 +187,7 @@ class Behaviour():
         
         else:
             self.tts.speak(phrases[language]["bozo"])
+            self.state = 0
 
         # self.player.resume() #resume the music
 
@@ -236,6 +240,7 @@ class Behaviour():
     def use(self):
         self.state = 0
         if self.wake_word.detected:
+            self.state = 2
             #self.player.pause() #pause the music
             # first thing first, say Hello :)
             # Check if the wake word was detected in the last 20 minutes

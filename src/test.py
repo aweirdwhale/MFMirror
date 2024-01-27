@@ -112,7 +112,7 @@ class UserInterface(threading.Thread):
         self.updateThumbnail = False
         self.spinning_image = None
         self.thumbnail_image = None
-        self.placeholder = "placeholder.png"
+        self.placeholder = "placeholder_.png"
         self.state = self.behaviour.state
         self.dot_color = "orange"  # Utilisez dot_color au lieu de state
 
@@ -152,12 +152,12 @@ class UserInterface(threading.Thread):
 
         # create the dot
         self.indicator_dot = IndicatorDot(state_canvas)
-        
+        self.update_state_indicator()
 
         
 
         # Name of the song
-        song_name = ctk.CTkLabel(self.app, text=f"", font=ctk.CTkFont("Subjectivity", 24), bg_color="#000000", text_color="#ffffff")
+        song_name = ctk.CTkLabel(self.app, text=f"No song playing", font=ctk.CTkFont("Subjectivity", 24), bg_color="#000000", text_color="#ffffff")
         song_name.place(x=125, y=655, anchor="sw")
 
         # Song duration
@@ -176,13 +176,12 @@ class UserInterface(threading.Thread):
 
     def update_state_indicator(self):
         new_state = self.behaviour.state
-        print(new_state)
         if new_state == 0:
-            new_color = "orange"
+            new_color = "#b86721"
         elif new_state == 1:
-            new_color = "green"
+            new_color = "#67b821"
         elif new_state == 2:
-            new_color = "blue"
+            new_color = "#2179b8"
 
         if new_color != self.dot_color:
             self.dot_color = new_color
@@ -261,12 +260,19 @@ class UserInterface(threading.Thread):
 
     def update_music_info(self, song_name_label, song_duration_label, progress_bar):
         self.isPlaying = self.behaviour.isPlaying
-        # Mettez à jour les étiquettes et la barre de progression avec les informations de la musique
-        song_name_label.configure(text=self.behaviour.music_title)
-        self.thumnail_link = self.behaviour.music_thumbnail
-        duration_text = f"{self.behaviour.audio_position_str}/{self.behaviour.audio_length_str}"
-        song_duration_label.configure(text=duration_text)
-        progress_bar.set(self.behaviour.progress_value)
+        if self.isPlaying:
+            # Mettez à jour les étiquettes et la barre de progression avec les informations de la musique
+            song_name_label.configure(text=self.behaviour.music_title)
+            self.thumnail_link = self.behaviour.music_thumbnail
+            duration_text = f"{self.behaviour.audio_position_str}/{self.behaviour.audio_length_str}"
+            song_duration_label.configure(text=duration_text)
+            progress_bar.set(self.behaviour.progress_value)
+            progress_bar.configure(bg_color="#000000", progress_color="#ffffff", fg_color="#000000", border_color="#ffffff")
+        else:
+            # Mettez à jour les étiquettes et la barre de progression avec les informations de la musique
+            song_name_label.configure(text=f"")
+            song_duration_label.configure(text="")
+            progress_bar.configure(bg_color="#000000", progress_color="#000000", fg_color="#000000", border_color="#000000")
 
         # Répétez cette méthode toutes les secondes
         self.app.after(1000, lambda: self.update_music_info(song_name_label, song_duration_label, progress_bar))
