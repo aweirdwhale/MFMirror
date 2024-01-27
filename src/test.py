@@ -101,6 +101,22 @@ class IndicatorDot:
         self.draw_dot()
 
 
+class wish:
+    def __init__(self, label, meteo):
+        self.label = label
+        self.meteo = meteo
+        self.label.configure(text="Bonjour, \n   Olivier")
+        self.toMeteo()
+    
+    def toMeteo(self):
+        self.label.configure(text=f'{self.meteo["current"]["temp"]}°C {self.meteo["current"]["code"]}')
+        self.label.configure(font=ctk.CTkFont("Subjectivity", 24))
+        self.label.after(10 * 1000, self.toWish)
+    
+    def toWish(self):
+        self.label.configure(text="Bonjour, \n   Olivier")
+        self.label.configure(font=ctk.CTkFont("Pilowlava", 24))
+        self.label.after(4 * 1000, self.toMeteo)
 
 
 class UserInterface(threading.Thread):
@@ -156,9 +172,13 @@ class UserInterface(threading.Thread):
         self.update_state_indicator()
 
         """Top left corner"""
+        # Wish the user
+        wish_label = ctk.CTkLabel(self.app, text=f"Bonjour, \n  Olivier", font=ctk.CTkFont("Pilowlava", 24), bg_color="#000000", text_color="#ffffff")
+        wish_label.place(x=20, y=20, anchor="nw")
+        w = wish(wish_label, self.meteo)
         # Meteo
-        meteo_label = ctk.CTkLabel(self.app, text=f'{self.meteo["current"]["temp"]}°C {self.meteo["current"]["code"]}', font=ctk.CTkFont("Subjectivity", 24), bg_color="#000000", text_color="#ffffff")
-        meteo_label.place(x=20, y=20, anchor="nw")
+        # meteo_label = ctk.CTkLabel(self.app, text=f'{self.meteo["current"]["temp"]}°C {self.meteo["current"]["code"]}', font=ctk.CTkFont("Subjectivity", 24), bg_color="#000000", text_color="#ffffff")
+        # meteo_label.place(x=20, y=20, anchor="nw")
 
 
 
@@ -176,9 +196,10 @@ class UserInterface(threading.Thread):
         progress_bar.place(x=125, y=700, anchor="sw")
 
         # Mettez à jour les informations de la musique
-        self.update_music_info(song_name, song_duration_label, progress_bar)
+        self.update_music_info(song_name, song_duration_label, progress_bar, thumbnail_canvas)
 
         self.app.mainloop()
+
 
     def update_state_indicator(self):
         new_state = self.behaviour.state
@@ -236,37 +257,39 @@ class UserInterface(threading.Thread):
 
 
     def update_thumbnail(self, thumbnail_canvas):
-        self.updateThumbnail = self.behaviour.updateThumbnail
         
-        if self.updateThumbnail:
-            self.updateThumbnail = False
-            # delete the placeholder image from the canvas
-            thumbnail_canvas.delete("all")
-            #get new image
-            self.get_thumbnail()
-            # place the new image
-            self.spinning_image = SpinningImage(thumbnail_canvas, "thumbnail.png")
-
+        self.isPlaying = self.behaviour.isPlaying
         
         if self.isPlaying:
+            if self.updateThumbnail:
+                self.updateThumbnail = False
+                # delete the placeholder image from the canvas
+                thumbnail_canvas.delete("all")
+                #get new image
+                self.get_thumbnail()
+                # place the new image
+                self.spinning_image = SpinningImage(thumbnail_canvas, "thumbnail.png")
+                self.updateThumbnail = False
             # Mettez à jour le canvas dans le thread principal
-            self.app.after(int(self.behaviour.audio_length * 1000), lambda: self.update_thumbnail(thumbnail_canvas))
-        else:
-            # Mettez à jour le canvas dans le thread principal
-            self.app.after(800, lambda: self.update_thumbnail(thumbnail_canvas))
-
-    def update_thumbnail_periodically(self):
-        # Appeler la fonction update_thumbnail ici pour mettre à jour la vignette
-        self.update_thumbnail(thumbnail_canvas)
-        self.update_state_indicator()
+            # self.app.after(int(self.behaviour.audio_length * 1000), lambda: self.update_thumbnail(thumbnail_canvas))
         
-        # Planifier la prochaine mise à jour après un certain délai (par exemple, toutes les secondes)
-        self.app.after(1000, self.update_thumbnail_periodically)
+
+        self.app.after(800, lambda: self.update_thumbnail(thumbnail_canvas))
+
+    
 
 
-    def update_music_info(self, song_name_label, song_duration_label, progress_bar):
+    def update_music_info(self, song_name_label, song_duration_label, progress_bar, thumbnail_canvas):
+        if self.isPlaying != self.behaviour.isPlaying:
+            print("isPlaying changed")
+            self.updateThumbnail = True
+            self.update_thumbnail(thumbnail_canvas)
+        else:
+            print("isPlaying didn't change")
+
         self.isPlaying = self.behaviour.isPlaying
         if self.isPlaying:
+            
             # Mettez à jour les étiquettes et la barre de progression avec les informations de la musique
             song_name_label.configure(text=self.behaviour.music_title)
             self.thumnail_link = self.behaviour.music_thumbnail
@@ -281,7 +304,7 @@ class UserInterface(threading.Thread):
             progress_bar.configure(bg_color="#000000", progress_color="#000000", fg_color="#000000", border_color="#000000")
 
         # Répétez cette méthode toutes les secondes
-        self.app.after(1000, lambda: self.update_music_info(song_name_label, song_duration_label, progress_bar))
+        self.app.after(1000, lambda: self.update_music_info(song_name_label, song_duration_label, progress_bar, thumbnail_canvas))
 
     def start_behaviour(self):
         self.behaviour.use()

@@ -117,40 +117,43 @@ class Player:
             return error
 
     def download(self):
-        log.log("Downloading . . .", "info")
-        self.tts.speak(self.phrases[LANGUAGE]["downloading"])
+        try:
+            log.log("Downloading . . .", "info")
+            self.tts.speak(self.phrases[LANGUAGE]["downloading"])
 
-        if len(self.result) > 0:
-            yt_url = self.result[0]["url"]
-            file_name = self.result[0]["id"]
-            if self.result[0]["isStream"]:
-                Log.log("Can't download a stream. Search something else.", "error")
-                self.tts.speak(self.phrases[LANGUAGE]["downloading_error"])
+            if len(self.result) > 0:
+                yt_url = self.result[0]["url"]
+                file_name = self.result[0]["id"]
+                if self.result[0]["isStream"]:
+                    Log.log("Can't download a stream. Search something else.", "error")
+                    self.tts.speak(self.phrases[LANGUAGE]["downloading_error"])
 
-                return False
-            
-            if os.path.isfile(f"{self.save_path}/{file_name}.mp3"):
-                log.log("File ready to play.", "great")
-                self.tts.speak(self.phrases[LANGUAGE]["downloading_success"])
+                    return False
+                
+                if os.path.isfile(f"{self.save_path}/{file_name}.mp3"):
+                    log.log("File ready to play.", "great")
+                    self.tts.speak(self.phrases[LANGUAGE]["downloading_success"])
 
+                else:
+                    yt = YouTube(yt_url)
+                    audio_stream = yt.streams.filter(only_audio=True).first()
+                    generic_filename = f"{file_name}.mp4"
+                    audio_stream.download(self.save_path, filename=generic_filename)
+
+                    log.log("Converting . . .", "info")
+
+                    video_clip = AudioFileClip(f"{self.save_path}/{file_name}.mp4")
+                    video_clip.write_audiofile(f"{self.save_path}/{file_name}.mp3")
+                    video_clip.close()
+                    os.remove(f"{self.save_path}/{file_name}.mp4")
+
+                    log.log("File downloaded and ready to play.", "great")
             else:
-                yt = YouTube(yt_url)
-                audio_stream = yt.streams.filter(only_audio=True).first()
-                generic_filename = f"{file_name}.mp4"
-                audio_stream.download(self.save_path, filename=generic_filename)
-
-                log.log("Converting . . .", "info")
-
-                video_clip = AudioFileClip(f"{self.save_path}/{file_name}.mp4")
-                video_clip.write_audiofile(f"{self.save_path}/{file_name}.mp3")
-                video_clip.close()
-                os.remove(f"{self.save_path}/{file_name}.mp4")
-
-                log.log("File downloaded and ready to play.", "great")
-        else:
-            log.log("404 Music not found.", "fail")
-            return False
-
+                log.log("404 Music not found.", "fail")
+                return False
+        except:
+            pass
+        
     def get_duration(self):
         if self.video_info and os.path.isfile(f"{self.save_path}/{self.video_info['id']}.mp3"):
             file_name = self.video_info["id"]
@@ -227,6 +230,13 @@ class Player:
 
         self.get_thumbnail()
 
+    def stop(self):
+        if self.pygame_instance is None:
+            return
+
+        pygame.mixer.music.stop()
+        pygame.quit()
+    
     def check_music_status(self):
         if pygame.mixer.music.get_busy():
             self.window.after(100, self.check_music_status)

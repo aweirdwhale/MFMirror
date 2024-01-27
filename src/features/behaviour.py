@@ -37,7 +37,7 @@ class Behaviour():
         )
         self.stt = SpeechToText()
         self.tts = TTS(lang=language)
-        self.wish = Wish(language, "Janick")
+        self.wish = Wish(language, "Olivier")
         self.weather = Weather()
         self.iss = ISS()
         self.player = Player()
@@ -103,6 +103,7 @@ class Behaviour():
         #self.player.pause()
 
     def get_args(self):
+        self.isPlaying = False
         self.state = 1
         self.stt.run() #running the speach to text
         
@@ -135,9 +136,12 @@ class Behaviour():
             self.tts.speak("La station spatiale internationale se trouve au dessus de " + position["over"] + " à " + position["time"])
         
         elif "bonne situation" in self.command:
+            self.player.pause()
             playsound.playsound("otis.mp3")
+            self.player.resume()
         
         elif "musique" in self.command:
+            self.isPlaying = False
             self.state = 2
             self.tts.speak(phrases[language]["music"])
             self.get_args()
@@ -156,8 +160,9 @@ class Behaviour():
             self.music_thumbnail = self.player.music_thumbnail
 
             #print(f"Durée de la musique : {str(self.player.audio_length)}, position dans la musique : {str(self.player.audio_position)}, valeur de la pbar {str(self.player.progress_value)}, Taille de l'audio en str: {self.player.audio_length_str}")
-            self.isPlaying = True
             self.updateThumbnail = True
+            self.isPlaying = True
+            
 
             
 
@@ -170,6 +175,9 @@ class Behaviour():
         
         elif "reprends" in self.command and not self.isPlaying:
             self.player.resume()
+            self.audio_position = self.player.audio_position
+            self.progress_value = self.player.progress_value
+            self.audio_position_str = self.player.audio_position_str
             self.isPlaying = True
         
         elif "volume" in self.command:
