@@ -137,7 +137,7 @@ class UserInterface(threading.Thread):
 
     def run(self):
         self.app = ctk.CTk()
-        self.app.title("Mother F Mirror")
+        self.app.title("Mother F* Mirror")
         self.app.geometry("960x720")
         self.app.resizable(False, False)
         self.app.config(bg="#000000")
@@ -258,20 +258,20 @@ class UserInterface(threading.Thread):
 
     def update_thumbnail(self, thumbnail_canvas):
         
-        self.isPlaying = self.behaviour.isPlaying
+        #self.isPlaying = self.behaviour.isPlaying
         
-        if self.isPlaying:
-            if self.updateThumbnail:
-                self.updateThumbnail = False
-                # delete the placeholder image from the canvas
-                thumbnail_canvas.delete("all")
-                #get new image
-                self.get_thumbnail()
-                # place the new image
-                self.spinning_image = SpinningImage(thumbnail_canvas, "thumbnail.png")
-                self.updateThumbnail = False
-            # Mettez à jour le canvas dans le thread principal
-            # self.app.after(int(self.behaviour.audio_length * 1000), lambda: self.update_thumbnail(thumbnail_canvas))
+        
+        if self.updateThumbnail:
+            self.updateThumbnail = False
+            # delete the placeholder image from the canvas
+            thumbnail_canvas.delete("all")
+            #get new image
+            self.get_thumbnail()
+            # place the new image
+            self.spinning_image = SpinningImage(thumbnail_canvas, "thumbnail.png")
+            self.updateThumbnail = False
+        # Mettez à jour le canvas dans le thread principal
+        # self.app.after(int(self.behaviour.audio_length * 1000), lambda: self.update_thumbnail(thumbnail_canvas))
         
 
         self.app.after(800, lambda: self.update_thumbnail(thumbnail_canvas))
@@ -285,6 +285,7 @@ class UserInterface(threading.Thread):
             self.updateThumbnail = True
             self.update_thumbnail(thumbnail_canvas)
         else:
+            self.updateThumbnail = False
             print("isPlaying didn't change")
 
         self.isPlaying = self.behaviour.isPlaying

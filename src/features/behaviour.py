@@ -141,12 +141,12 @@ class Behaviour():
             self.player.resume()
         
         elif "musique" in self.command:
-            self.isPlaying = False
             self.state = 2
             self.tts.speak(phrases[language]["music"])
             self.get_args()
             print("Music : " + self.arg)
             self.player.use_youtube(self.arg, os.getenv("GOOGLE_KEY"))
+            self.isPlaying = False
             self.player.play()
             self.player.get_duration()
 
