@@ -1,4 +1,5 @@
 import os
+import datetime
 
 import cv2
 import pygame
@@ -7,8 +8,11 @@ from googleapiclient.errors import HttpError
 from moviepy.audio.io.AudioFileClip import AudioFileClip
 from pytube import YouTube
 
-from src.features.Logs.log import Log
+import numpy as np
+from PIL import ImageTk, Image, ImageDraw
 
+from features.Logs.log import Log
+import json
 from dotenv import load_dotenv
 
 import tkinter as tk
@@ -20,26 +24,33 @@ import requests
 import mediapipe as mp
 import threading
 
-from hand_gesture import HandGesture
 
-import math
-import numpy as np
+from features.music.hand_gesture import HandGesture
+from features.textToSpeech.speech import TTS
+
+
+
+from mutagen.mp3 import MP3
 
 mp_drawing = mp.solutions.drawing_utils
 mp_hands = mp.solutions.hands
 
-load_dotenv(dotenv_path="../../../.env.secret")
+load_dotenv(dotenv_path=".env.secret")
 key = os.getenv("GOOGLE_KEY")
 
 # init log
 log = Log()
+
+# init language
+load_dotenv(dotenv_path="config.env")
+LANGUAGE = os.getenv("LANGUAGE")
 
 
 class Player:
     def __init__(self, window=None):
         self.video_info = None
         self.result = []
-        self.save_path = '../../../DATA/musics'
+        self.save_path = 'DATA/musics'
         self.window = window
 
         self.pygame_instance = None
@@ -48,6 +59,19 @@ class Player:
         self.current_position = 0
 
         self.volume_thread_stop_event = threading.Event()
+
+        # UI
+        self.audio_length = 0
+        self.audio_position = 0
+        self.audio_position_str = ""
+        self.progress_value = 0
+        self.audio_length_str = ""
+        self.music_title = ""
+        self.music_thumbnail = ""
+
+        self.tts = TTS(lang=LANGUAGE)
+        self.phrases = json.load(open("src/features/phrases.json", "r"))
+        
 
     def use_youtube(self, query, yt_key):
         youtube = build("youtube", "v3", developerKey=yt_key)
@@ -66,13 +90,19 @@ class Player:
                 artist = search_result["snippet"]["channelTitle"]
                 title = search_result["snippet"]["title"]
                 thumbnail = search_result["snippet"]["thumbnails"]["medium"]["url"]
+                # isStream = search_result["liveBroadcastContent"]
+                # if isStream == "live":
+                #    isStream = True
+                # else:
+                #    isStream = False
 
                 self.video_info = {
                     "url": video_url,
                     "artist": artist,
                     "title": title,
                     "thumbnail": thumbnail,
-                    "id": str(video_id)
+                    "id": str(video_id),
+                    "isStream": False
                 }
 
                 self.result = []
@@ -87,32 +117,100 @@ class Player:
             return error
 
     def download(self):
-        log.log("Downloading . . .", "info")
+        try:
+            log.log("Downloading . . .", "info")
+            self.tts.speak(self.phrases[LANGUAGE]["downloading"])
 
-        if len(self.result) > 0:
-            yt_url = self.result[0]["url"]
-            file_name = self.result[0]["id"]
+            if len(self.result) > 0:
+                yt_url = self.result[0]["url"]
+                file_name = self.result[0]["id"]
+                if self.result[0]["isStream"]:
+                    Log.log("Can't download a stream. Search something else.", "error")
+                    self.tts.speak(self.phrases[LANGUAGE]["downloading_error"])
 
-            if os.path.isfile(f"{self.save_path}/{file_name}.mp3"):
-                log.log("File ready to play.", "great")
+                    return False
+                
+                if os.path.isfile(f"{self.save_path}/{file_name}.mp3"):
+                    log.log("File ready to play.", "great")
+                    self.tts.speak(self.phrases[LANGUAGE]["downloading_success"])
 
+                else:
+                    yt = YouTube(yt_url)
+                    audio_stream = yt.streams.filter(only_audio=True).first()
+                    generic_filename = f"{file_name}.mp4"
+                    audio_stream.download(self.save_path, filename=generic_filename)
+
+                    log.log("Converting . . .", "info")
+
+                    video_clip = AudioFileClip(f"{self.save_path}/{file_name}.mp4")
+                    video_clip.write_audiofile(f"{self.save_path}/{file_name}.mp3")
+                    video_clip.close()
+                    os.remove(f"{self.save_path}/{file_name}.mp4")
+
+                    log.log("File downloaded and ready to play.", "great")
             else:
-                yt = YouTube(yt_url)
-                audio_stream = yt.streams.filter(only_audio=True).first()
-                generic_filename = f"{file_name}.mp4"
-                audio_stream.download(self.save_path, filename=generic_filename)
+                log.log("404 Music not found.", "fail")
+                return False
+        except:
+            pass
+        
+    def get_duration(self):
+        if self.video_info and os.path.isfile(f"{self.save_path}/{self.video_info['id']}.mp3"):
+            file_name = self.video_info["id"]
+            audio = MP3(f"{self.save_path}/{file_name}.mp3")
 
-                log.log("Converting . . .", "info")
+            self.audio_length = audio.info.length
+            self.audio_length_str = str(datetime.datetime.fromtimestamp(audio.info.length).strftime('%M:%S'))
 
-                video_clip = AudioFileClip(f"{self.save_path}/{file_name}.mp4")
-                video_clip.write_audiofile(f"{self.save_path}/{file_name}.mp3")
-                video_clip.close()
-                os.remove(f"{self.save_path}/{file_name}.mp4")
+            if pygame.mixer.music.get_busy():
+                self.audio_position = pygame.mixer.music.get_pos() / 1000
+            else:
+                self.audio_position = 0
 
-                log.log("File downloaded and ready to play.", "great")
-        else:
-            log.log("404 Music not found.", "fail")
-            return False
+            self.audio_position_str = str(datetime.datetime.fromtimestamp(self.audio_position).strftime('%M:%S'))
+            self.progress_value = self.audio_position / self.audio_length
+
+            self.music_title = self.video_info["title"]
+            
+
+        return self.audio_length, self.audio_position, self.progress_value, self.audio_length_str
+
+    def get_thumbnail(self):
+        self.music_thumbnail = self.video_info["thumbnail"]
+
+        # Musica !
+        """round the image"""
+        # get the image from link
+        _ = requests.get(self.music_thumbnail)
+        _.raise_for_status()  # Check if request is successful
+
+
+
+        img = Image.open(BytesIO(_.content)).convert("RGB")
+
+        npImage = np.array(img)
+        h, w = img.size
+
+        # Create same size alpha layer with circle
+        alpha = Image.new('L', img.size, 0)
+        draw = ImageDraw.Draw(alpha)
+
+        radius = w // 2
+        center_x = h // 2
+        center_y = w // 2
+
+        # make a circle with radius = h/2 at the center of image
+        draw.pieslice((center_x - radius, center_y - radius, center_x + radius, center_y + radius), 0, 360, fill=255, width=2)
+
+        # Convert alpha Image to numpy array
+        npAlpha = np.array(alpha)
+
+        # Add alpha layer to RGB
+        npImage = np.dstack((npImage, npAlpha))
+
+        # Save with alpha
+        Image.fromarray(npImage).save('thumbnail.png')
+        print(self.music_thumbnail)
 
     def play(self):
         file_name = self.result[0]["id"]
@@ -130,19 +228,36 @@ class Player:
         if self.window is not None:
             self.window.after(100, self.check_music_status)
 
+        self.get_thumbnail()
+
+    def stop(self):
+        if self.pygame_instance is None:
+            return
+
+        pygame.mixer.music.stop()
+        pygame.quit()
+    
     def check_music_status(self):
         if pygame.mixer.music.get_busy():
             self.window.after(100, self.check_music_status)
         elif not self.paused:
             pygame.quit()
 
-    def pause_resume(self):
+    def pause(self):
+
+        if self.pygame_instance is None:
+            return
 
         if pygame.mixer.music.get_busy() and not self.paused:
             self.current_position = pygame.mixer.music.get_pos()
             pygame.mixer.music.pause()
             self.paused = True
-        elif self.paused:
+
+    def resume(self):
+        if self.pygame_instance is None:
+            return
+
+        if self.paused:
             pygame.mixer.music.play(start=float(self.current_position / 1000))
             self.paused = False
 
@@ -150,6 +265,7 @@ class Player:
         hg = HandGesture()  # instance
         hg.start()  # start thread
         hg.join()  # wait for thread to finish
+
 
 
 # Test
@@ -171,12 +287,17 @@ if __name__ == '__main__':
 
         def play(self):
             self.behaviour.play()
+            self.behaviour.get_duration()
 
         def pause(self):
             self.behaviour.pause_resume()
 
         def volume(self):
             self.behaviour.volume()
+
+        def duration(self):
+            self.behaviour.get_duration()
+            print(self.behaviour.audio_length)
 
 
     # Create the main window
@@ -206,6 +327,10 @@ if __name__ == '__main__':
 
     progress = ttk.Label(root)
     progress.pack()
+
+    duration = tk.Button(root, text="duration", command=actions.duration)
+    duration.pack()
+
 
     pause_button = tk.Button(root, text="Pause/Reprendre la musique", command=actions.pause)
     pause_button.pack()

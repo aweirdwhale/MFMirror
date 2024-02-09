@@ -1,0 +1,33 @@
+{
+    "fr": {
+        "listening": "Je suis tout ouïe",
+        "processing": "Je m'en charge ! Laissez-moi quelques secondes...",
+        "bozo": "Je suis désolé, je ne suis pas assez qualifié pour ce job.",
+        "success": "Et voilà le travail !",
+        "howareyou": "Je vais bien, merci ! Et vous ?",
+        "music": "Que voulez-vous écouter ?",
+        "error": "Je suis désolé, je n'ai pas compris. Veuillez répéter",
+        "wikipedia": "Qui voulez-vous rechercher ?",
+        "wikipedia_error": "Je suis désolé, je n'ai pas trouvé de résultat pour cette recherche",
+        "wikipedia_success": "Voici ce que j'ai trouvé sur Wikipédia :",
+        "downloading": "Je télécharge votre musique, veuillez patienter...",
+        "downloading_error": "Je suis désolé, je n'ai pas réussi à télécharger votre musique",
+        "downloading_success": "Votre musique a bien été téléchargée !"
+
+    },
+    "en": {
+        "listening": "I'm all ears",
+        "processing": "I'm on it! Give me a few seconds...",
+        "bozo": "I'm sorry, I'm not qualified enough for this job.",
+        "success": "Here you go!",
+        "howareyou": "I'm fine, thank you! And you?",
+        "music": "What do you want to listen to?",
+        "error": "I'm sorry, I didn't understand. Please repeat",
+        "wikipedia": "Who do you want to search for?",
+        "wikipedia_error": "I'm sorry, I didn't find any result for this search",
+        "wikipedia_success": "Here's what I found on Wikipedia:",
+        "downloading": "I'm downloading your music, please wait...",
+        "downloading_error": "I'm sorry, I couldn't download your music",
+        "downloading_success": "Your music has been downloaded successfully!"
+    }
+}
