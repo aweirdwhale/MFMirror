@@ -3,6 +3,7 @@ Interface to show when the weather is being updated
 """
 
 import customtkinter as ctk
+import tkinter as tk
 from PIL import Image, ImageTk
 import os
 
@@ -47,12 +48,16 @@ class Content:
         self.label2.pack(pady=0)
         self.label2.place(relx=0.5, rely=0.12, anchor="center")
         
-        self.image = Image.open(self.image_path)
-        self.image = self.image.resize((10, 10), Image.ANTIALIAS)
-        self.photo = ImageTk.PhotoImage(self.image)
-        self.label4 = ctk.CTkImage()
-        self.label4.pack(pady=20)
-        self.label4.place(relx=0.5, rely=0.5, anchor="center")
+        
+        # Create a canvas to show the weather image
+        self.canvas = tk.Canvas(self.frame, width=200, height=200, bg="#000000", highlightthickness=0)
+        self.canvas.pack(pady=20)
+        self.canvas.place(relx=0.5, rely=0.5, anchor="center")
+        self.img = Image.open(self.image_path)
+        self.img = self.img.resize((72, 72), Image.ANTIALIAS)
+        self.img = ImageTk.PhotoImage(self.img)
+        self.canvas.create_image(0, 0, anchor="nw", image=self.img)
+
 
         
         # Create a label to show the weather
