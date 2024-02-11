@@ -116,12 +116,6 @@ Fonts used in the UI : [Pilowlava](https://www.freefaces.gallery/typefaces/pilow
 
 ![Hardware](https://img.shields.io/badge/Hardware-TODO-red?labelColor=gray&style=for-the-badge)
 
-## TODO
-
-- Volume control by hand gesture
-- Implementing some functionalities as weather, calendar etc.
-- The main UI
-
 ## Software :
 
 ![PYTHON](https://img.shields.io/badge/Python-FFD43B?style=for-the-badge&logo=python&logoColor=blue)  ![](https://img.shields.io/badge/PyCharm-000000.svg?&style=for-the-badge&logo=PyCharm&logoColor=white)  ![](https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white)

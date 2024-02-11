@@ -132,6 +132,7 @@ class UserInterface(threading.Thread):
         self.state = self.behaviour.state
         self.dot_color = "orange"  # Utilisez dot_color au lieu de state
         self.meteo = self.behaviour.meteo
+        self.last_modification_time = None
 
         
 
@@ -156,7 +157,9 @@ class UserInterface(threading.Thread):
         thumbnail_canvas = ctk.CTkCanvas(self.app, width=80, height=80, bg="#000000", highlightthickness=0)
         thumbnail_canvas.place(x=20, y=700, anchor="sw")
 
-        self.update_thumbnail(thumbnail_canvas=thumbnail_canvas)
+        #self.update_thumbnail(thumbnail_canvas=thumbnail_canvas)
+        self.last_modification_time = os.path.getmtime("thumbnail.png")
+        self.check_image_modification("thumbnail.png", thumbnail_canvas)
 
         # put a placeholder image
         self.thumbnail_image = ImageTk.PhotoImage(Image.open(self.placeholder).convert("RGBA"))
@@ -256,38 +259,49 @@ class UserInterface(threading.Thread):
 
 
 
-    def update_thumbnail(self, thumbnail_canvas):
-        
-        #self.isPlaying = self.behaviour.isPlaying
-        
-        
-        if self.updateThumbnail:
-            self.updateThumbnail = False
-            # delete the placeholder image from the canvas
-            thumbnail_canvas.delete("all")
-            #get new image
-            self.get_thumbnail()
-            # place the new image
-            self.spinning_image = SpinningImage(thumbnail_canvas, "thumbnail.png")
-            self.updateThumbnail = False
-        # Mettez à jour le canvas dans le thread principal
-        # self.app.after(int(self.behaviour.audio_length * 1000), lambda: self.update_thumbnail(thumbnail_canvas))
-        
+    #def update_thumbnail(self, thumbnail_canvas):
+     #   self.updateThumbnail = False
+        # delete the placeholder image from the canvas
+      #  thumbnail_canvas.delete("all")
+        #get new image
+       # self.get_thumbnail()
+        # place the new image
+        #self.spinning_image = SpinningImage(thumbnail_canvas, "thumbnail.png")
+        #self.updateThumbnail = False
 
-        self.app.after(800, lambda: self.update_thumbnail(thumbnail_canvas))
 
-    
+
+    def check_image_modification(self, image_path, canvas):
+        """
+        Vérifie si une image a été modifiée en comparant les horodatages de modification.
+        """
+        try:
+            # Récupérer l'horodatage de modification actuel de l'image
+            current_modification_time = os.path.getmtime(image_path)
+
+            # Si l'horodatage a changé depuis la dernière vérification
+            if current_modification_time != self.last_modification_time:
+                # Mettre à jour l'image
+                if self.spinning_image:
+                    print("cleared")
+                    self.spinning_image.clear()
+                    time.sleep(1)
+
+                # Mettre à jour l'image existante
+                self.spinning_image = SpinningImage(canvas, image_path)
+                
+                print("Image modifiée")
+
+                # Mettre à jour l'horodatage de la dernière modification
+                self.last_modification_time = current_modification_time
+        except FileNotFoundError:
+            print("Fichier introuvable :", image_path)
+
+        # Planifier la prochaine vérification après un certain délai (par exemple, toutes les secondes)
+        self.app.after(1000, lambda: self.check_image_modification(image_path, canvas=canvas))
 
 
     def update_music_info(self, song_name_label, song_duration_label, progress_bar, thumbnail_canvas):
-        if self.isPlaying != self.behaviour.isPlaying:
-            print("isPlaying changed")
-            self.updateThumbnail = True
-            self.update_thumbnail(thumbnail_canvas)
-        else:
-            self.updateThumbnail = False
-            print("isPlaying didn't change")
-
         self.isPlaying = self.behaviour.isPlaying
         if self.isPlaying:
             
@@ -300,6 +314,7 @@ class UserInterface(threading.Thread):
             progress_bar.configure(bg_color="#000000", progress_color="#ffffff", fg_color="#000000", border_color="#ffffff")
         else:
             # Mettez à jour les étiquettes et la barre de progression avec les informations de la musique
+            
             song_name_label.configure(text=f"")
             song_duration_label.configure(text="")
             progress_bar.configure(bg_color="#000000", progress_color="#000000", fg_color="#000000", border_color="#000000")

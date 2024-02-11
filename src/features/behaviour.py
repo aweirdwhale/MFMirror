@@ -146,7 +146,7 @@ class Behaviour():
             self.get_args()
             print("Music : " + self.arg)
             self.player.use_youtube(self.arg, os.getenv("GOOGLE_KEY"))
-            self.isPlaying = False
+            self.clean_music()
             self.player.play()
             self.player.get_duration()
 
@@ -200,11 +200,28 @@ class Behaviour():
             except:
                 self.tts.speak(phrases[language]["wikipedia_error"])
         
+        elif "stop" in self.command:
+            #shutdown the program
+            pass
+
         else:
             self.tts.speak(phrases[language]["bozo"])
             self.state = 0
 
         # self.player.resume() #resume the music
+
+    def clean_music(self):
+        # reset title, thumbnail etc to avoid showing the previous music
+        self.audio_length = 0
+        self.audio_position = 0
+        self.audio_position_str = ""
+        self.progress_value = 0
+        self.audio_length_str = ""
+        self.music_title = ""
+        self.music_thumbnail = "https://www.aweirdwhale.xyz/pps/21.jpg"
+        self.updateThumbnail = False
+        self.isPlaying = False
+
 
     def bypass_voice(self):
         self.get_args()
@@ -281,8 +298,6 @@ class Behaviour():
             
 
         self.listen()
-
-    
 
 
     def cleanup(self):
