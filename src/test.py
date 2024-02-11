@@ -100,7 +100,6 @@ class IndicatorDot:
         self.clear()
         self.draw_dot()
 
-
 class wish:
     def __init__(self, label, meteo):
         self.label = label

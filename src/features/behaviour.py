@@ -11,7 +11,7 @@ from features.wish.wish import Wish
 from features.speechToText.stt import SpeechToText
 from features.face_recon.facerecognition import FaceRecognition
 from features.wakeword.Wakey import PorcupineListener
-
+from features.weather.weatherUI import WeatherUI
 import json
 import playsound
 import pygame
@@ -66,6 +66,7 @@ class Behaviour():
         # weather
         self.meteo = {}
         self.getMeteo()
+        self.weatherUI = WeatherUI()
 
     def listen(self):
         self.state = 0
@@ -128,7 +129,11 @@ class Behaviour():
         if "météo" in self.command or "temps" in self.command:
             self.weather.refresh()
             self.meteo = self.weather.meteo
+            # launch the weather UI
+            self.weatherUI.start()
+            
             self.tts.speak("Il fait " + self.meteo["current"]["temp"] + " degrés Celcius, ressentit" + self.meteo["current"]["body_feeling"])
+            
         
         elif "iss" in self.command or "station spatiale" in self.command:
             self.iss.refresh()
