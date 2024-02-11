@@ -15,14 +15,16 @@ class Converter:
 
     def convert(self):
         # Utilisation du dictionnaire pour obtenir la description correspondante
-        description = self.weather_codes[self.lang][str(self.code)]
+        description = self.weather_codes[self.lang][str(self.code)][0]
         print(description)  # Cela affichera "Rain - Slight intensity"
         
         return description
 
-# Usage
-converter = Converter(61)
-converter.convert()
 
-        
+    def get_images_path(self):
+        # Utilisation du dictionnaire pour obtenir le chemin de l'image correspondante
+        path = self.weather_codes[self.lang][str(self.code)][1]
+        print(path)
+
+        return path
 

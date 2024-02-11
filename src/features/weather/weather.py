@@ -65,15 +65,7 @@ class Weather:
         
         # convert weather code format
         current_weather_code = int(current_weather_code)
-        #convert from X to 0X
-        if current_weather_code < 10:
-            current_weather_code = "0" + str(current_weather_code)
         
-        # add d or n at the end if it's day or night
-        if current_is_day:
-            current_weather_code = str(current_weather_code) + "d"
-        else:
-            current_weather_code = str(current_weather_code) + "n"
 
         self.meteo = {
             "header": [
@@ -97,7 +89,6 @@ class Weather:
             }
         }
 
-        print(self.meteo)
 
         return self.meteo
 

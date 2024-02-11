@@ -14,6 +14,9 @@ import tkinter as tk
 import threading
 import time
 
+from weather_codes import Converter
+from weather import Weather
+
 import dotenv
 dotenv.load_dotenv(dotenv_path="config.env")
 
@@ -24,6 +27,13 @@ lat = os.getenv("LAT")
 # pass content as a widget
 class Content:
     def __init__(self, parent):
+        self.w = Weather()
+        self.code = self.w.refresh()["current"]["code"]
+
+        self.c = Converter(self.code)
+        self.description = self.c.convert()
+        self.image_path = self.c.get_images_path()
+
         self.parent = parent
         # make a frame that takes the whole window
         self.frame = ctk.CTkFrame(self.parent, bg_color="#000000")
@@ -35,16 +45,20 @@ class Content:
         # Another just below it
         self.label2 = ctk.CTkLabel(self.frame, text=f"{lon}°N, {lat}°E", font=("Subjectivity", 16), bg_color="#000000", fg_color="#000000")
         self.label2.pack(pady=0)
-        # Add the weather image top left
-        self.weather_image = Image.open("assets/weather.png")
-        self.weather_image = self.weather_image.resize((100, 100))
-        self.weather_image = ImageTk.PhotoImage(self.weather_image)
-        self.weather_label = ctk.CTkLabel(self.frame, image=self.weather_image, bg_color="#000000")
-        self.weather_label.pack(pady=20, padx=20, side="left")
-        # Add the weather text below the image
-        self.weather_text = ctk.CTkLabel(self.frame, text="Light Rain", font=("Pilowlava", 20), bg_color="#000000", fg_color="#000000")
-        self.weather_text.pack(pady=20, side="left")
+        self.label2.place(relx=0.5, rely=0.12, anchor="center")
         
+        self.image = Image.open(self.image_path)
+        self.image = self.image.resize((10, 10), Image.ANTIALIAS)
+        self.photo = ImageTk.PhotoImage(self.image)
+        self.label4 = ctk.CTkImage()
+        self.label4.pack(pady=20)
+        self.label4.place(relx=0.5, rely=0.5, anchor="center")
+
+        
+        # Create a label to show the weather
+        self.label3 = ctk.CTkLabel(self.frame, text=self.c.convert(), font=("Subjectivity", 10), bg_color="#000000", fg_color="#000000")
+        self.label3.pack(pady=20)
+        self.label3.place(relx=0.01, rely=0.2, anchor="nw")
 
 
 
@@ -55,6 +69,7 @@ class Content:
         self.frame.destroy()
     
     def update(self, text):
+        # get meteo infos by weather code
         self.label.config(text=text)
         self.frame.update()
 
