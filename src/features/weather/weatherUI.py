@@ -33,7 +33,7 @@ class Content:
 
         self.c = Converter(self.code)
         self.description = self.c.convert()
-        self.image_path = self.c.get_images_path()
+        # self.image_path = self.c.get_images_path()
 
         self.parent = parent
         # make a frame that takes the whole window
@@ -50,13 +50,13 @@ class Content:
         
         
         # Create a canvas to show the weather image
-        self.canvas = tk.Canvas(self.frame, width=200, height=200, bg="#000000", highlightthickness=0)
-        self.canvas.pack(pady=20)
-        self.canvas.place(relx=0.5, rely=0.5, anchor="center")
-        self.img = Image.open(self.image_path)
-        self.img = self.img.resize((72, 72), Image.ANTIALIAS)
-        self.img = ImageTk.PhotoImage(self.img)
-        self.canvas.create_image(0, 0, anchor="nw", image=self.img)
+        # self.canvas = tk.Canvas(self.frame, width=200, height=200, bg="#000000", highlightthickness=0)
+        # self.canvas.pack(pady=20)
+        # self.canvas.place(relx=0.5, rely=0.5, anchor="center")
+        # self.img = Image.open(self.image_path)
+        # self.img = self.img.resize((72, 72), Image.ANTIALIAS)
+        # self.img = ImageTk.PhotoImage(self.img)
+        # self.canvas.create_image(0, 0, anchor="nw", image=self.img)
 
 
         

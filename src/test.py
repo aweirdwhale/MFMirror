@@ -137,7 +137,7 @@ class UserInterface(threading.Thread):
 
     def run(self):
         self.app = ctk.CTk()
-        self.app.title("Mother F* Mirror")
+        self.app.title("Hermione (Mother F* Mirror)")
         self.app.geometry("960x720")
         self.app.resizable(False, False)
         self.app.config(bg="#000000")

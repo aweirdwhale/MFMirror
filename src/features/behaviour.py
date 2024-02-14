@@ -11,7 +11,8 @@ from features.wish.wish import Wish
 from features.speechToText.stt import SpeechToText
 from features.face_recon.facerecognition import FaceRecognition
 from features.wakeword.Wakey import PorcupineListener
-from features.weather.weatherUI import WeatherUI
+#from features.weather.weatherUI import WeatherUI
+from features.wikipedia.wikipedia import Wikipedia
 import json
 import playsound
 import pygame
@@ -31,9 +32,9 @@ class Behaviour():
     def __init__(self):
         self.wake_word = PorcupineListener(
             accessKey=PiKEY,
-            keywordPath="src/features/wakeword/wake_fr.ppn",
+            keywordPath=["src/features/wakeword/Hermione.ppn", "src/features/wakeword/stop_musique.ppn"],
             modelPath="src/features/wakeword/porcupine_fr.pv",
-            outputPath="src/features/wakeword/output.wav"
+            outputPath="src/features/wakeword/output-Hermione.wav"
         )
         self.stt = SpeechToText()
         self.tts = TTS(lang=language)
@@ -66,7 +67,7 @@ class Behaviour():
         # weather
         self.meteo = {}
         self.getMeteo()
-        self.weatherUI = WeatherUI()
+        #self.weatherUI = WeatherUI()
 
     def listen(self):
         self.state = 0
@@ -116,6 +117,7 @@ class Behaviour():
     def set_playing_state(self, is_playing):
         self.isPlaying = is_playing
 
+    
     def getMeteo(self):
         self.weather.refresh()
         self.meteo = self.weather.meteo
@@ -130,7 +132,7 @@ class Behaviour():
             self.weather.refresh()
             self.meteo = self.weather.meteo
             # launch the weather UI
-            self.weatherUI.start()
+            #self.weatherUI.start()
             
             self.tts.speak("Il fait " + self.meteo["current"]["temp"] + " degrés Celcius, ressentit" + self.meteo["current"]["body_feeling"])
             
@@ -276,6 +278,7 @@ class Behaviour():
 
     def use(self):
         self.state = 0
+        
         if self.wake_word.detected:
             self.state = 2
             #self.player.pause() #pause the music
@@ -287,19 +290,29 @@ class Behaviour():
                 self.last_detection_time = datetime.now()
 
                 self.tts.speak(phrases[language]["listening"])
-                # listen for commands
-                self.listen_for_commands()
+                
             else:
                 # Don't say hello again, it'll be boring else
                 # but still listen for commands
                 # Say yes I listen to you
                 self.last_detection_time = datetime.now()
                 self.tts.speak(phrases[language]["listening"])
-                # listen for commands
-                self.listen_for_commands()
+            
+            # listen for commands
+            self.listen_for_commands()
 
             self.audio_position = round(self.player.audio_position / 60000, 2)
             self.progress_value = round(self.player.progress_value, 2)
+
+        elif self.wake_word.stopmsk:
+            print(self.isPlaying)
+            if self.isPlaying:
+                print("Stopping music")
+                self.player.stop()
+                self.isPlaying = False
+                
+            self.wake_word.stopmsk = False
+            self.use()
             
 
         self.listen()

@@ -26,11 +26,12 @@ class PorcupineListener:
         self.recorder = None
         self.wav_file = None
         self.detected = False
+        self.stopmsk = False
 
     def initialize(self):
         self.porcupine = pvporcupine.create(
             access_key=self.access_key,
-            keyword_paths=[self.keyword_path],
+            keyword_paths=self.keyword_path,
             model_path=self.model_path
         )
 
@@ -50,16 +51,25 @@ class PorcupineListener:
         print('Listening ...')
         try:
             while True:
+                
+                
+
                 pcm = self.recorder.read()
                 result = self.porcupine.process(pcm)
 
                 if self.wav_file is not None:
                     self.wav_file.writeframes(struct.pack("h" * len(pcm), *pcm))
 
-                if result >= 0:
-                    print('[%s] Detected outre ça' % str(datetime.now()))
+                
+                if result == 0:
+                    print('[%s] Detected Hermione' % str(datetime.now()))
                     self.detected = True
                     return True
+                elif result == 1:
+                    print('[%s] Detected Stop Music' % str(datetime.now()))
+                    self.stopmsk = True
+                    return True
+
         except KeyboardInterrupt:
             print('Stopping ...')
         finally:

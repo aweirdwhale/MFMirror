@@ -3,7 +3,7 @@
 import json
 import os
 import dotenv
-
+from os import path
 dotenv.load_dotenv(dotenv_path="config.env")
 lang = os.getenv("LANGUAGE")
 
@@ -21,10 +21,10 @@ class Converter:
         return description
 
 
-    def get_images_path(self):
-        # Utilisation du dictionnaire pour obtenir le chemin de l'image correspondante
-        path = self.weather_codes[self.lang][str(self.code)][1]
-        print(path)
-
-        return path
+    #def get_images_path(self):
+     #   # Utilisation du dictionnaire pour obtenir le chemin de l'image correspondante
+      #  chemin = path.join("DATA/weather_icons/" + self.weather_codes[self.lang][str(self.code)][1])
+       # print(chemin)
+##
+ #       return chemin
 
