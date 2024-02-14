@@ -129,7 +129,7 @@ class UserInterface(threading.Thread):
         self.thumbnail_image = None
         self.placeholder = "placeholder_.png"
         self.state = self.behaviour.state
-        self.dot_color = "orange"  # Utilisez dot_color au lieu de state
+        self.dot_color = "orange"  # Use dot_color instead of state
         self.meteo = self.behaviour.meteo
         self.last_modification_time = None
 
