@@ -32,8 +32,8 @@
     "fr": {
         "0": ["Ciel dégagé", "d/sunny.svg"],
         "1": ["Ciel dégagé", "d/clear_day.svg"],
-        "2": ["Ciel dégagé", "d/partly_cloudy_day.svg"],
-        "3": ["Ciel dégagé", "d/cloud.svg"],
+        "2": ["Nuages éparses", "d/partly_cloudy_day.svg"],
+        "3": ["Nuageux", "d/cloud.svg"],
         "45": ["Brouillard", "d/foggy.svg"],
         "48": ["Brouillard givrant", "d/foggy.svg"],
         "51": ["Bruine \nLégère", "d/rainy.svg"],
@@ -58,6 +58,6 @@
         "95": ["Orage \nLéger", "d/thunderstorm.svg"],
         "96": ["Orage de grêle \nLéger", "d/thunderstorm.svg"],
         "99": ["Orage de grêle \nForte", "d/thunderstorm.svg"]
-        
+
     }
 }

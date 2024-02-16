@@ -4,7 +4,7 @@ Interface to show when the weather is being updated
 
 import customtkinter as ctk
 import tkinter as tk
-from PIL import Image, ImageTk, ImageDraw, ImageFont
+from PIL import Image, ImageTk, ImageDraw, ImageFont, ImageOps
 import os
 
 ctk.FontManager.load_font("fonts/Pilowlava.ttf")
@@ -17,6 +17,7 @@ import time
 
 from weather_codes import Converter
 from weather import Weather
+from rounded_rect import drawRect
 
 import dotenv
 dotenv.load_dotenv(dotenv_path="config.env")
@@ -40,6 +41,7 @@ class Content:
         self.frame = ctk.CTkFrame(self.parent, bg_color="#000000", fg_color="#000000")
         self.frame.pack(fill="both", expand=True)
 
+        # =============== TITLE =================
         # Create a label top center
         self.label = ctk.CTkLabel(self.frame, text=f"{place}", font=("Pilowlava", 40), bg_color="#000000", fg_color="#000000")
         self.label.pack(pady=20)
@@ -49,6 +51,7 @@ class Content:
         self.label2.place(relx=0.5, rely=0.12, anchor="center")
         
         
+        # =============== ICON + DESCRIPTION  =================
         # Create a canvas to show the weather image
         self.canvas = tk.Canvas(self.frame, width=100, height=100, bg="#000000", highlightthickness=0)
         self.canvas.pack(pady=20)
@@ -58,51 +61,56 @@ class Content:
         self.img = ImageTk.PhotoImage(self.img)
         self.canvas.create_image(50, 50, image=self.img)
 
+        # Write the weather description on the canvas
+        self.canvas.create_text(50, 90, text=self.c.convert(), font=("Subjectivity", 15), fill="white")
 
+
+        # =============== WEATHER INFORMATIONS =================
         
-        # Create a label to show the weather
-        self.label3 = ctk.CTkLabel(self.frame, text=self.c.convert(), font=("Subjectivity", 15), bg_color="#000000", fg_color="#000000")
-        self.label3.pack(pady=20)
-        self.label3.place(relx=0.015, rely=0.15, anchor="nw")
+        rectangle_width = 200
+        rectangle_height = 100
+
+        # Create a canvas
+        self.canvas = tk.Canvas(self.frame, width=300, height=290, bg="black", highlightthickness=0)
+        self.canvas.pack(pady=20)
+        self.canvas.place(relx=0.5, rely=0.5, anchor="center")
+
+        # INFO BOX
+        drawRect(self.canvas, 0, 0, 300, 290, 20, 8, "#FFFFFF")
+
+        # TEMPERATURE
+        # temperature circle 20px from bottom and left, 120px width and height
+        self.canvas.create_oval(20, 150, 140, 270, fill="black")
+        # temperature text at the middle, font : Pilowlava 20
+        self.canvas.create_text(80, 200, text=f"{self.w['current']['temp']}°C", font=("Pilowlava", 20), fill="white")
+        # High and low temperature text bellow the temperature text, font : Subjectivity 10
+        self.canvas.create_text(80, 230, text=f"H: {self.w['daily']['temp_max']}°C, L: {self.w['daily']['temp_min']}", font=("Subjectivity", 10), fill="white")
 
 
-        # CONTENT AT THE MIDDLE OF THE SCREEN
-        # temperature (+L & H)
-        self.temperature = self.w["current"]["temp"]
-        self.tempH = self.w["daily"]["temp_max"]
-        self.tempL = self.w["daily"]["temp_min"]
+        #BODY FEELING
+        # body feeling circle 20px from bottom and right, 120px width and height
+        self.canvas.create_oval(160, 150, 280, 270, fill="black")
+        # body feeling temp at the middle, font : Pilowlava 20
+        self.canvas.create_text(220, 220, text=f"{self.w['current']['body_feeling']}°C", font=("Pilowlava", 20), fill="white")
+        # "body feeling" label over temp, font : Subjectivity 10
+        self.canvas.create_text(220, 195, text="Body feeling", font=("Subjectivity", 10), fill="white")
 
-        # make a white circle-shaped canvas to show the temperature
-        self.tempCanvas = tk.Canvas(self.frame, width=120, height=120, bg="#000000", highlightthickness=0)
-        self.tempCanvas.pack(pady=20)
-        self.tempCanvas.place(relx=0.42, rely=0.35, anchor="center")
-        self.tempCanvas.create_oval(0, 0, 120, 120, fill="#FFFFFF")
+        # TITLE
+        # label for weather description at the middle, font : Subjectivity 20
+        self.canvas.create_text(150, 25, text="Weather", font=("Subjectivity", 20), fill="black")
 
+        # WEATHER ICON / DESCRIPTION
+        # weather icon : mid left mid top, 72x72, reverse colors
+        self.img2 = Image.open(self.image_path)
+        self.img2 = ImageOps.invert(self.img2.convert("RGB"))
+        self.img2 = self.img2.resize((72, 72), Image.ANTIALIAS)
+        self.img2 = ImageTk.PhotoImage(self.img2)
+        self.canvas.create_image(150, 85, image=self.img2)
 
-        # write the temperature in the middle of the circle
-        self.tempCanvas.create_text(60, 53, text=f"{self.temperature}°C", font=("Subjectivity", 35), fill="#000000")
-        self.tempCanvas.create_text(60, 83, text=f"H:{self.tempH}°C L:{self.tempL}°C", font=("Subjectivity", 12), fill="#000000")
+        # weather description : mid right, bellow icon, font : Subjectivity 15
+        self.canvas.create_text(150, 125, text=self.c.convert(), font=("Subjectivity", 15), fill="black")
 
-        #body feeling
-        self.bfeeling = self.w["current"]["body_feeling"]
-
-        # make a white circle-shaped canvas to show the temperature
-        self.bodyfeelingCanvas = tk.Canvas(self.frame, width=120, height=120, bg="#000000", highlightthickness=0)
-        self.bodyfeelingCanvas.pack(pady=20)
-        self.bodyfeelingCanvas.place(relx=0.58, rely=0.35, anchor="center")
-        self.bodyfeelingCanvas.create_oval(0, 0, 120, 120, fill="#FFFFFF")
-
-
-        # write the temperature in the middle of the circle
-        self.bodyfeelingCanvas.create_text(60, 45, text=f"Body Feeling", font=("Subjectivity", 10), fill="#000000")
-        self.bodyfeelingCanvas.create_text(60, 75, text=f"{self.bfeeling}°C", font=("Subjectivity", 35), fill="#000000")
-
-
-
-
-
-
-
+        # ======================================================
 
         self.frame.update()
     

@@ -4,7 +4,7 @@ import json
 import os
 import dotenv
 
-from svg import svg2png
+from features.weather.svg import svg2png
 
 from os import path
 dotenv.load_dotenv(dotenv_path="config.env")
@@ -20,7 +20,7 @@ class Converter:
     def convert(self):
         # Utilisation du dictionnaire pour obtenir la description correspondante
         description = self.weather_codes[self.lang][str(self.code)][0]
-        print(description)  # Cela affichera "Rain - Slight intensity"
+        #print(description)  # Cela affichera "Rain - Slight intensity"
         
         return description
 

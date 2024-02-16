@@ -11,6 +11,7 @@ from features.wish.wish import Wish
 from features.speechToText.stt import SpeechToText
 from features.face_recon.facerecognition import FaceRecognition
 from features.wakeword.Wakey import PorcupineListener
+from features.weather.weather_codes import Converter
 #from features.weather.weatherUI import WeatherUI
 from features.wikipedia.wikipedia import Wikipedia
 import json
@@ -67,6 +68,10 @@ class Behaviour():
         # weather
         self.meteo = {}
         self.getMeteo()
+        self.showWeather = False
+        self.code = self.meteo["current"]["code"]
+        self.c = Converter(self.code)
+        self.description = self.c.convert()
         #self.weatherUI = WeatherUI()
 
     def listen(self):
@@ -129,13 +134,14 @@ class Behaviour():
             self.tts.speak(phrases[language]["processing"])
 
         if "météo" in self.command or "temps" in self.command:
-            self.weather.refresh()
-            self.meteo = self.weather.meteo
-            # launch the weather UI
-            #self.weatherUI.start()
-            
-            self.tts.speak("Il fait " + self.meteo["current"]["temp"] + " degrés Celcius, ressentit" + self.meteo["current"]["body_feeling"])
-            
+            self.getMeteo()
+            # set showWeather to True to display the weather for 8 seconds
+            self.showWeather = True
+            print("Behaviour : 136 showWeather" + str(self.showWeather))
+            self.tts.speak("Il fait " + self.meteo["current"]["temp"] + " degrés Celcius, ressenti" + self.meteo["current"]["body_feeling"] + "." + self.description)
+            time.sleep(18)
+            self.showWeather = False
+
         
         elif "iss" in self.command or "station spatiale" in self.command:
             self.iss.refresh()
