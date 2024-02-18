@@ -9,7 +9,7 @@
         "error": "Je suis désolé, je n'ai pas compris. Veuillez répéter",
         "wikipedia": "Qui voulez-vous rechercher ?",
         "wikipedia_error": "Je suis désolé, je n'ai pas trouvé de résultat pour cette recherche",
-        "wikipedia_success": "Voici ce que j'ai trouvé sur Wikipédia :",
+        "wikipedia_success": "Voici ce que j'ai trouvé sur Wikipédia à propos de {0}",
         "downloading": "Je télécharge votre musique, veuillez patienter...",
         "downloading_error": "Je suis désolé, je n'ai pas réussi à télécharger votre musique",
         "downloading_success": "Votre musique a bien été téléchargée !",
@@ -22,7 +22,10 @@
         "register": "Je vous ajoute à la base de données. Comment dois-je vous appeler ?",
         "register_loading": "Attendez un instant...",
         "register_success": "C'est noté, je vous appellerai désormais {0} !",
-        "Farewell": "Au plaisir de vous revoir !"
+        "Farewell": "Au plaisir de vous revoir !",
+        "beautiful": "C'est blanche neige, vous le savez depuis bien longtemps !",
+        "weather": "Il fait actuellement {0}°C à {1}. Ressenti : {2}°C. {3}.",
+        "strongest": "Le plus fort de tous les temps, c'est bien évidemment Chuck Norris !"
 
     },
     "en": {
@@ -48,6 +51,9 @@
         "register": "I'm adding you to the database. How should I call you?",
         "register_loading": "Wait a moment...",
         "register_success": "Noted, I will call you {0} from now on!",
-        "Farewell": "Nice to see you again!"
+        "Farewell": "Nice to see you again!",
+        "beautiful": "It's Snow White, you've known it for a long time!",
+        "weather": "It's currently {0}°C in {1}. Feels like {2}°C. {3}.",
+        "strongest": "The strongest of all time is obviously Chuck Norris!"
     }
 }

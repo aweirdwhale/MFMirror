@@ -30,6 +30,7 @@ load_dotenv(dotenv_path="config.env")
 language = os.getenv("LANGUAGE")
 PiKEY = os.getenv("PORCUPINE_KEY")
 github_key = os.getenv("GITHUB")
+place = os.getenv("PLACE")
 
 
 class Behaviour():
@@ -170,16 +171,16 @@ class Behaviour():
         if "peux-tu" in self.command:
             self.tts.speak(phrases[language]["processing"])
 
-        if "météo" in self.command or "temps" in self.command:
+        if "météo" in self.command or "temps" in self.command or "weather" in self.command:
             self.getMeteo()
             # set showWeather to True to display the weather for 8 seconds
             self.showWeather = True
             print("Behaviour : 136 showWeather" + str(self.showWeather))
-            self.tts.speak("Il fait " + self.meteo["current"]["temp"] + " degrés Celcius, ressenti" + self.meteo["current"]["body_feeling"] + "." + self.description)
+            self.tts.speak(phrases[language]["weather"].replace("{0}", self.meteo["current"]["temp"]).replace("{2}", self.meteo["current"]["body_feeling"]).replace("{3}", self.description).replace("{1}", place))
             
             self.showWeather = False
        
-        elif "iss" in self.command or "station spatiale" in self.command:
+        elif "iss" in self.command or "station spatiale" in self.command or "space station" in self.command:
             self.iss.refresh()
             position = self.iss.position
             self.tts.speak("La station spatiale internationale se trouve au dessus de " + position["over"] + " à " + position["time"])
@@ -189,7 +190,7 @@ class Behaviour():
             playsound.playsound("otis.mp3")
             self.player.resume()
         
-        elif "musique" in self.command:
+        elif "musique" in self.command or "music" in self.command:
             self.count = 0
             self.state = 2
             self.tts.speak(phrases[language]["music"])
@@ -230,7 +231,7 @@ class Behaviour():
         elif "pause" in self.command and self.isPlaying:
             self.pause()
         
-        elif "reprends" in self.command or "remets la musique" in self.command and not self.isPlaying:
+        elif "reprends" in self.command or "remets la musique" in self.command or "play" in self.command and not self.isPlaying:
             self.player.resume()
             self.audio_position = self.player.audio_position
             self.progress_value = self.player.progress_value
@@ -240,7 +241,7 @@ class Behaviour():
         elif "volume" in self.command:
             self.player.volume()
 
-        elif "wikipédia" in self.command or "recherche" in self.command or "rechercher" in self.command:
+        elif "wikipédia" in self.command or "recherche" in self.command or "rechercher" in self.command or "search" in self.command:
             self.tts.speak(phrases[language]["wikipedia"])
             self.get_args_upper()
             subject = self.arg
@@ -255,23 +256,23 @@ class Behaviour():
             elif wikipedia_fetcher.recherche[0] == "503":
                 self.tts.speak(phrases[language]["wikipedia_error"])
             else:
-                self.tts.speak(phrases[language]["wikipedia_success"])
+                self.tts.speak(phrases[language]["wikipedia_success"].replace("{0}", subject))
                 self.tts.speak(wikipedia_fetcher.recherche[0]) # print the first paragraph
         
         elif "stop" in self.command:
             #shutdown the program
             pass
 
-        elif "bonjour" in self.command:
+        elif "bonjour" in self.command or "hello" in self.command:
             self.tts.speak(self.wish.wish())
 
-        elif "qui es-tu" in self.command or "quel est ton nom" in self.command:
+        elif "qui es-tu" in self.command or "quel est ton nom" in self.command or "who are you" in self.command or "what's your name" in self.command:
             self.tts.speak(phrases[language]["who"])
 
-        elif "comment vas-tu" in self.command:
+        elif "comment vas-tu" in self.command or "ça va" in self.command or "how are you" in self.command:
             self.tts.speak(phrases[language]["how"])
 
-        elif "fonctionnalités" in self.command or "commandes" in self.command:
+        elif "fonctionnalités" in self.command or "commandes" in self.command or "qu'est-ce que tu sais faire" in self.command or "what can you do" in self.command:
             self.tts.speak(phrases[language]["features"])
 
         elif "suggestion" in self.command or "proposition" in self.command:
@@ -289,7 +290,7 @@ class Behaviour():
             self.tts.speak(phrases[language]["bug"])
             self.gh.bug(bug, self.username)
 
-        elif "enregistre moi" in self.command or "enregistre-moi" in self.command or "ajoute-moi" in self.command or "enregistrement" in self.command:
+        elif "enregistre moi" in self.command or "enregistre-moi" in self.command or "ajoute-moi" in self.command or "enregistrement" in self.command or "register" in self.command:
             self.tts.speak(phrases[language]["register"])
             self.get_args()
             name = self.arg
@@ -299,7 +300,7 @@ class Behaviour():
             self.face.extract()
             self.face.train()
 
-        elif "reconnais moi" in self.command or "reconnais-moi" in self.command or "connecte-moi" in self.command or "reconnaît moi" in self.command or "reconnaît-moi" in self.command or "connecte-moi" in self.command:
+        elif "reconnais moi" in self.command or "reconnais-moi" in self.command or "connecte-moi" in self.command or "reconnaît moi" in self.command or "reconnaît-moi" in self.command or "connecte-moi" in self.command or "log me in" in self.command or "log me" in self.command or "log in" in self.command or "log me in" in self.command or "log me" in self.command or "log in" in self.command:
             user = self.face.recognition()[0]
             self.username = user
             print(user)
@@ -307,11 +308,23 @@ class Behaviour():
             self.wish.set_username(user)
             self.tts.speak(self.wish.wish())
         
-        elif "éteins-toi" in self.command or "éteins toi" in self.command:
+        elif "éteins-toi" in self.command or "éteins toi" in self.command or "va faire dodo" in self.command or "rideaux" in self.command or "extinction" in self.command or "shutdown" in self.command or "shut down" in self.command or "go to sleep" in self.command or "go to bed" in self.command or "goodbye" in self.command or "bye" in self.command or "au revoir" in self.command:
             self.tts.speak(phrases[language]["Farewell"])
             playsound.playsound("DATA/musics/shutdown.mp3")
             # crash the program to force shutdown
             exit()
+
+        elif "qui est la plus belle" in self.command or "qui est le plus beau" in self.command or "magnifique" in self.command :
+            self.tts.speak(phrases[language]["beautiful"])
+
+        elif "mise à jour" in self.command or "mettre à jour" in self.command or "nouvelle version" in self.command or "new version" in self.command or "update" in self.command:
+            self.tts.speak("This feature is not yet implemented (current version: 1.18:02:23)")
+
+        elif "qui est le plus fort" in self.command or "qui est la plus forte" in self.command or "strongest" in self.command or "strong" in self.command:
+            self.tts.speak(phrases[language]["strongest"])
+        
+        elif "restart" in self.command or "reboot" in self.command or "redémarre" in self.command or "redémarrage" in self.command:
+            self.tts.speak("This feature is not yet implemented")
 
         else:
             self.tts.speak(phrases[language]["bozo"])

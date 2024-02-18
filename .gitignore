@@ -180,3 +180,4 @@ DATA/faces/*
 .env.secret
 !config.env
 pd
+setup-log.txt
