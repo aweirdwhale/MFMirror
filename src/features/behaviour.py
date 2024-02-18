@@ -199,7 +199,10 @@ class Behaviour():
                 self.pause()
                 self.state = 0
                 return
-            
+            if "error :" in self.arg:
+                self.state = 0
+                self.tts.speak(phrases[language]["error"])
+                return
             self.player.use_youtube(self.arg, os.getenv("GOOGLE_KEY"))
             self.clean_music()
             self.player.play()
