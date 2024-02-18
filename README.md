@@ -36,28 +36,9 @@ Les Biquettes make it a point of honour to keep your personal information secure
 1. Debian based os
 
    - Fork and clone this repo
-   - At the root of the project, run `pip install -r requirements.txt` :`<details><summary>`List of dependencies used in this project`</summary>`
+   - At the root of the project, run `pip install -r requirements.txt` :`<details><summary>`List of dependencies used in this project `</summary>`
 
-     - tkinter with customtkinter
-     - numpy
-     - imutils
-     - pickle
-     - sklearn
-     - threading
-     - mediapipe
-     - pygame
-     - IO
-     - moviepy
-     - pytube
-     - google apis
-     - json
-     - pyttsx3
-     - wikipedia
-     - webbrowser
-     - shutil
-     - speechrecognition
-
-     **You will need pyaudio for this project. It's a bit complicated so you may have to search on the web to install it properly :**
+     - **You will need pyaudio for this project. It's a bit complicated so you may have to search on the web to install it properly :**
 
      ```shell
        sudo apt-get install python-pyaudio

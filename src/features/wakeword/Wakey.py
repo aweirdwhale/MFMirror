@@ -9,7 +9,7 @@ from pvrecorder import PvRecorder
 from dotenv import load_dotenv
 from features.Logs.log import Log
 
-load_dotenv("../../../.env.secret")
+load_dotenv("../../../.env.key")
 PiKEY = os.getenv("PORCUPINE_KEY")
 console = Log()
 

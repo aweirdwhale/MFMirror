@@ -35,7 +35,7 @@ from mutagen.mp3 import MP3
 mp_drawing = mp.solutions.drawing_utils
 mp_hands = mp.solutions.hands
 
-load_dotenv(dotenv_path=".env.secret")
+load_dotenv(dotenv_path=".env.key")
 key = os.getenv("GOOGLE_KEY")
 
 # init log

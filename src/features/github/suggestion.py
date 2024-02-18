@@ -3,7 +3,7 @@ import json
 import os
 import dotenv
 
-dotenv.load_dotenv(".env.secret")
+dotenv.load_dotenv(".env.key")
 github_key = os.getenv("GITHUB")
 
 class GhIssue:

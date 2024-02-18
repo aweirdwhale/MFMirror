@@ -25,7 +25,7 @@ phrases = json.load(open("src/features/phrases.json", "r"))
 
 log = Log()
 
-load_dotenv(dotenv_path=".env.secret")
+load_dotenv(dotenv_path=".env.key")
 load_dotenv(dotenv_path="config.env")
 language = os.getenv("LANGUAGE")
 PiKEY = os.getenv("PORCUPINE_KEY")
