@@ -121,18 +121,35 @@ class Behaviour():
         self.stt.run() #running the speach to text
         
         self.arg = self.stt.text
-        self.arg = self.arg.lower()
-
-        return self.arg
+        # if Unable to understand the command
+        if "error :" in self.arg:
+            self.count += 1
+            if self.count < 2:
+                self.tts.speak(phrases[language]["error"])
+                self.get_args()
+            else:
+                return
+        else:
+            
+            self.arg = self.arg.lower()
 
     def get_args_upper(self):
         self.isPlaying = False
         self.state = 1
-        self.stt.run()
-
+        self.stt.run() #running the speach to text
+        
         self.arg = self.stt.text
-
-        return self.arg
+        # if Unable to understand the command
+        if "error : unable to understand the audio." in self.arg:
+            self.count += 1
+            if self.count < 2:
+                self.tts.speak(phrases[language]["error"])
+                self.get_args_upper()
+            else:
+                return
+        else:
+                
+            self.arg = self.arg
 
     def set_playing_state(self, is_playing):
         self.isPlaying = is_playing
@@ -173,10 +190,16 @@ class Behaviour():
             self.player.resume()
         
         elif "musique" in self.command:
+            self.count = 0
             self.state = 2
             self.tts.speak(phrases[language]["music"])
             self.get_args()
             print("Music : " + self.arg)
+            if "stop" in self.arg:
+                self.pause()
+                self.state = 0
+                return
+            
             self.player.use_youtube(self.arg, os.getenv("GOOGLE_KEY"))
             self.clean_music()
             self.player.play()

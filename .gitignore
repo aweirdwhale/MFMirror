@@ -176,3 +176,5 @@ DATA/faces/*
 
 *.key
 *.wav
+.env.secret
+!config.env
