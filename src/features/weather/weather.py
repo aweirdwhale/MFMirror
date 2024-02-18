@@ -57,6 +57,13 @@ class Weather:
         hourly_temperature_2m = hourly.Variables(0).ValuesAsNumpy()
         hourly_weather_code = hourly.Variables(1).ValuesAsNumpy()
 
+        daily = self.response.Daily()
+        daily_temperature_2m_max = daily.Variables(0).ValuesAsNumpy()
+        daily_temperature_2m_min = daily.Variables(1).ValuesAsNumpy()
+        daily_sunrise = daily.Variables(2).ValuesAsNumpy()
+        daily_sunset = daily.Variables(3).ValuesAsNumpy()
+        daily_uv_index_max = daily.Variables(4).ValuesAsNumpy()
+
         # print(hourly_weather_code, hourly_temperature_2m)
 
         #hourly_dataframe = pd.DataFrame(data=hourly_data)
@@ -65,15 +72,7 @@ class Weather:
         
         # convert weather code format
         current_weather_code = int(current_weather_code)
-        #convert from X to 0X
-        if current_weather_code < 10:
-            current_weather_code = "0" + str(current_weather_code)
         
-        # add d or n at the end if it's day or night
-        if current_is_day:
-            current_weather_code = str(current_weather_code) + "d"
-        else:
-            current_weather_code = str(current_weather_code) + "n"
 
         self.meteo = {
             "header": [
@@ -93,11 +92,18 @@ class Weather:
                 "code": current_weather_code,
             },
             "hourly": {
-
+                "temp": hourly_temperature_2m,
+                "code": hourly_weather_code
+            },
+            "daily": {
+                "temp_max": str(round(daily_temperature_2m_max[0])),
+                "temp_min": str(round(daily_temperature_2m_min[0])),
+                "sunrise": daily_sunrise,
+                "sunset": daily_sunset,
+                "uv_index_max": daily_uv_index_max
             }
         }
 
-        print(self.meteo)
 
         return self.meteo
 

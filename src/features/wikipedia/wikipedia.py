@@ -23,6 +23,8 @@ class Wikipedia:
         page = next(iter(data['query']['pages'].values()), None)
         return page
 
+    
+
     def print_page_info(self):
         try:
             page = self.get_page_info()
@@ -50,6 +52,8 @@ class Wikipedia:
 
 if __name__ == '__main__':
     subject = 'Ada Lovelace'
+    subject.lower()
+    print(subject)
     wikipedia_fetcher = Wikipedia(subject)
     wikipedia_fetcher.print_page_info()
     print(wikipedia_fetcher.recherche)

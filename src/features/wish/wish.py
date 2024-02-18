@@ -15,6 +15,9 @@ class Wish:
     def __init__(self, lang=language, username="Guest"):
         self.lang = lang
         self.daytime = ""
+        self.username = None
+    
+    def set_username(self, username):
         self.username = username
 
     def _get_random_message(self, message_list):
@@ -38,16 +41,26 @@ class Wish:
         self.daytime = self._get_time_of_day()
 
         # Greet
-        greeting_list = wishlist["welcome"][self.lang][self.daytime]
-        greeting = self._get_random_message(greeting_list)
-        greeting = greeting.replace("{username}", self.username)
+        if self.username is None:
+            greeting_list = wishlist["welcome"][self.lang]["noUsername"]
+            greeting = self._get_random_message(greeting_list)
+        else:
+            greeting_list = wishlist["welcome"][self.lang][self.daytime]
+            greeting = self._get_random_message(greeting_list)
+            greeting = greeting.replace("{username}", self.username)
 
         return greeting
 
     def farewell(self):
-        farewell_list = wishlist["goodbye"][self.lang]
-        farewell = self._get_random_message(farewell_list)
-        farewell = farewell.replace("{username}", self.username)
+        print("called")
+        if self.username is None:
+            farewell_list = wishlist["goodbye"][self.lang]
+            farewell = self._get_random_message(farewell_list)
+            farewell = farewell.replace("{username}", " ")
+        else:
+            farewell_list = wishlist["goodbye"][self.lang]
+            farewell = self._get_random_message(farewell_list)
+            farewell = farewell.replace("{username}", self.username)
 
         return farewell
 
