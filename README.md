@@ -6,9 +6,8 @@ _**By Les Biquettes**_
 
 _"Les Biquettes" is the name of two french computer science students' band._
 
-#
-
 ## Table of Contents
+
 <details>
 <summary>Expend in order to see</summary>
 
@@ -18,8 +17,8 @@ _"Les Biquettes" is the name of two french computer science students' band._
 
 </details>
 
-
 ### Description
+
 Don't have any friends? Better than a curly: MFMirror!
 
 MFMirror is an artificial intelligence based on Llama, created by the Biquettes. It powers the world's best mirror. You might ask: If I had to sum up MFMirror with you today, I'd start by saying that it's a meeting between two brilliant minds who reached out to each other, perhaps at a time when we couldn't take it anymore, when we were alone at home. And it's quite curious to think that this chance meeting forged a most perfect mirror, because when you have this taste for things well done, the beautiful gesture, well I'd say that you don't find the interest in spying on your customers as our competitors Amazon, Google or even Apple do.
@@ -30,16 +29,15 @@ A seemingly simple object of fascination, the mirror is in fact a marvellous ins
 
 MFMirror is a mirror prototype based on the AI concept of the famous fictional character Tony Stark, a.k.a. Iron Man, or Gideon, the AI of Barry Allen, a.k.a. Flash. A generative AI based on Llama, coupled with voice synthesis, will provide a companion, and control home automation without fear of data leakage. Facial recognition will give the user a feeling of proximity. With no keyboard, mouse or other peripherals, the mirror could be controlled by voice or hand gestures. It would display what you ask it to, thanks to a retrieval screen; it would be battery-powered and in standby it would display the time, the weather and could manage your music from the Internet or stored locally. Finally, using proprietary software, it could manage your schedule, timer and much more without using third-party services. The camera would not be connected to the Internet at all, to avoid spyware.
 
-
 Les Biquettes make it a point of honour to keep your personal information secure (really!), and 99% of the information needed for the device to function properly would be stored locally, safe from rogue advertisers and pirates.
-
-#
 
 ## Installation
 
 1. Debian based os
+
    - Fork and clone this repo
-   - At the root of the project, run `pip install -r requirements.txt` :<details><summary>List of dependencies used in this project</summary>
+   - At the root of the project, run `pip install -r requirements.txt` :`<details><summary>`List of dependencies used in this project`</summary>`
+
      - tkinter with customtkinter
      - numpy
      - imutils
@@ -58,19 +56,21 @@ Les Biquettes make it a point of honour to keep your personal information secure
      - webbrowser
      - shutil
      - speechrecognition
-     
+
      **You will need pyaudio for this project. It's a bit complicated so you may have to search on the web to install it properly :**
-      ```shell
-        sudo apt-get install python-pyaudio
-      ```
-   
-    </details>
-      
+
+     ```shell
+       sudo apt-get install python-pyaudio
+     ```
+
+   </details>
+
    - And you are **done** ! You can use this project **as you want**, edit it **as you want** and if you want to help us, open issues and pull requests to make it **grow** :)
-     
 
 ## Documentation
+
 Folder Structure :
+
 ```
   .
   ├── build                   # Compiled files (alternatively `dist`)
@@ -93,11 +93,13 @@ Folder Structure :
   |
   ├── LICENSE
   └── README.md               # You are here !
-  ```
-#### [How face recognition works ?](./Explainations/Face-recognition.md)
-#### [How hand gesture detection works ?](./Explainations/Hand-gesture.md)
-#### [How the music is played ?](./Explainations/Music.md)
+```
 
+#### [How face recognition works ?](./Explainations/Face-recognition.md)
+
+#### [How hand gesture detection works ?](./Explainations/Hand-gesture.md)
+
+#### [How the music is played ?](./Explainations/Music.md)
 
 ## Authors
 

@@ -12,7 +12,17 @@
         "wikipedia_success": "Voici ce que j'ai trouvé sur Wikipédia :",
         "downloading": "Je télécharge votre musique, veuillez patienter...",
         "downloading_error": "Je suis désolé, je n'ai pas réussi à télécharger votre musique",
-        "downloading_success": "Votre musique a bien été téléchargée !"
+        "downloading_success": "Votre musique a bien été téléchargée !",
+        "who": "Je suis Hermione, votre assistante personnelle. Crée par Les Biquettes",
+        "how": "Je vais bien, merci !",
+        "features": "Je suis capable de rechercher des informations sur Wikipédia, de télécharger de la musique, de vous donner la météo, de vous donner l'heure, de vous donner la position exacte de l'ISS, et bien d'autres choses encore ! Si vous avez une suggestion, n'hésitez pas à me la faire savoir !",
+        "suggestion": "C'est noté, j'en informe les biquettes de suite !",
+        "suggestion1": "Je vous écoute",
+        "bug": "Merci de m'avoir signalé ce bug, je vais prévenir les biquettes au plus vite !",
+        "register": "Je vous ajoute à la base de données. Comment dois-je vous appeler ?",
+        "register_loading": "Attendez un instant...",
+        "register_success": "C'est noté, je vous appellerai désormais {0} !",
+        "Farewell": "Au plaisir de vous revoir !"
 
     },
     "en": {
@@ -28,6 +38,16 @@
         "wikipedia_success": "Here's what I found on Wikipedia:",
         "downloading": "I'm downloading your music, please wait...",
         "downloading_error": "I'm sorry, I couldn't download your music",
-        "downloading_success": "Your music has been downloaded successfully!"
+        "downloading_success": "Your music has been downloaded successfully!",
+        "who": "I'm Hermione, your personal assistant. Created by Les Biquettes",
+        "how": "I'm fine, thank you!",
+        "features": "I'm able to search for information on Wikipedia, download music, give you the weather, give you the time, give you the exact position of the ISS, and many other things! If you have a suggestion, feel free to let me know!",
+        "suggestion": "It's okay, I'll let Les Biquettes know right away!",
+        "suggestion1": "I'm listening",
+        "bug": "Thank you for reporting this bug, I'll let Les Biquettes know as soon as possible!",
+        "register": "I'm adding you to the database. How should I call you?",
+        "register_loading": "Wait a moment...",
+        "register_success": "Noted, I will call you {0} from now on!",
+        "Farewell": "Nice to see you again!"
     }
 }

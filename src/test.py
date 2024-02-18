@@ -122,7 +122,7 @@ class IndicatorDot:
 class WeatherComponent:
     def __init__(self, parent, meteo):
         self.parent = parent
-        self.frame = ctk.CTkFrame(self.parent, bg_color="#000000", fg_color="#f00000")
+        self.frame = ctk.CTkFrame(self.parent, bg_color="#000000", fg_color="#000000")
         self.frame.pack(fill="both", expand=True)
         self.w = meteo
 
@@ -132,38 +132,44 @@ class WeatherComponent:
         self.description = self.c.convert()
         self.image_path = self.c.get_icon()
 
-        self.label = ctk.CTkLabel(self.frame, text=f"", font=("Pilowlava", 40), bg_color="#000000", fg_color="#000000")
-        self.toIcon()
-
-    def toIcon(self):
-        # delete the label
-        self.label.destroy()
-
-        # =============== ICON + DESCRIPTION  =================
-        # Create a canvas to show the weather image
-        self.canvas = Canvas(self.frame, width=100, height=100, bg="#000000", highlightthickness=0)
+        self.canvas = Canvas(self.frame, width=150, height=130, bg="#000000", highlightthickness=0)
         self.canvas.pack(pady=20)
         self.canvas.place(relx=0.01, rely=0, anchor="nw")
         self.img = Image.open(self.image_path)
         self.img = self.img.resize((72, 72), Image.ANTIALIAS)
         self.img = ImageTk.PhotoImage(self.img)
-        self.canvas.create_image(50, 50, image=self.img)
+        
+
+        self.toIcon()
+
+    def toIcon(self):
+        # clear the canvas
+        self.canvas.delete("all")
+
+        # =============== ICON + DESCRIPTION  =================
+        # Write the weather icon on the canvas        
+        self.canvas.create_image(75, 50, image=self.img)
 
         # Write the weather description on the canvas
-        self.canvas.create_text(50, 90, text=self.c.convert(), font=("Subjectivity", 15), fill="white")
+        self.canvas.create_text(75, 110, text=f"{self.c.convert()}", font=("Subjectivity", 15), fill="white", anchor="center")
 
         self.canvas.after(5 * 1000, self.toLabel) # switch every 5 seconds
 
     def toLabel(self):
-        # delete the canvas
-        self.canvas.destroy()
+        # clear the canvas
+        self.canvas.delete("all")
+
+        # write temp at the middle of the canvas, font : Pilowlava 32
+        self.canvas.create_text(75, 50, text=f'{self.w["current"]["temp"]}°C', font=("Pilowlava", 32), fill="white", anchor="center")
+
 
         # write temp in a label
-        self.label = ctk.CTkLabel(self.frame, text=f'{self.w["current"]["temp"]}°C', font=("Pilowlava", 32), bg_color="#000000", fg_color="#000000")
-        self.label.pack(pady=20, padx=20)
-        self.label.place(relx=0.02, rely=.02, anchor="nw")
+        # self.label = ctk.CTkLabel(self.frame, text=f'{self.w["current"]["temp"]}°C', font=("Pilowlava", 32), bg_color="#000000", fg_color="#000000")
+        # self.label.pack(pady=20, padx=20)
+        # self.label.place(relx=0.02, rely=.02, anchor="nw")
 
-        self.label.after(5 * 1000, self.toIcon) # switch every 5 seconds
+        self.canvas.after(5 * 1000, self.toIcon) # switch every 5 seconds
+
 
     def wInfos(self):
         # =============== WEATHER INFORMATIONS =================
@@ -172,33 +178,33 @@ class WeatherComponent:
         rectangle_height = 100
 
         # Create a canvas
-        self.canvas = Canvas(self.frame, width=300, height=290, bg="pink", highlightthickness=0)
-        self.canvas.pack(pady=20)
-        self.canvas.place(relx=0.5, rely=0.5, anchor="center")
+        self.canvas2 = Canvas(self.frame, width=300, height=290, bg="black", highlightthickness=0)
+        self.canvas2.pack(pady=20)
+        self.canvas2.place(relx=0.5, rely=0.5, anchor="center")
 
         # INFO BOX
-        drawRect(self.canvas, 0, 0, 300, 290, 20, 8, "#FFFFFF")
+        drawRect(self.canvas2, 0, 0, 300, 290, 20, 8, "#FFFFFF")
 
         # TEMPERATURE
         # temperature circle 20px from bottom and left, 120px width and height
-        self.canvas.create_oval(20, 150, 140, 270, fill="black")
+        self.canvas2.create_oval(20, 150, 140, 270, fill="black")
         # temperature text at the middle, font : Pilowlava 20
-        self.canvas.create_text(80, 200, text=f"{self.w['current']['temp']}°C", font=("Pilowlava", 20), fill="white")
+        self.canvas2.create_text(80, 200, text=f"{self.w['current']['temp']}°C", font=("Pilowlava", 20), fill="white")
         # High and low temperature text bellow the temperature text, font : Subjectivity 10
-        self.canvas.create_text(80, 230, text=f"H: {self.w['daily']['temp_max']}°C, L: {self.w['daily']['temp_min']}", font=("Subjectivity", 10), fill="white")
+        self.canvas2.create_text(80, 230, text=f"H: {self.w['daily']['temp_max']}°C, L: {self.w['daily']['temp_min']}", font=("Subjectivity", 10), fill="white")
 
 
         #BODY FEELING
         # body feeling circle 20px from bottom and right, 120px width and height
-        self.canvas.create_oval(160, 150, 280, 270, fill="black")
+        self.canvas2.create_oval(160, 150, 280, 270, fill="black")
         # body feeling temp at the middle, font : Pilowlava 20
-        self.canvas.create_text(220, 220, text=f"{self.w['current']['body_feeling']}°C", font=("Pilowlava", 20), fill="white")
+        self.canvas2.create_text(220, 220, text=f"{self.w['current']['body_feeling']}°C", font=("Pilowlava", 20), fill="white")
         # "body feeling" label over temp, font : Subjectivity 10
-        self.canvas.create_text(220, 195, text="Body feeling", font=("Subjectivity", 10), fill="white")
+        self.canvas2.create_text(220, 195, text="Body feeling", font=("Subjectivity", 10), fill="white")
 
         # TITLE
         # label for weather description at the middle, font : Subjectivity 20
-        self.canvas.create_text(150, 25, text="Weather", font=("Subjectivity", 20), fill="black")
+        self.canvas2.create_text(150, 25, text="Weather", font=("Subjectivity", 20), fill="black")
 
         # WEATHER ICON / DESCRIPTION
         # weather icon : mid left mid top, 72x72, reverse colors
@@ -206,11 +212,13 @@ class WeatherComponent:
         self.img2 = ImageOps.invert(self.img2.convert("RGB"))
         self.img2 = self.img2.resize((72, 72), Image.ANTIALIAS)
         self.img2 = ImageTk.PhotoImage(self.img2)
-        self.canvas.create_image(150, 85, image=self.img2)
+        self.canvas2.create_image(150, 85, image=self.img2)
 
         # weather description : mid right, bellow icon, font : Subjectivity 15
-        self.canvas.create_text(150, 125, text=self.c.convert(), font=("Subjectivity", 15), fill="black")
+        self.canvas2.create_text(150, 135, text=self.c.convert(), font=("Subjectivity", 15), fill="black")
 
+        # DELETE THE CANVAS
+        self.canvas2.after(10 * 1000, lambda: self.canvas2.destroy())
         # ======================================================
 
     
@@ -233,19 +241,23 @@ class UserInterface(threading.Thread):
         self.app = None
         
 
-    def showW(self, weather=None):
-        print("test : 236 showW")
-        if self.app != None and weather != None:
+    def showW(self, weather):
+        # print("test : 236 showW")
+        if self.app != None:
             self.showWeather = self.behaviour.showWeather
-            print("test : 238 showWeather" + str(self.showWeather))
+            # print("test : 238 showWeather" + str(self.showWeather))
             if self.showWeather:
+                print("called showW")
                 self.wInfos = weather.wInfos()
                 self.showWeather = False
                 # If successful, schedule the next update after 20seconds
-                self.app.after(20 * 1000, self.showW)
+                self.app.after(10 * 1000, lambda: self.showW(weather))
             else:
                 # If failed, schedule the next update after 1 second
-                self.app.after(1000, self.showW)
+                # print("test : 246 showWeather" + str(self.showWeather))
+                self.showWeather = False
+                self.app.after(1000, lambda: self.showW(weather))
+
         
 
     def run(self):
@@ -445,6 +457,9 @@ class UserInterface(threading.Thread):
         self.app.after(1000, lambda: self.update_music_info(song_name_label, song_duration_label, progress_bar, thumbnail_canvas))
 
     def start_behaviour(self):
+        # play startup song
+        self.behaviour.startup_song()
+
         self.behaviour.use()
 
 lock = threading.Lock()

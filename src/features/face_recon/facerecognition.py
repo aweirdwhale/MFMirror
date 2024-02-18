@@ -27,8 +27,8 @@ class FaceRecognition:
         # Using pycharm, you have to run from terminal or paths doesn't work
         self.dataset = 'DATA/faces/'
         self.embeddings = 'src/features/face_recon/output/embeddings.pickle'
-        self.recognizer = './output/recognizer.pickle'
-        self.le = './output/le.pickle'
+        self.recognizer = 'src/features/face_recon/output/recognizer.pickle'
+        self.le = 'src/features/face_recon/output/le.pickle'
         self.protopath = "src/features/face_recon/face_detection_model/deploy.prototxt"
         self.deploypath = "src/features/face_recon/face_detection_model/deploy.prototxt"
         self.modelpath = "src/features/face_recon/face_detection_model/res10_300x300_ssd_iter_140000.caffemodel"

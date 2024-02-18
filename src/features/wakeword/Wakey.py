@@ -64,11 +64,11 @@ class PorcupineListener:
                 if result == 0:
                     print('[%s] Detected Hermione' % str(datetime.now()))
                     self.detected = True
-                    return True
+                    return
                 elif result == 1:
                     print('[%s] Detected Stop Music' % str(datetime.now()))
                     self.stopmsk = True
-                    return True
+                    return
 
         except KeyboardInterrupt:
             print('Stopping ...')

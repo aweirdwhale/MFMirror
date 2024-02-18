@@ -163,12 +163,16 @@ cython_debug/
 # Music files
 *.mp3
 !otis.mp3
+!startup.mp3
+!shutdown.mp3
 
 llama/*
 
+
+
 # Dataset/* but not Dataset/unknown
-Dataset/*
-!Dataset/unknown
+DATA/faces/*
+!DATA/faces/unknown
 
 *.key
 *.wav

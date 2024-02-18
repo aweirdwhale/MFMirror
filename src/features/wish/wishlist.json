@@ -24,6 +24,11 @@
         "C'est toujours un plaisir de vous voir, {username}!",
         "Bienvenue, {username}!",
         "Salut, {username}, ravi de vous avoir ici!"
+      ],
+      "noUsername":[
+        "Bonjour, comment allez-vous?",
+        "Je suis content de vous revoir!",
+        "Ravi de vous voir!"
       ]
     },
     "en": {
@@ -50,7 +55,13 @@
         "It's always a pleasure to see you, {username}!",
         "Welcome, {username}!",
         "Hi, {username}, glad to have you here!"
+      ],
+      "noUsername":[
+        "Hello, how are you?",
+        "I'm glad to see you again!",
+        "Good to see you!"
       ]
+
     }
   },
   "goodbye": {

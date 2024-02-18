@@ -12,6 +12,7 @@ from features.speechToText.stt import SpeechToText
 from features.face_recon.facerecognition import FaceRecognition
 from features.wakeword.Wakey import PorcupineListener
 from features.weather.weather_codes import Converter
+from features.github.suggestion import GhIssue
 #from features.weather.weatherUI import WeatherUI
 from features.wikipedia.wikipedia import Wikipedia
 import json
@@ -28,6 +29,8 @@ load_dotenv(dotenv_path=".env.secret")
 load_dotenv(dotenv_path="config.env")
 language = os.getenv("LANGUAGE")
 PiKEY = os.getenv("PORCUPINE_KEY")
+github_key = os.getenv("GITHUB")
+
 
 class Behaviour():
     def __init__(self):
@@ -39,11 +42,12 @@ class Behaviour():
         )
         self.stt = SpeechToText()
         self.tts = TTS(lang=language)
-        self.wish = Wish(language, "Olivier")
+        self.wish = Wish(language)
         self.weather = Weather()
         self.iss = ISS()
         self.player = Player()
         self.face = FaceRecognition(0)
+        self.gh = GhIssue()
         self.last_detection_time = None
         self.command = ""
         self.arg = ""
@@ -73,6 +77,8 @@ class Behaviour():
         self.c = Converter(self.code)
         self.description = self.c.convert()
         #self.weatherUI = WeatherUI()
+
+        self.username = "Guest"
 
     def listen(self):
         self.state = 0
@@ -119,6 +125,15 @@ class Behaviour():
 
         return self.arg
 
+    def get_args_upper(self):
+        self.isPlaying = False
+        self.state = 1
+        self.stt.run()
+
+        self.arg = self.stt.text
+
+        return self.arg
+
     def set_playing_state(self, is_playing):
         self.isPlaying = is_playing
 
@@ -127,6 +142,11 @@ class Behaviour():
         self.weather.refresh()
         self.meteo = self.weather.meteo
         return self.meteo
+
+    def pause(self):
+        if self.isPlaying:
+            self.player.pause()
+            self.isPlaying = False
 
     def process_command(self):
         self.state = 2
@@ -139,10 +159,9 @@ class Behaviour():
             self.showWeather = True
             print("Behaviour : 136 showWeather" + str(self.showWeather))
             self.tts.speak("Il fait " + self.meteo["current"]["temp"] + " degrés Celcius, ressenti" + self.meteo["current"]["body_feeling"] + "." + self.description)
-            time.sleep(18)
+            
             self.showWeather = False
-
-        
+       
         elif "iss" in self.command or "station spatiale" in self.command:
             self.iss.refresh()
             position = self.iss.position
@@ -183,10 +202,9 @@ class Behaviour():
             update_thread.start()
         
         elif "pause" in self.command and self.isPlaying:
-            self.player.pause()
-            self.isPlaying = False
+            self.pause()
         
-        elif "reprends" in self.command and not self.isPlaying:
+        elif "reprends" in self.command or "remets la musique" in self.command and not self.isPlaying:
             self.player.resume()
             self.audio_position = self.player.audio_position
             self.progress_value = self.player.progress_value
@@ -198,24 +216,76 @@ class Behaviour():
 
         elif "wikipédia" in self.command or "recherche" in self.command or "rechercher" in self.command:
             self.tts.speak(phrases[language]["wikipedia"])
-            self.get_args()
-            print("Wikipedia : " + self.arg)
-            self.tts.speak(phrases[language]["processing"])
-            self.wiki = Wikipedia(self.arg)
-            self.wiki.print_page_info()
-            try:
-                if self.wiki.recherche[0] == "404":
-                    self.tts.speak(phrases[language]["wikipedia_error"])
-                elif self.wiki.recherche[0] == "503":
-                    self.tts.speak(phrases[language]["wikipedia_error"])
-                else:
-                    self.tts.speak(phrases[language]["wikipedia_success"])
-            except:
+            self.get_args_upper()
+            subject = self.arg
+
+            wikipedia_fetcher = Wikipedia(subject)
+            wikipedia_fetcher.print_page_info()
+
+            # self.tts.speak(wikipedia_fetcher.recherche[0])
+            
+            if wikipedia_fetcher.recherche[0] == "404":
                 self.tts.speak(phrases[language]["wikipedia_error"])
+            elif wikipedia_fetcher.recherche[0] == "503":
+                self.tts.speak(phrases[language]["wikipedia_error"])
+            else:
+                self.tts.speak(phrases[language]["wikipedia_success"])
+                self.tts.speak(wikipedia_fetcher.recherche[0]) # print the first paragraph
         
         elif "stop" in self.command:
             #shutdown the program
             pass
+
+        elif "bonjour" in self.command:
+            self.tts.speak(self.wish.wish())
+
+        elif "qui es-tu" in self.command or "quel est ton nom" in self.command:
+            self.tts.speak(phrases[language]["who"])
+
+        elif "comment vas-tu" in self.command:
+            self.tts.speak(phrases[language]["how"])
+
+        elif "fonctionnalités" in self.command or "commandes" in self.command:
+            self.tts.speak(phrases[language]["features"])
+
+        elif "suggestion" in self.command or "proposition" in self.command:
+            self.tts.speak(phrases[language]["suggestion1"])
+            self.get_args_upper()
+            suggestion = self.arg
+            user = self.username
+            self.tts.speak(phrases[language]["suggestion"])
+            self.gh.suggestion(suggestion, user)
+
+        elif "bug" in self.command or "problème" in self.command:
+            self.tts.speak(phrases[language]["suggestion1"])
+            self.get_args_upper()
+            bug = self.arg
+            self.tts.speak(phrases[language]["bug"])
+            self.gh.bug(bug, self.username)
+
+        elif "enregistre moi" in self.command or "enregistre-moi" in self.command or "ajoute-moi" in self.command or "enregistrement" in self.command:
+            self.tts.speak(phrases[language]["register"])
+            self.get_args()
+            name = self.arg
+            self.tts.speak(phrases[language]["register_loading"])
+            self.face.implement_dataset(name)
+            self.tts.speak(phrases[language]["register_success"].replace("{0}", name))
+            self.face.extract()
+            self.face.train()
+
+        elif "reconnais moi" in self.command or "reconnais-moi" in self.command or "connecte-moi" in self.command or "reconnaît moi" in self.command or "reconnaît-moi" in self.command or "connecte-moi" in self.command:
+            user = self.face.recognition()[0]
+            self.username = user
+            print(user)
+            # wish
+            self.wish.set_username(user)
+            self.tts.speak(self.wish.wish())
+        
+        elif "éteins-toi" in self.command or "éteins toi" in self.command:
+            self.tts.speak(phrases[language]["Farewell"])
+            playsound.playsound("DATA/musics/shutdown.mp3")
+            # crash the program to force shutdown
+            exit()
 
         else:
             self.tts.speak(phrases[language]["bozo"])
@@ -282,6 +352,11 @@ class Behaviour():
             self.set_playing_state(self.isPlaying)
             time.sleep(1)  # Attendre 1 seconde avant la prochaine mise à jour
 
+    def startup_song(self):
+        #play startup song (DATA/musics/startup.mp3)
+        playsound.playsound("DATA/musics/startup.mp3")
+
+
     def use(self):
         self.state = 0
         
@@ -311,15 +386,12 @@ class Behaviour():
             self.progress_value = round(self.player.progress_value, 2)
 
         elif self.wake_word.stopmsk:
-            print(self.isPlaying)
-            if self.isPlaying:
-                print("Stopping music")
-                self.player.stop()
-                self.isPlaying = False
-                
+            self.wake_word.detected = False
+            self.pause()
             self.wake_word.stopmsk = False
-            self.use()
+            self.state = 0
             
+
 
         self.listen()
 
