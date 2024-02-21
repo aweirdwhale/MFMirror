@@ -181,3 +181,5 @@ DATA/faces/*
 !config.env
 pd
 setup-log.txt
+
+!speech.mp3

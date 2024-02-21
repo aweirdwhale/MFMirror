@@ -25,7 +25,14 @@
         "Farewell": "Au plaisir de vous revoir !",
         "beautiful": "C'est blanche neige, vous le savez depuis bien longtemps !",
         "weather": "Il fait actuellement {0}°C à {1}. Ressenti : {2}°C. {3}.",
-        "strongest": "Le plus fort de tous les temps, c'est bien évidemment Chuck Norris !"
+        "strongest": "Le plus fort de tous les temps, c'est bien évidemment Chuck Norris !",
+        "iss": "L'ISS est au-dessus de {0} à {1}. Elle se déplace à 28 000 km/h.",
+        "update_avaliable": "Une mise a jour est disponible: la {0}, je vais la télécharger et l'installer. Veuillez patienter...",
+        "update_success": "La mise à jour a été installée avec succès. Je redémarre...",
+        "update_error": "Il n'y a pas de mise à jour disponible pour le moment.",
+        "check_update": "Recherche de mises à jour...",
+        "restarting": "Je redémarre...",
+        "wanna_update": "Voulez-vous que je me mette à jour ? Cela prendra quelques secondes."
 
     },
     "en": {
@@ -54,6 +61,13 @@
         "Farewell": "Nice to see you again!",
         "beautiful": "It's Snow White, you've known it for a long time!",
         "weather": "It's currently {0}°C in {1}. Feels like {2}°C. {3}.",
-        "strongest": "The strongest of all time is obviously Chuck Norris!"
+        "strongest": "The strongest of all time is obviously Chuck Norris!",
+        "iss": "The ISS is above {0} at {1}. It's moving at 28,000 km/h.",
+        "update_avaliable": "An update is available: {0}, I will download and install it. Please wait...",
+        "update_success": "The update has been installed successfully. I'm restarting...",
+        "update_error": "There's no update currently avaliable.",
+        "check_update": "Checking for updates...",
+        "restarting": "I'm restarting...",
+        "wanna_update": "Do you want me to update myself ? It will take a few seconds."
     }
 }

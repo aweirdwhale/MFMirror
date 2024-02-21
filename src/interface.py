@@ -239,6 +239,7 @@ class UserInterface(threading.Thread):
         self.showWeather = self.behaviour.showWeather
         print("test : 231 showWeather" + str(self.showWeather))
         self.app = None
+        self.behaviour.check_for_update()
         
 
     def showW(self, weather):

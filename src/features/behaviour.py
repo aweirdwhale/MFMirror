@@ -19,6 +19,8 @@ import json
 import playsound
 import pygame
 import threading
+import sys
+import requests
 
 phrases = json.load(open("src/features/phrases.json", "r"))
 
@@ -154,8 +156,7 @@ class Behaviour():
 
     def set_playing_state(self, is_playing):
         self.isPlaying = is_playing
-
-    
+ 
     def getMeteo(self):
         self.weather.refresh()
         self.meteo = self.weather.meteo
@@ -168,6 +169,9 @@ class Behaviour():
 
     def process_command(self):
         self.state = 2
+        if self.command.split()[-1] == "quoi":
+            self.tts.speak("QUOICOUBEH !!")
+
         if "peux-tu" in self.command:
             self.tts.speak(phrases[language]["processing"])
 
@@ -183,6 +187,7 @@ class Behaviour():
         elif "iss" in self.command or "station spatiale" in self.command or "space station" in self.command:
             self.iss.refresh()
             position = self.iss.position
+            spik = phrases[language]["iss"].replace("{0}", position["over"]).replace("{1}", position["time"])
             self.tts.speak("La station spatiale internationale se trouve au dessus de " + position["over"] + " à " + position["time"])
         
         elif "bonne situation" in self.command:
@@ -235,7 +240,7 @@ class Behaviour():
             self.player.resume()
             self.audio_position = self.player.audio_position
             self.progress_value = self.player.progress_value
-            self.audio_position_str = self.player.audio_position_str
+            overself.audio_position_str = self.player.audio_position_str
             self.isPlaying = True
         
         elif "volume" in self.command:
@@ -318,19 +323,70 @@ class Behaviour():
             self.tts.speak(phrases[language]["beautiful"])
 
         elif "mise à jour" in self.command or "mettre à jour" in self.command or "nouvelle version" in self.command or "new version" in self.command or "update" in self.command:
-            self.tts.speak("This feature is not yet implemented (current version: 1.18:02:23)")
+            self.update()
 
         elif "qui est le plus fort" in self.command or "qui est la plus forte" in self.command or "strongest" in self.command or "strong" in self.command:
             self.tts.speak(phrases[language]["strongest"])
         
         elif "restart" in self.command or "reboot" in self.command or "redémarre" in self.command or "redémarrage" in self.command:
-            self.tts.speak("This feature is not yet implemented")
+            self.tts.speak(phrases[language]["restarting"])
 
         else:
             self.tts.speak(phrases[language]["bozo"])
             self.state = 0
 
         # self.player.resume() #resume the music
+
+    def check_for_update(self):
+        self.tts.speak(phrases[language]["check_update"])
+        # check if update (api link in config.env)
+        update = os.getenv("UPDATE_LINK")
+        version = os.getenv("VERSION")
+        latest = requests.get(update).json()["versions"][0]["version"]
+        if latest != version:
+            self.tts.speak(phrases[language]["update_available"].replace("{0}", latest))
+            self.tts.speak(phrases[language]["wanna_update"])
+        else:
+            self.tts.speak(phrases[language]["update_error"])
+
+    def update(self):
+        self.tts.speak(phrases[language]["check_update"])
+        # check if update (api link in config.env)
+        update = os.getenv("UPDATE_LINK")
+        version = os.getenv("VERSION")
+        latest = requests.get(update).json()["versions"][0]["version"]
+        print(latest)
+        if latest != version:
+            self.tts.speak(phrases[language]["update_available"].replace("{0}", latest))
+            # download update
+            url = requests.get(update).json()["versions"][0]["url"]
+            print(url)
+
+            r = requests.get(url)
+            with open("update.zip", "wb") as code:
+                code.write(r.content)
+            
+            # update version in config.env
+            with open("config.env", "r") as f:
+                lines = f.readlines()
+            with open("config.env", "w") as f:
+                for line in lines:
+                    if "VERSION" in line:
+                        f.write(f"VERSION={latest}\n")
+                    else:
+                        f.write(line)
+                        
+            # unzip update
+            os.system("unzip update.zip")
+            os.system("rm update.zip")
+
+            
+
+            self.tts.speak(phrases[language]["update_success"])
+            os.execv(sys.executable, ['python'] + sys.argv)
+
+        else:
+            self.tts.speak(phrases[language]["update_error"])
 
     def clean_music(self):
         # reset title, thumbnail etc to avoid showing the previous music
@@ -343,7 +399,6 @@ class Behaviour():
         self.music_thumbnail = "https://www.aweirdwhale.xyz/pps/21.jpg"
         self.updateThumbnail = False
         self.isPlaying = False
-
 
     def bypass_voice(self):
         self.get_args()
@@ -375,7 +430,6 @@ class Behaviour():
         self.isPlaying = self.behaviour.isPlaying
         self.behaviour.set_playing_state(self.isPlaying)
 
-
     def update_music_info_continuously(self):
         while True:
             self.player.get_duration()
@@ -394,7 +448,6 @@ class Behaviour():
     def startup_song(self):
         #play startup song (DATA/musics/startup.mp3)
         playsound.playsound("DATA/musics/startup.mp3")
-
 
     def use(self):
         self.state = 0
@@ -433,7 +486,6 @@ class Behaviour():
 
 
         self.listen()
-
 
     def cleanup(self):
         if self.wake_word:
