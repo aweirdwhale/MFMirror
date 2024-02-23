@@ -56,6 +56,7 @@ class Behaviour():
         self.arg = ""
         self.isPlaying = False
         self.count = 0
+        self.last_command_time = None
         
         # UI
         self.audio_length = 0
@@ -105,6 +106,10 @@ class Behaviour():
         
         self.command = self.stt.text
         self.command = self.command.lower()
+
+        # If a command just got executed, don't ask for wakeword
+        # if self.last_command_time is None or datetime.now() - self.last_command_time < timedelta(seconds=5):
+        #     self.listen_for_commands()
 
         if "error :" in self.command:
             self.count += 1
@@ -169,6 +174,8 @@ class Behaviour():
 
     def process_command(self):
         self.state = 2
+        self.last_command_time = datetime.now()
+
         if self.command.split()[-1] == "quoi":
             self.tts.speak("QUOICOUBEH !!")
 
@@ -263,10 +270,6 @@ class Behaviour():
             else:
                 self.tts.speak(phrases[language]["wikipedia_success"].replace("{0}", subject))
                 self.tts.speak(wikipedia_fetcher.recherche[0]) # print the first paragraph
-        
-        elif "stop" in self.command:
-            #shutdown the program
-            pass
 
         elif "bonjour" in self.command or "hello" in self.command:
             self.tts.speak(self.wish.wish())
@@ -330,10 +333,12 @@ class Behaviour():
         
         elif "restart" in self.command or "reboot" in self.command or "redémarre" in self.command or "redémarrage" in self.command:
             self.tts.speak(phrases[language]["restarting"])
+            os.system("sudo reboot")
 
         else:
             self.tts.speak(phrases[language]["bozo"])
             self.state = 0
+
 
         # self.player.resume() #resume the music
 
@@ -478,10 +483,7 @@ class Behaviour():
             self.progress_value = round(self.player.progress_value, 2)
 
         elif self.wake_word.stopmsk:
-            self.wake_word.detected = False
-            self.pause()
-            self.wake_word.stopmsk = False
-            self.state = 0
+            print("Stop musique")
             
 
 
