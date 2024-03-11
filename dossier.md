@@ -13,6 +13,8 @@ _"Les Biquettes" est le nom donné au groupe de Baptiste et Olivier dans leur av
 * **[Le reste à faire](#todo)**
 * **[Conclusion](#conclu)**
 
+---
+
 ### Synopsis
 
 Vous n'avez pas d'amis ? Mieux qu'un curly : MFMirror !
@@ -73,8 +75,6 @@ Les premières commandes ont marqué le début de l'interaction réelle avec not
 
 L'interface utilisateur, développée avec tkinter, a été soigneusement conçue pour offrir une expérience optimale aux utilisateurs. Chaque détail a été pensé pour faciliter l'interaction et la navigation dans notre système.
 
-
-
 _création d'une interface simple avec tkinter_
 ![Capture d'écran du code et de l'interface utilisateur](./Explainations/assets/screencodeui.png)
 ![Capture de l'ui](./Explainations/assets/screen%20ui.png)
@@ -83,6 +83,8 @@ Les finitions ont été une étape cruciale pour peaufiner notre projet. Nous av
 [Vidéo de démonstration (Youtube)](https://youtu.be/SJMAKETeiYE)
 
 En parallèle, nous avons également développé des fonctionnalités techniques telles que la mise à jour automatique et l'arrêt du système pour améliorer la performance et la fiabilité de notre produit.
+
+*ici le systeme de mises à jour : on regarde si la version correspond à celle de l'api et sinon on télécharge le zip via le lien, on dé-zip en écrasant les ancien fichiers et on suprime le zip pour gagner de la place*
 ![Capture d'écran du code](./Explainations/assets/update.png)
 
 Enfin, nous avons abordé la partie matérielle de notre projet en réparant un écran de récupération, en réalisant un montage soigné et en intégrant un Raspberry Pi pour garantir le bon fonctionnement de notre système.
@@ -90,15 +92,27 @@ Enfin, nous avons abordé la partie matérielle de notre projet en réparant un 
 
 Dans l'ensemble, ce projet a été une expérience enrichissante, remplie de défis et de réussites. Chaque étape nous a rapprochés de notre objectif final avec confiance et détermination.
 
+---
+
 ### Le reste à faire :
 
 Il ne reste plus qu'à finaliser le montage Hardware, nous attendons la pièce maîtresse : le miroir
 
+---
 
 ### Conclusion :
 
 En résumé, notre projet de miroir connecté combine l'hestétisme et la fonctionnalité pour créer une expérience unique. Il simplifie la routine quotidienne en offrant la reconnaissance faciale, des options musicales, un accès quasi-instantané à Wikipédia et des informations météorologiques.
-Un miroir qui va au-delà de la simple réflexion pour devenir un véritable assistant personnel, fruit du travail collaboratif de notre équipe
+Un miroir qui va au-delà de la simple réflexion pour devenir un véritable assistant personnel, fruit du travail collaboratif de notre équipe.
 
+Baptiste et Olivier
 
 ![Alex](https://www.programme-tv.net/imgre/fit/http.3A.2F.2Fprd2-bone-image.2Es3-website-eu-west-1.2Eamazonaws.2Ecom.2Ftel.2F2019.2F07.2F01.2F82b6a3a2-341b-439c-a922-5127f7fbc38c.2Ejpeg/720x405/crop-from/top/quality/80/alexandre-le-bienheureux.jpg)
+
+##### PS:
+
+Le projet est sous une licence MIT, donc ouvert à tous dans l'édition, la commercialisation ou l'utilisation personnelle, nous demandons simplement une rétribution.
+
+Les polices utilisées dans l'UI : [Pilowlava](https://www.freefaces.gallery/typefaces/pilowlava) & [Subjectivity](https://www.freefaces.gallery/typefaces/subjectivity)
+
+Entièremet codé en python.
