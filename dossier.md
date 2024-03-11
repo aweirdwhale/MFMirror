@@ -1,4 +1,5 @@
-![banner](./Explainations/assets/readmebanner.png)
+
+![banner](https://raw.githubusercontent.com/aweirdwhale/MFMirror/dev/Explainations/assets/readmebanner.png)
 
 # **MFMirror**
 
@@ -38,9 +39,9 @@ Les Biquettes font un point d'honneur à protéger vos informations personnelles
 ### Les 5 w :
 
 1. **Pour qui ?**
-    * Pour tout n'importe qui ! MFMirror est destiné à n'importe qui voulant l'essayer, et sans avopir de miroir il est toujours possible d'utiliser Hermione dans un ordinateur normal !
+    * Pour tout n'importe qui ! MFMirror est destiné à n'importe qui voulant l'essayer, et sans avoir de miroir il est toujours possible d'utiliser Hermione dans un ordinateur normal !
 2. **Pourquoi ?**
-    * La première réponse qui me vient à l'esprit est "Pourquoi pas ?", en effet toute personne sensée trouverait cette invention inutile et dépourvue de sens, mais de nôtre point de vue, c'est une merveille de code et de construction. En dépit de son inutilité, Hermione nous à permit d'en apprendre plus sur la reconnaissance faciale, gestuelle et vocale, la programmatiojn orientée objet et la constructiuon d'objets physiques.
+    * La première réponse qui me vient à l'esprit est "Pourquoi pas ?", en effet toute personne sensée trouverait cette invention inutile et dépourvue de sens, mais de nôtre point de vue, c'est une merveille de code et de construction. En dépit de son inutilité, Hermione nous à permit d'en apprendre plus sur la reconnaissance faciale, gestuelle et vocale, la programmation orientée objet et la construction d'objets physiques.
     * _Fait rigolo : Hermione et MFMirror en cumulé font plus de 200 000 lignes de code !_
 3. **Quand ?**
     * Hermione v-alpha est terminée ! La release est disponible [ici](https://github.com/aweirdwhale/MFMirror) !
@@ -49,4 +50,16 @@ Les Biquettes font un point d'honneur à protéger vos informations personnelles
     * Le projet est accessible à l'utilisation et la contribution n'importe où dans le monde !
     * Si vous avez envie de participer, tout est [ici](https://github.com/aweirdwhale/MFMirror) !
 
+---
 ### Le chemin parcouru :
+La première étape a été la conceptualisation de l'idée. 
+Puis, vient la preuve du concept : "Est-ce réalisable ?" pour répondre à cette question, nous avons essayé de faire une "console" administrateur. Par console administrateur j’entends une interface très moche mais avec les fonctionnalités principales : la musique, la reconnaissance faciale etc...
+**!!SCREENSHOT DE L'UI MOCHE!!**
+
+Ensuite, on se met au design. À l'aide de l'outil Figma, on design les différents écrans, les icônes etc :
+![exemple de deux écrans](https://github.com/aweirdwhale/MFMirror/blob/mfm/Explainations/assets/CaptureFigma.PNG?raw=true)_exemple de deux écrans dessinés sur Figma_
+
+Maintenant, nous savons que notre concept est réalisable, il est dessiné, il ne reste **qu'à** implémenter les nouvelles fonctionnalités, comme la météo, la recherche wikipedia, youtube etc...
+
+Et c'est comme ça que la toute première version _alpha_ est née. La 2eme alpha, disponible en release [ici](https://github.com/aweirdwhale/MFMirror/releases/),
+implémente un moyen de mettre à jour Hermione, de l'éteindre et d'autres fonctionnalités facultatives mais importantes.
