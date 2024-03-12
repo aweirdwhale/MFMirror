@@ -16,6 +16,8 @@ try:
     from features.weather.weather_codes import Converter
     from features.weather.rounded_rect import drawRect
 
+    import playsound
+
     class Clock:
         def __init__(self, label, window):
             self.label = label
@@ -460,15 +462,16 @@ try:
 
         def start_behaviour(self):
             # play startup song
-            self.behaviour.startup_song()
-
             self.behaviour.use()
 
     lock = threading.Lock()
     # Lancer l'application en tant que thread
     ui = UserInterface(lock)
+    
+    
+    playsound.playsound('sounds/starting.mp3')
     ui.start()
-
+    
     with lock:
         ui.start_behaviour()
 
@@ -479,7 +482,7 @@ except Exception as e:
     # make a lil tkinter window to show the error
     root = Tk()
     root.title("Error")
-    root.geometry("300x100")
+    root.geometry("600x100")
     root.resizable(False, False)
     root.config(bg="#000000")
     

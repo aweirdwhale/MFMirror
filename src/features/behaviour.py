@@ -318,9 +318,9 @@ class Behaviour():
         
         elif "éteins-toi" in self.command or "éteins toi" in self.command or "va faire dodo" in self.command or "rideaux" in self.command or "extinction" in self.command or "shutdown" in self.command or "shut down" in self.command or "go to sleep" in self.command or "go to bed" in self.command or "goodbye" in self.command or "bye" in self.command or "au revoir" in self.command:
             self.tts.speak(phrases[language]["Farewell"])
-            playsound.playsound("DATA/musics/shutdown.mp3")
+            playsound.playsound("sounds/shutdown.mp3")
             # crash the program to force shutdown
-            exit()
+            os._exit(0)
 
         elif "qui est la plus belle" in self.command or "qui est le plus beau" in self.command or "magnifique" in self.command :
             self.tts.speak(phrases[language]["beautiful"])
@@ -451,10 +451,21 @@ class Behaviour():
             time.sleep(1)  # Attendre 1 seconde avant la prochaine mise à jour
 
     def startup_song(self):
-        #play startup song (DATA/musics/startup.mp3)
-        playsound.playsound("DATA/musics/startup.mp3")
+        
+
+        return True
+
+    def notify(self, message):
+        self.tts.speak(message)
+    
+    def notify_sound(self, sound):
+        if sound == 0:
+            playsound.playsound("sounds/notif1.mp3")
+        else:
+            playsound.playsound("sounds/notif erreur.mp3")
 
     def use(self):
+        print("use")
         self.state = 0
         
         if self.wake_word.detected:
