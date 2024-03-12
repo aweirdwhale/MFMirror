@@ -57,7 +57,7 @@ Les Biquettes font un point d'honneur à protéger vos informations personnelles
 La première étape a été la conceptualisation de l'idée.
 
 Notre parcours dans ce projet a été une véritable aventure, pleine d'étapes cruciales et de défis stimulants. Tout a commencé avec la phase de proof of concept, où nous avons mis en œuvre nos premières idées pour voir si elles tenaient la route. Cette étape nous a permis de confirmer que notre projet était faisable.
-![Capture d'écran de l'interface moche](lien_vers_image)
+
 
 Ensuite, nous nous sommes plongés dans le processus de conception en utilisant Figma, un outil puissant qui nous a aidés à concrétiser nos idées sous forme de maquettes interactives. Cela nous a permis de mieux visualiser et affiner notre vision du produit final.
 ![Capture d'écran de Figma](https://github.com/aweirdwhale/MFMirror/raw/mfm/Explainations/assets/CaptureFigma.PNG?raw=true)
@@ -68,7 +68,7 @@ L'intégration de la reconnaissance vocale avec le module voice_recognition et l
 import speech_recognition as sr
 ```
 
-*Ici, on peut voir la classe qui gère la reconnaissance vocale.  En premier lieu elle écoute, puis elle convertis, puis elle reconnait grâce à l'api de google.*![Capture d'écran du code](./Explainations/assets/code_stt.png)
+*Ici, on peut voir la classe qui gère la reconnaissance vocale.  En premier lieu elle écoute, puis elle convertis, puis elle reconnait grâce à l'api de google.*![Capture d'écran du code](https://raw.githubusercontent.com/aweirdwhale/MFMirror/dev/Explainations/assets/code_stt.png)
 
 Les premières commandes ont marqué le début de l'interaction réelle avec notre système. C'est là que nous avons pu tester et ajuster notre code pour garantir un fonctionnement sans accroc.
 [Vidéo de démonstration (Youtube)](https://youtu.be/m2F-8MmrUC8)
@@ -76,8 +76,8 @@ Les premières commandes ont marqué le début de l'interaction réelle avec not
 L'interface utilisateur, développée avec tkinter, a été soigneusement conçue pour offrir une expérience optimale aux utilisateurs. Chaque détail a été pensé pour faciliter l'interaction et la navigation dans notre système.
 
 _création d'une interface simple avec tkinter_
-![Capture d'écran du code et de l'interface utilisateur](./Explainations/assets/screencodeui.png)
-![Capture de l'ui](./Explainations/assets/screen%20ui.png)
+![Capture d'écran du code et de l'interface utilisateur](https://raw.githubusercontent.com/aweirdwhale/MFMirror/dev/Explainations/assets/screencodeui.png)
+![Capture de l'ui](https://raw.githubusercontent.com/aweirdwhale/MFMirror/dev/Explainations/assets/screen%20ui.png)
 
 Les finitions ont été une étape cruciale pour peaufiner notre projet. Nous avons apporté des ajustements esthétiques et fonctionnels, ajouté des éléments tels que des salutations et des sons pour rendre l'expérience utilisateur encore plus immersive et agréable.
 [Vidéo de démonstration (Youtube)](https://youtu.be/SJMAKETeiYE)
@@ -85,7 +85,7 @@ Les finitions ont été une étape cruciale pour peaufiner notre projet. Nous av
 En parallèle, nous avons également développé des fonctionnalités techniques telles que la mise à jour automatique et l'arrêt du système pour améliorer la performance et la fiabilité de notre produit.
 
 *ici le systeme de mises à jour : on regarde si la version correspond à celle de l'api et sinon on télécharge le zip via le lien, on dé-zip en écrasant les ancien fichiers et on suprime le zip pour gagner de la place*
-![Capture d'écran du code](./Explainations/assets/update.png)
+![Capture d'écran du code](https://raw.githubusercontent.com/aweirdwhale/MFMirror/dev/Explainations/assets/update.png)
 
 Enfin, nous avons abordé la partie matérielle de notre projet en réparant un écran de récupération, en réalisant un montage soigné et en intégrant un Raspberry Pi pour garantir le bon fonctionnement de notre système.
 ![Photos de l'écran](https://media.discordapp.net/attachments/1132396777056772146/1216845843353702543/IMG_20240311_010253245.jpg?ex=6601df00&is=65ef6a00&hm=4c4d31d230eaaa8ba01f3e15fd52f61a18155a8173480a753e9db48c924c05e7&=&format=webp&width=468&height=468)
