@@ -1,0 +1,1 @@
+/bin/python3 path/to/src/interface.py

@@ -468,7 +468,7 @@ lock = threading.Lock()
 ui = UserInterface(lock)
 
 
-playsound.playsound('sounds/starting.mp3')
+playsound.playsound('sounds/shutdown.mp3')
 ui.start()
 
 with lock:
