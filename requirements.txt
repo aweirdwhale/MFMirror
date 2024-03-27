@@ -3,7 +3,6 @@ customtkinter==5.2.1
 google_api_python_client==2.111.0
 gTTS==2.5.0
 imutils==0.5.4
-mediapipe==0.10.9
 moviepy==1.0.3
 mutagen==1.47.0
 numpy==1.22.0
@@ -29,3 +28,4 @@ scipy==1.12.0
 sounddevice==0.4.6
 SpeechRecognition==3.10.1
 wavio==0.0.8
+mediapipe==0.10.9
