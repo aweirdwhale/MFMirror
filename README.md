@@ -53,6 +53,12 @@ Les Biquettes make it a point of honour to keep your personal information secure
      ```
    - At the root of the project, run `pip install -r requirements.txt`
 
+   - Install tkinter, imagetk
+     ```shell
+     sudo apt-get install python-tk
+     sudo apt-get install python3-pil python3-pil.imagetk
+     ```
+     
      - **You will need pyaudio for this project. It's a bit complicated so you may have to search on the web to install it properly :**
 
      ```shell
