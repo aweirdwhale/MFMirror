@@ -17,16 +17,16 @@ from features.weather.rounded_rect import drawRect
 
 import playsound
 
-class Clock:
-    def __init__(self, label, window):
-        self.label = label
-        self.window = window
-        self.change_label()
+# class Clock:
+#     def __init__(self, label, window):
+#         self.label = label
+#         self.window = window
+#         self.change_label()
 
-    def change_label(self):
-        current_time = time.strftime('%H\n%M')
-        self.label.configure(text=current_time)
-        self.window.after(1000, self.change_label)
+#     def change_label(self):
+#         current_time = time.strftime('%H\n%M')
+#         self.label.configure(text=current_time)
+#         self.window.after(1000, self.change_label)
 
 class SpinningImage:
     def __init__(self, canvas, image_path):
@@ -134,7 +134,7 @@ class WeatherComponent:
         self.description = self.c.convert()
         self.image_path = self.c.get_icon()
 
-        self.canvas = Canvas(self.frame, width=150, height=130, bg="#000000", highlightthickness=0)
+        self.canvas = Canvas(self.frame, width=150, height=150, bg="#000000", highlightthickness=0)
         self.canvas.pack(pady=20)
         self.canvas.place(relx=0.01, rely=0, anchor="nw")
         self.img = Image.open(self.image_path)
@@ -150,10 +150,10 @@ class WeatherComponent:
 
         # =============== ICON + DESCRIPTION  =================
         # Write the weather icon on the canvas        
-        self.canvas.create_image(75, 50, image=self.img)
+        self.canvas.create_image(75, 70, image=self.img)
 
         # Write the weather description on the canvas
-        self.canvas.create_text(75, 110, text=f"{self.c.convert()}", font=("Subjectivity", 15), fill="white", anchor="center")
+        self.canvas.create_text(75, 130, text=f"{self.c.convert()}", font=("Subjectivity", 15), fill="white", anchor="center")
 
         self.canvas.after(5 * 1000, self.toLabel) # switch every 5 seconds
 
@@ -162,7 +162,7 @@ class WeatherComponent:
         self.canvas.delete("all")
 
         # write temp at the middle of the canvas, font : Pilowlava 32
-        self.canvas.create_text(75, 50, text=f'{self.w["current"]["temp"]}°C', font=("Pilowlava", 32), fill="white", anchor="center")
+        self.canvas.create_text(75, 70, text=f'{self.w["current"]["temp"]}°C', font=("Subjectivity", 32), fill="white", anchor="center")
 
 
         # write temp in a label
@@ -170,7 +170,7 @@ class WeatherComponent:
         # self.label.pack(pady=20, padx=20)
         # self.label.place(relx=0.02, rely=.02, anchor="nw")
 
-        self.canvas.after(5 * 1000, self.toIcon) # switch every 5 seconds
+        self.canvas.after(5 * 1000, self.toHour) # switch every 5 seconds
 
 
     def wInfos(self):
@@ -182,7 +182,7 @@ class WeatherComponent:
         # Create a canvas
         self.canvas2 = Canvas(self.frame, width=300, height=290, bg="black", highlightthickness=0)
         self.canvas2.pack(pady=20)
-        self.canvas2.place(relx=0.5, rely=0.5, anchor="center")
+        self.canvas2.place(x=920, rely=0.5, anchor="center")
 
         # INFO BOX
         drawRect(self.canvas2, 0, 0, 300, 290, 20, 8, "#FFFFFF")
@@ -222,6 +222,12 @@ class WeatherComponent:
         # DELETE THE CANVAS
         self.canvas2.after(10 * 1000, lambda: self.canvas2.destroy())
         # ======================================================
+
+    def toHour(self):
+        self.canvas.delete("all")
+        current_time = time.strftime('%H' + ":" + '%M')
+        self.canvas.create_text(75, 70, text=current_time, font=("Pilowlava", 32), fill="white", anchor="center")
+        self.canvas.after(5 * 1000, self.toIcon)
 
     
 class UserInterface(threading.Thread):
@@ -266,9 +272,11 @@ class UserInterface(threading.Thread):
     def run(self):
         self.app = ctk.CTk()
         self.app.title("Hermione (Mother F* Mirror)")
-        self.app.geometry("960x720")
+        self.app.geometry("1436x1080")
         self.app.resizable(False, False)
         self.app.config(bg="#000000")
+        # fullscreen
+        self.app.attributes("-fullscreen", True)
 
         
         # Weather widget
@@ -276,18 +284,18 @@ class UserInterface(threading.Thread):
         self.showW(self.wComponent)
 
         # Clock widget
-        watch_canvas = ctk.CTkCanvas(self.app, width=120, height=120, bg="#000000", highlightthickness=0)
-        watch_canvas.place(x=940, y=12, anchor="ne")
+        # watch_canvas = ctk.CTkCanvas(self.app, width=120, height=120, bg="#000000", highlightthickness=0)
+        # watch_canvas.place(x=940, y=42, anchor="ne")
 
-        clk = ctk.CTkLabel(self.app, text="", font=("Subjectivity", 42), bg_color="#000000", text_color="#ffffff")
-        clk.place(x=940, y=20, anchor="ne")
-        clock = Clock(clk, self.app)
+        # clk = ctk.CTkLabel(self.app, text="", font=("Subjectivity", 42), bg_color="#000000", text_color="#ffffff")
+        # clk.place(x=940, y=40, anchor="ne")
+        # clock = Clock(clk, self.app)
 
         # self.behaviour.get_thumbnail()
 
         # place the image
         thumbnail_canvas = ctk.CTkCanvas(self.app, width=80, height=80, bg="#000000", highlightthickness=0)
-        thumbnail_canvas.place(x=20, y=700, anchor="sw")
+        thumbnail_canvas.place(x=20, y=1050, anchor="sw")
 
         #self.update_thumbnail(thumbnail_canvas=thumbnail_canvas)
         self.last_modification_time = os.path.getmtime("thumbnail.png")
@@ -300,7 +308,7 @@ class UserInterface(threading.Thread):
         # place the listener state indicator dot
         state_canvas = ctk.CTkCanvas(self.app, width=20, height=20, bg="#000000", highlightthickness=0)
         # place the dot at the top center
-        state_canvas.place(x=480, y=20, anchor="n")
+        state_canvas.place(x=940, y=40, anchor="n")
 
         # create the dot
         self.indicator_dot = IndicatorDot(state_canvas)
@@ -319,16 +327,16 @@ class UserInterface(threading.Thread):
 
         # Name of the song
         song_name = ctk.CTkLabel(self.app, text=f"Nothing is playing", font=ctk.CTkFont("Subjectivity", 24), bg_color="#000000", text_color="#ffffff")
-        song_name.place(x=125, y=655, anchor="sw")
+        song_name.place(x=125, y=1005, anchor="sw")
 
         # Song duration
         song_duration_label = ctk.CTkLabel(self.app, text="", font=ctk.CTkFont("Subjectivity", 16), bg_color="#000000", text_color="#ffffff")
-        song_duration_label.place(x=125, y=685, anchor="sw")
+        song_duration_label.place(x=125, y=1035, anchor="sw")
 
         # Progress bar
         progress_bar = ctk.CTkProgressBar(self.app, width=250, height=6, bg_color="#000000", border_color="#FFFFFF", border_width=1, progress_color="#ffffff", fg_color="#000000")
         progress_bar.set(0)
-        progress_bar.place(x=125, y=700, anchor="sw")
+        progress_bar.place(x=125, y=1050, anchor="sw")
 
         # Mettez à jour les informations de la musique
         self.update_music_info(song_name, song_duration_label, progress_bar, thumbnail_canvas)
@@ -442,7 +450,7 @@ class UserInterface(threading.Thread):
         self.isPlaying = self.behaviour.isPlaying
         if self.isPlaying:
             
-            # Mettez à jour les étiquettes et la barre de progression avec les informations de la musique
+            # Mettre à jour les étiquettes et la barre de progression avec les informations de la musique
             song_name_label.configure(text=self.behaviour.music_title)
             self.thumnail_link = self.behaviour.music_thumbnail
             duration_text = f"{self.behaviour.audio_position_str}/{self.behaviour.audio_length_str}"

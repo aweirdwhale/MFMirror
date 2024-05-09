@@ -197,6 +197,23 @@ class Behaviour():
             spik = phrases[language]["iss"].replace("{0}", position["over"]).replace("{1}", position["time"])
             self.tts.speak("La station spatiale internationale se trouve au dessus de " + position["over"] + " à " + position["time"])
         
+        elif "musique préférée" in self.command or "favorite song" in self.command or "favorite music" in self.command or "dernière musique" in self.command or "last music" in self.command:
+            
+            self.player.use_youtube("Still standing", os.getenv("GOOGLE_KEY"))
+            self.player.play()
+            self.player.get_duration()
+            self.audio_length = self.player.audio_length
+            self.audio_position = self.player.audio_position
+            self.audio_position_str = self.player.audio_position_str
+            self.progress_value = self.player.progress_value
+            self.audio_length_str = self.player.audio_length_str
+            self.music_title = self.player.music_title
+            self.music_thumbnail = self.player.music_thumbnail
+            self.isPlaying = True
+            self.updateThumbnail = True
+            update_thread = threading.Thread(target=self.update_music_info_continuously)
+            update_thread.start()
+
         elif "bonne situation" in self.command:
             self.player.pause()
             playsound.playsound("otis.mp3")
@@ -334,7 +351,7 @@ class Behaviour():
         elif "restart" in self.command or "reboot" in self.command or "redémarre" in self.command or "redémarrage" in self.command:
             self.tts.speak(phrases[language]["restarting"])
             os.system("sudo reboot")
-
+ 
         else:
             self.tts.speak(phrases[language]["bozo"])
             self.state = 0

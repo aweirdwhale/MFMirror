@@ -32,7 +32,8 @@
         "update_error": "Il n'y a pas de mise à jour disponible pour le moment.",
         "check_update": "Recherche de mises à jour...",
         "restarting": "Je redémarre...",
-        "wanna_update": "Voulez-vous que je me mette à jour ? Cela prendra quelques secondes."
+        "wanna_update": "Voulez-vous que je me mette à jour ? Cela prendra quelques secondes.",
+        "wait": "Un instant s'il-vous-plaît..."
 
     },
     "en": {
@@ -68,6 +69,7 @@
         "update_error": "There's no update currently avaliable.",
         "check_update": "Checking for updates...",
         "restarting": "I'm restarting...",
-        "wanna_update": "Do you want me to update myself ? It will take a few seconds."
+        "wanna_update": "Do you want me to update myself ? It will take a few seconds.",
+        "wait": "Please wait..."
     }
 }

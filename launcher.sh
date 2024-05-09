@@ -1,1 +1,1 @@
-/bin/python3 path/to/src/interface.py
+/bin/python3 /src/interface.py
