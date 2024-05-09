@@ -264,7 +264,7 @@ class Behaviour():
             self.player.resume()
             self.audio_position = self.player.audio_position
             self.progress_value = self.player.progress_value
-            overself.audio_position_str = self.player.audio_position_str
+            self.audio_position_str = self.player.audio_position_str
             self.isPlaying = True
         
         elif "volume" in self.command:

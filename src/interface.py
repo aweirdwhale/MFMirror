@@ -295,7 +295,7 @@ class UserInterface(threading.Thread):
 
         # place the image
         thumbnail_canvas = ctk.CTkCanvas(self.app, width=80, height=80, bg="#000000", highlightthickness=0)
-        thumbnail_canvas.place(x=20, y=1050, anchor="sw")
+        thumbnail_canvas.place(x=20, y=1005, anchor="sw")
 
         #self.update_thumbnail(thumbnail_canvas=thumbnail_canvas)
         self.last_modification_time = os.path.getmtime("thumbnail.png")
@@ -327,16 +327,16 @@ class UserInterface(threading.Thread):
 
         # Name of the song
         song_name = ctk.CTkLabel(self.app, text=f"Nothing is playing", font=ctk.CTkFont("Subjectivity", 24), bg_color="#000000", text_color="#ffffff")
-        song_name.place(x=125, y=1005, anchor="sw")
+        song_name.place(x=125, y=975, anchor="sw")
 
         # Song duration
         song_duration_label = ctk.CTkLabel(self.app, text="", font=ctk.CTkFont("Subjectivity", 16), bg_color="#000000", text_color="#ffffff")
-        song_duration_label.place(x=125, y=1035, anchor="sw")
+        song_duration_label.place(x=125, y=995, anchor="sw")
 
         # Progress bar
         progress_bar = ctk.CTkProgressBar(self.app, width=250, height=6, bg_color="#000000", border_color="#FFFFFF", border_width=1, progress_color="#ffffff", fg_color="#000000")
         progress_bar.set(0)
-        progress_bar.place(x=125, y=1050, anchor="sw")
+        progress_bar.place(x=125, y=1000, anchor="sw")
 
         # Mettez à jour les informations de la musique
         self.update_music_info(song_name, song_duration_label, progress_bar, thumbnail_canvas)
