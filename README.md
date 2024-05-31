@@ -123,7 +123,6 @@ Here's a list of everything you can ask to Hermione :
 ## Authors
 
 - [@A.weirdwhale](https://www.github.com/aweirdwhale)
-- [@Baziog](https://www.github.com/Baziog)
 
 ## Appendix
 
